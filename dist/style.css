@@ -6,15 +6,23 @@
 #intro-loader.is-done{transform:translateY(-102%);pointer-events:none}
 .intro-name{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#c92748;font:500 clamp(72px,8.6vw,152px)/.78 Georgia,"Times New Roman",serif;letter-spacing:-.085em;text-align:center;white-space:nowrap;user-select:none}
 .intro-name span{display:block}
-.intro-curtain{position:absolute;inset:0;z-index:1;background:#050505;transform:translateX(0);animation:intro-push 3.65s .45s forwards;will-change:transform}
-.intro-pusher{--pusher-w:clamp(360px,31vw,500px);position:absolute;width:var(--pusher-w);aspect-ratio:659/596;height:auto;left:calc(-1 * var(--pusher-w) + clamp(32px,3vw,48px));top:50%;transform:translateY(-50%);pointer-events:none;animation:pusher-shift 3.65s .45s both;transform-origin:83% 69%;will-change:transform}.intro-pusher-pose{position:absolute;inset:0;background-image:url("pusher-poses.svg?v=1");background-size:200% 200%;background-repeat:no-repeat;opacity:0;will-change:opacity}.pose-prepare{background-position:left top;animation:pose-prepare 3.65s .45s both}.pose-first{background-position:right top;animation:pose-first 3.65s .45s both}.pose-hold{background-position:left bottom;animation:pose-hold 3.65s .45s both}.pose-final{background-position:right bottom;animation:pose-final 3.65s .45s both}
-@keyframes intro-push{0%{transform:translateX(0);animation-timing-function:cubic-bezier(.2,.7,.25,1)}18%{transform:translateX(28%)}32%{transform:translateX(28%);animation-timing-function:cubic-bezier(.3,.7,.25,1)}50%{transform:translateX(55%)}60%{transform:translateX(55%);animation-timing-function:cubic-bezier(.3,.7,.25,1)}88%{transform:translateX(90%)}100%{transform:translateX(100%)}}
-@keyframes pusher-shift{0%{transform:translateY(-50%) translateX(-10px)}18%,32%{transform:translateY(-50%) translateX(-2px)}50%{transform:translateY(-50%) translateX(14px)}60%{transform:translateY(-50%) translateX(10px)}88%{transform:translateY(-50%) translateX(14px)}100%{transform:translateY(-50%) translateX(2px)}}
-@keyframes pose-prepare{0%,30%{opacity:1}35%,100%{opacity:0}}
-@keyframes pose-first{0%,30%{opacity:0}35%,48%{opacity:1}52%,100%{opacity:0}}
-@keyframes pose-hold{0%,48%{opacity:0}52%,60%{opacity:1}64%,84%{opacity:0}88%,100%{opacity:1}}
-@keyframes pose-final{0%,60%{opacity:0}64%,84%{opacity:1}88%,100%{opacity:0}}
-@media(max-width:650px){.intro-name{font-size:clamp(48px,13.5vw,82px)}.intro-pusher{--pusher-w:clamp(260px,78vw,340px);left:calc(-1 * var(--pusher-w) + clamp(24px,7vw,35px))}}
+.intro-curtain{position:absolute;inset:0;z-index:1;background:#050505;transform:translateX(0);animation:intro-push 3s .8s linear forwards;will-change:transform}
+.intro-pusher{--pusher-w:clamp(330px,27vw,440px);position:absolute;width:var(--pusher-w);aspect-ratio:1;height:auto;left:0;top:50%;transform:translateY(-50%);pointer-events:none}
+.intro-pusher-pose{position:absolute;top:0;width:100%;height:100%;background-image:url("pusher-poses.svg?v=2");background-size:300% 200%;background-repeat:no-repeat;opacity:0;will-change:opacity}
+.pose-step-1{left:calc(-.926 * var(--pusher-w));background-position:left top;animation:pose-step-1 3s .8s both}
+.pose-step-2{left:calc(-.818 * var(--pusher-w));background-position:center top;animation:pose-step-2 3s .8s both}
+.pose-step-3{left:calc(-.787 * var(--pusher-w));background-position:right top;animation:pose-step-3 3s .8s both}
+.pose-step-4{left:calc(-.928 * var(--pusher-w));background-position:left bottom;animation:pose-step-4 3s .8s both}
+.pose-step-5{left:calc(-.891 * var(--pusher-w));background-position:center bottom;animation:pose-step-5 3s .8s both}
+.pose-step-6{left:calc(-.855 * var(--pusher-w));background-position:right bottom;animation:pose-step-6 3s .8s both}
+@keyframes intro-push{0%{transform:translateX(0)}20%{transform:translateX(30%)}30%{transform:translateX(30%)}40%{transform:translateX(52%)}50%{transform:translateX(60%)}70%{transform:translateX(60%)}80%{transform:translateX(64%)}90%{transform:translateX(75%)}100%{transform:translateX(100%)}}
+@keyframes pose-step-1{0%,10%{opacity:1}15%,100%{opacity:0}}
+@keyframes pose-step-2{0%,10%{opacity:0}15%,26%{opacity:1}31%,100%{opacity:0}}
+@keyframes pose-step-3{0%,26%{opacity:0}31%,43%{opacity:1}48%,100%{opacity:0}}
+@keyframes pose-step-4{0%,43%{opacity:0}48%,65%{opacity:1}70%,100%{opacity:0}}
+@keyframes pose-step-5{0%,65%{opacity:0}70%,79%{opacity:1}84%,100%{opacity:0}}
+@keyframes pose-step-6{0%,79%{opacity:0}84%,100%{opacity:1}}
+@media(max-width:650px){.intro-name{font-size:clamp(48px,13.5vw,82px)}.intro-pusher{--pusher-w:clamp(250px,72vw,330px);left:0}}
 @media(prefers-reduced-motion:reduce){#intro-loader{transition:none}.intro-curtain{animation:none;transform:translateX(100%)}.intro-pusher{visibility:hidden}}
 
 /* About page inspired by HuyML's editorial, oversized type and numbered sections */
