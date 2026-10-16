@@ -66,3 +66,6 @@ html.has-route-transition #intro-loader{display:none}
 @keyframes intro-pusher-show{0%,19.99%{visibility:hidden}20%,100%{visibility:visible}}
 @keyframes intro-arrive-push{0%,10%{transform:translateX(100%)}20%{transform:translateX(0)}35%{transform:translateX(30%)}42%{transform:translateX(30%)}50%{transform:translateX(52%)}55%{transform:translateX(60%)}68%{transform:translateX(60%)}72%{transform:translateX(64%)}78%{transform:translateX(75%)}82%,100%{transform:translateX(100%)}}
 @media(prefers-reduced-motion:reduce){#intro-loader{animation:none;background:#faf9f6}.intro-name{animation:none;opacity:1}.intro-curtain{animation:none;transform:translateX(100%)}.intro-pusher{animation:none;visibility:hidden}.intro-pusher-pose{animation:none}}
+
+/* Keep the landing view complete before the incoming curtain. */
+.masthead h1{animation:none;opacity:1;transform:translateY(-8vh)}
