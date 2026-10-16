@@ -8,12 +8,12 @@
 .intro-name span{display:block}
 .intro-curtain{position:absolute;inset:0;z-index:1;background:#050505;transform:translateX(0);animation:intro-push 3.65s .45s forwards;will-change:transform}
 .intro-pusher{--pusher-w:clamp(360px,31vw,500px);position:absolute;width:var(--pusher-w);aspect-ratio:659/596;height:auto;left:calc(-1 * var(--pusher-w) + clamp(32px,3vw,48px));top:50%;transform:translateY(-50%);pointer-events:none;animation:pusher-shift 3.65s .45s both;transform-origin:83% 69%;will-change:transform}.intro-pusher-pose{position:absolute;inset:0;background-image:url("pusher-poses.svg?v=1");background-size:200% 200%;background-repeat:no-repeat;opacity:0;will-change:opacity}.pose-prepare{background-position:left top;animation:pose-prepare 3.65s .45s both}.pose-first{background-position:right top;animation:pose-first 3.65s .45s both}.pose-hold{background-position:left bottom;animation:pose-hold 3.65s .45s both}.pose-final{background-position:right bottom;animation:pose-final 3.65s .45s both}
-@keyframes intro-push{0%{transform:translateX(0);animation-timing-function:cubic-bezier(.2,.7,.25,1)}36%{transform:translateX(28%);animation-timing-function:linear}47%{transform:translateX(28%);animation-timing-function:cubic-bezier(.2,.7,.25,1)}100%{transform:translateX(100%)}}
-@keyframes pusher-shift{0%{transform:translateY(-50%) translateX(-10px)}16%{transform:translateY(-50%) translateX(-4px)}36%,47%{transform:translateY(-50%) translateX(8px)}84%{transform:translateY(-50%) translateX(14px)}100%{transform:translateY(-50%) translateX(2px)}}
-@keyframes pose-prepare{0%,16%{opacity:1}20%,100%{opacity:0}}
-@keyframes pose-first{0%,16%{opacity:0}20%,35%{opacity:1}39%,100%{opacity:0}}
-@keyframes pose-hold{0%,35%{opacity:0}39%,47%{opacity:1}51%,84%{opacity:0}88%,100%{opacity:1}}
-@keyframes pose-final{0%,47%{opacity:0}51%,84%{opacity:1}88%,100%{opacity:0}}
+@keyframes intro-push{0%{transform:translateX(0);animation-timing-function:cubic-bezier(.2,.7,.25,1)}18%{transform:translateX(28%)}32%{transform:translateX(28%);animation-timing-function:cubic-bezier(.3,.7,.25,1)}50%{transform:translateX(55%)}60%{transform:translateX(55%);animation-timing-function:cubic-bezier(.3,.7,.25,1)}88%{transform:translateX(90%)}100%{transform:translateX(100%)}}
+@keyframes pusher-shift{0%{transform:translateY(-50%) translateX(-10px)}18%,32%{transform:translateY(-50%) translateX(-2px)}50%{transform:translateY(-50%) translateX(14px)}60%{transform:translateY(-50%) translateX(10px)}88%{transform:translateY(-50%) translateX(14px)}100%{transform:translateY(-50%) translateX(2px)}}
+@keyframes pose-prepare{0%,30%{opacity:1}35%,100%{opacity:0}}
+@keyframes pose-first{0%,30%{opacity:0}35%,48%{opacity:1}52%,100%{opacity:0}}
+@keyframes pose-hold{0%,48%{opacity:0}52%,60%{opacity:1}64%,84%{opacity:0}88%,100%{opacity:1}}
+@keyframes pose-final{0%,60%{opacity:0}64%,84%{opacity:1}88%,100%{opacity:0}}
 @media(max-width:650px){.intro-name{font-size:clamp(48px,13.5vw,82px)}.intro-pusher{--pusher-w:clamp(260px,78vw,340px);left:calc(-1 * var(--pusher-w) + clamp(24px,7vw,35px))}}
 @media(prefers-reduced-motion:reduce){#intro-loader{transition:none}.intro-curtain{animation:none;transform:translateX(100%)}.intro-pusher{visibility:hidden}}
 
