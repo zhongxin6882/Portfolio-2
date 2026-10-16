@@ -69,3 +69,6 @@ html.has-route-transition #intro-loader{display:none}
 
 /* Keep the landing view complete before the incoming curtain. */
 .masthead h1{animation:none;opacity:1;transform:translateY(-8vh)}
+
+/* Sprite poses switch on exact beats; interpolated opacity creates double bodies. */
+.intro-pusher-pose{animation-timing-function:steps(1,end)}
