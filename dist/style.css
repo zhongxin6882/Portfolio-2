@@ -54,3 +54,15 @@
 html.has-route-transition #intro-loader{display:none}
 @keyframes transition-title-in{to{filter:blur(0);opacity:1;transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.page-transition,.page-transition__title,.intro-pusher,.intro-pusher-pose{animation:none;transition:none}.page-transition.is-leaving{transform:translateY(-100%)}}
+
+/* Begin on the portfolio, let the black panel enter, then reveal the name as it is pushed away. */
+#intro-loader{background:transparent;animation:intro-ground 5.4s step-end both}
+.intro-name{opacity:0;animation:intro-name-show 5.4s step-end both}
+.intro-curtain{animation:intro-arrive-push 5.4s linear both}
+.intro-pusher{visibility:hidden;animation:intro-pusher-show 5.4s step-end both}
+.intro-pusher-pose{animation-duration:3.35s;animation-delay:1.08s}
+@keyframes intro-ground{0%,19.99%{background:transparent}20%,100%{background:#faf9f6}}
+@keyframes intro-name-show{0%,19.99%{opacity:0}20%,100%{opacity:1}}
+@keyframes intro-pusher-show{0%,19.99%{visibility:hidden}20%,100%{visibility:visible}}
+@keyframes intro-arrive-push{0%,10%{transform:translateX(100%)}20%{transform:translateX(0)}35%{transform:translateX(30%)}42%{transform:translateX(30%)}50%{transform:translateX(52%)}55%{transform:translateX(60%)}68%{transform:translateX(60%)}72%{transform:translateX(64%)}78%{transform:translateX(75%)}82%,100%{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){#intro-loader{animation:none;background:#faf9f6}.intro-name{animation:none;opacity:1}.intro-curtain{animation:none;transform:translateX(100%)}.intro-pusher{animation:none;visibility:hidden}.intro-pusher-pose{animation:none}}
