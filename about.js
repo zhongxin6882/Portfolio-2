@@ -4,6 +4,6 @@ if(portrait){
   const setOpen=open=>{portrait.classList.toggle('is-open',open);portrait.setAttribute('aria-expanded',String(open))};
   portrait.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')setOpen(true)});
   portrait.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')setOpen(false)});
-  portrait.addEventListener('click',()=>setOpen(!portrait.classList.contains('is-open')));
+  portrait.addEventListener('click',e=>setOpen(e.pointerType==='mouse'?true:!portrait.classList.contains('is-open')));
   portrait.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false)});
 }
