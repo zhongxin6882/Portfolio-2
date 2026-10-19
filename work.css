@@ -393,3 +393,50 @@
   .work-meta-awards span { display: block; margin-bottom: 7px; }
   .work-visit { margin-left: 0; }
 }
+
+/* The work sequence is a circular stack driven by the wheel or touch gesture. */
+@media (min-width: 851px) {
+  html:has(.work-home), .work-home { height: 100%; overflow: hidden; }
+  .work-shell { height: 100vh; min-height: 0; overflow: hidden; }
+  .work-stack {
+    height: 100vh;
+    padding: 0;
+    perspective: 1400px;
+    overflow: visible;
+  }
+  .work-card, .work-card:first-child, .work-card:last-child {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 58%; max-width: 400px;
+    height: auto; min-height: 0;
+    aspect-ratio: 1.25;
+    margin: 0; padding: 0;
+    transform: translate(-50%,-50%) translate3d(var(--stack-x,0px),var(--stack-y,0px),0)
+      rotate(var(--stack-rotation,0deg)) rotateY(var(--stack-yaw,0deg)) scale(var(--stack-scale,1));
+    transform-style: preserve-3d;
+    transition: none;
+    will-change: transform;
+  }
+  .work-card button, .work-card.is-visible button,
+  .work-card button:hover, .work-card button:focus-visible {
+    width: 100%; max-width: none; height: 100%;
+    opacity: 1; filter: none; transform: none;
+    transition: filter .3s, box-shadow .3s;
+  }
+  .work-card button:hover, .work-card button:focus-visible { filter: brightness(1.08); }
+  .work-index { overflow: clip; }
+  #work-index-items { position: relative; display: block; width: 100%; height: 100%; padding: 0; transform: none; transition: none; }
+  .work-index-item, .work-index-item.active {
+    position: absolute; top: 49%; left: 0;
+    width: 100%; min-height: 142px;
+    transform: translateY(calc(-50% + var(--index-y,0px)));
+    transition: none;
+  }
+}
+@media (min-width: 851px) and (max-width: 1200px) {
+  .work-card { width: 66%; }
+  .work-index-item, .work-index-item.active { min-height: 115px; }
+}
+@media (prefers-reduced-motion: reduce) and (min-width: 851px) {
+  .work-card { transition: none; }
+}
