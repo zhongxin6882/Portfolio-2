@@ -132,3 +132,11 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 .about-character.has-selection .character-trigger{transform:translate(1%,-1.2%) rotate(0) scale(1.015)}
 @media(max-width:800px){.about-character{left:4%;top:32%;height:30%}.character-hint{left:0;top:-7%;font-size:10px}.idea{width:36px;height:36px;font-size:21px}.about-character.is-open .idea-one{transform:translate(-72px,-78px) rotate(-16deg)}.about-character.is-open .idea-two{transform:translate(-29px,-120px) rotate(11deg)}.about-character.is-open .idea-three{transform:translate(20px,-108px) rotate(-8deg)}.about-character.is-open .idea-four{transform:translate(76px,-74px) rotate(17deg)}.about-character.is-open .idea-five{transform:translate(77px,-10px) rotate(-12deg)}.about-character.is-open .idea-six{transform:translate(-73px,-8px) rotate(13deg)}.about-character.is-open .idea-one{--idea-x:-72px;--idea-y:-78px}.about-character.is-open .idea-two{--idea-x:-29px;--idea-y:-120px}.about-character.is-open .idea-three{--idea-x:20px;--idea-y:-108px}.about-character.is-open .idea-four{--idea-x:76px;--idea-y:-74px}.about-character.is-open .idea-five{--idea-x:77px;--idea-y:-10px}.about-character.is-open .idea-six{--idea-x:-73px;--idea-y:-8px}.character-note{top:67%;left:9%;width:74%;font-size:9px}}
 @media(prefers-reduced-motion:reduce){.character-trigger,.character-art,.character-hint,.idea,.character-note{transition:none!important}}
+
+/* Give the About portrait and the two copy blocks distinct, readable zones. */
+@media(min-width:801px){
+  .about-character{left:23%;height:47%}
+  .showcase-personal{left:auto;right:4%;top:4%;width:22%;font-size:clamp(16px,1.25vw,23px);line-height:1.05}
+  .showcase-and{left:auto;right:4%;top:31%}
+  .showcase-statement{left:auto;right:4%;top:51%;width:22%;font-size:clamp(17px,1.35vw,25px);line-height:1.05}
+}
