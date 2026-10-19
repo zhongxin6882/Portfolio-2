@@ -17,6 +17,7 @@
     '04 / DESIGN TOOLKIT':'04 / 设计方法','Strong fundamentals.':'扎实的设计基础，','Room to':'持续','experiment.':'探索。','Product definition':'产品定义','Translate business needs and user scenarios into a clear product structure.':'将业务需求和用户场景梳理为清晰的产品结构。','Interaction':'交互设计','Map user flows, states, and edge cases into usable experiences.':'将用户流程、状态和异常场景转化为易用体验。','Visual systems':'视觉体系','Build coherent components, design language, and product specifications.':'建立一致的组件、设计语言与产品规范。','Prototyping':'原型设计','Explore ideas quickly and communicate behavior before implementation.':'快速验证方案，并在开发前清晰表达交互行为。','Make complex operational information easier to understand.':'让复杂的运营信息更容易理解。','Extend the product language into motion and communication materials.':'将产品语言延伸到动效和宣传物料。','Photoshop, Illustrator, After Effects, Sketch, C4D, Blender, and HTML5.':'Photoshop、Illustrator、After Effects、Sketch、C4D、Blender 与 HTML5。',
     '05 / EDUCATION':'05 / 教育经历','Learning shapes':'学习塑造','how I design.':'我的设计方式。','NORTHEAST NORMAL UNIVERSITY':'东北师范大学','Fine Arts · Bachelor’s degree':'美术学 · 本科','2020.03 — 2022.06':'2020.03 — 2022.06','LET’S MAKE SOMETHING USEFUL ↗':'一起做出有用的产品 ↗'
   });
+  const en=Object.fromEntries(Object.entries(zh).map(([english,chinese])=>[chinese,english]));
   const enTitles = new Map([
     ['About — September Fifteen','About — September Fifteen'],['Playground — September Fifteen','Playground — September Fifteen'],['Contact — September Fifteen','Contact — September Fifteen'],['FROMANOTHER — Project Study','FROMANOTHER — Project Study']
   ]);
@@ -30,14 +31,16 @@
     sourceText.set(node,node.nodeValue);
   }
   const toggle=document.querySelector('.language-toggle');
-  let language=localStorage.getItem('jiuyueshiwu-language')||'en';
+  const pageLanguageKey=document.body.dataset.languageKey;
+  const pageDefaultLanguage=document.body.dataset.defaultLanguage||'en';
+  let language=(pageLanguageKey&&localStorage.getItem(pageLanguageKey))||(pageLanguageKey?pageDefaultLanguage:localStorage.getItem('jiuyueshiwu-language'))||'en';
   function apply(lang){
     language=lang;
     for(const [node,original] of stored){
       const current=sourceText.get(node)??original;
       const trimmed=current.trim().replace(/\s+/g,' ');
       if(!trimmed) continue;
-      const translated=lang==='zh'?zh[trimmed]:null;
+      const translated=lang==='zh'?zh[trimmed]:en[trimmed];
       if(translated!==undefined && translated!==null){
         const start=current.match(/^\s*/)?.[0]||'';
         const end=current.match(/\s*$/)?.[0]||'';
@@ -45,13 +48,15 @@
       } else node.nodeValue=current;
     }
     document.documentElement.lang=lang==='zh'?'zh-CN':'en';
-    const originalTitle=document.documentElement.dataset.enTitle||document.title;
-    document.documentElement.dataset.enTitle=originalTitle;
-    document.title=lang==='zh'?(zh[originalTitle]||originalTitle):originalTitle;
+    const currentTitle=document.documentElement.dataset.enTitle||document.title;
+    if(!document.documentElement.dataset.enTitle) document.documentElement.dataset.enTitle=currentTitle;
+    const baseTitle=document.documentElement.dataset.enTitle;
+    document.title=lang==='zh'?(zh[baseTitle]||baseTitle):(en[baseTitle]||baseTitle);
     if(toggle){toggle.textContent=lang==='zh'?'EN':'中文';toggle.setAttribute('aria-label',lang==='zh'?'Switch to English':'切换到中文');toggle.setAttribute('aria-pressed',String(lang==='zh'));}
-    localStorage.setItem('jiuyueshiwu-language',lang);
+    if(pageLanguageKey) localStorage.setItem(pageLanguageKey,lang);
+    else localStorage.setItem('jiuyueshiwu-language',lang);
   }
-  const textObserver=new MutationObserver(records=>{for(const record of records){const nodes=record.type==='characterData'?[record.target]:[...record.addedNodes].filter(node=>node.nodeType===Node.TEXT_NODE);for(const node of nodes){const raw=node.nodeValue||'';const value=raw.trim().replace(/\s+/g,' ');if(zh[value]!==undefined){if(!sourceText.has(node)){sourceText.set(node,raw);stored.push([node,raw]);}else if(record.type==='characterData')sourceText.set(node,raw);if(language==='zh'){const start=raw.match(/^\s*/)?.[0]||'';const end=raw.match(/\s*$/)?.[0]||'';node.nodeValue=start+zh[value]+end;}}}}});
+  const textObserver=new MutationObserver(records=>{for(const record of records){const nodes=record.type==='characterData'?[record.target]:[...record.addedNodes].filter(node=>node.nodeType===Node.TEXT_NODE);for(const node of nodes){const raw=node.nodeValue||'';const value=raw.trim().replace(/\s+/g,' ');if(zh[value]!==undefined||en[value]!==undefined){if(!sourceText.has(node)){sourceText.set(node,raw);stored.push([node,raw]);}else if(record.type==='characterData')sourceText.set(node,raw);const translated=language==='zh'?zh[value]:en[value];if(translated){const start=raw.match(/^\s*/)?.[0]||'';const end=raw.match(/\s*$/)?.[0]||'';node.nodeValue=start+translated+end;}}}}});
   textObserver.observe(document.body,{subtree:true,characterData:true,childList:true});
   if(toggle) toggle.addEventListener('click',()=>apply(language==='en'?'zh':'en'));
   apply(language);
