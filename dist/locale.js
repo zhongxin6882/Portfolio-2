@@ -17,7 +17,12 @@
     '04 / DESIGN TOOLKIT':'04 / 设计方法','Strong fundamentals.':'扎实的设计基础，','Room to':'持续','experiment.':'探索。','Product definition':'产品定义','Translate business needs and user scenarios into a clear product structure.':'将业务需求和用户场景梳理为清晰的产品结构。','Interaction':'交互设计','Map user flows, states, and edge cases into usable experiences.':'将用户流程、状态和异常场景转化为易用体验。','Visual systems':'视觉体系','Build coherent components, design language, and product specifications.':'建立一致的组件、设计语言与产品规范。','Prototyping':'原型设计','Explore ideas quickly and communicate behavior before implementation.':'快速验证方案，并在开发前清晰表达交互行为。','Make complex operational information easier to understand.':'让复杂的运营信息更容易理解。','Extend the product language into motion and communication materials.':'将产品语言延伸到动效和宣传物料。','Photoshop, Illustrator, After Effects, Sketch, C4D, Blender, and HTML5.':'Photoshop、Illustrator、After Effects、Sketch、C4D、Blender 与 HTML5。',
     '05 / EDUCATION':'05 / 教育经历','Learning shapes':'学习塑造','how I design.':'我的设计方式。','NORTHEAST NORMAL UNIVERSITY':'东北师范大学','Fine Arts · Bachelor’s degree':'美术学 · 本科','2020.03 — 2022.06':'2020.03 — 2022.06','LET’S MAKE SOMETHING USEFUL ↗':'一起做出有用的产品 ↗'
   });
-  const en=Object.fromEntries(Object.entries(zh).map(([english,chinese])=>[chinese,english]));
+  Object.assign(zh,{
+    'FOR THE CURIOUS':'为好奇心而设计','AND':'以及','EVER WONDERED':'好奇过','WHAT\'S GOING ON':'我的脑海中','INSIDE MY HEAD?':'藏着什么吗？','SCROLL TO EXPLORE ↓':'向下滚动探索 ↓'
+  });
+  const en=Object.assign(Object.fromEntries(Object.entries(zh).map(([english,chinese])=>[chinese,english])),{
+    '设计数字产品，坚持':'Design digital products with intention,','清晰、结构与人本体验':'clarity, structure, and a human touch','——从用户流程到最终界面。':'— from first user flow to final pixel.','设计工具':'Tools'
+  });
   const enTitles = new Map([
     ['About — September Fifteen','About — September Fifteen'],['Playground — September Fifteen','Playground — September Fifteen'],['Contact — September Fifteen','Contact — September Fifteen'],['FROMANOTHER — Project Study','FROMANOTHER — Project Study']
   ]);
