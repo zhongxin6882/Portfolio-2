@@ -334,7 +334,7 @@
   .work-meta-row > span { color: #777; }
   .work-meta-row p { margin: 0; }
   .work-meta-awards {
-    grid-template-columns: 15% minmax(0,1fr);
+    grid-template-columns: 30% minmax(0,1fr);
     padding-left: 40%;
   }
   .work-visit { display: none; }
@@ -365,7 +365,7 @@
   }
   .work-card button:hover, .work-card button:focus-visible { filter: brightness(1.08); box-shadow: 0 25px 55px #0003; }
 
-  .work-index { z-index: 2; padding: 0 3% 26px; }
+  .work-index { z-index: 2; overflow: clip; padding: 0 3% 26px; }
   #work-index-items { gap: 38px; padding: 0; }
   .work-index-item { position: relative; width: 100%; min-height: 142px; }
   .work-index-item small { font-size: 12px; }
