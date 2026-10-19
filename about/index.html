@@ -26,6 +26,40 @@
     @media(max-width:800px){.chrome{grid-template-columns:20% 32% 1fr auto;padding:18px 14px 0}.brand b{font-size:22px}.header-slot nav{font-size:17px}.location{display:none}.inquiry{grid-column:3}.language-toggle{left:auto;right:14px;top:88px}.portrait-section{grid-template-columns:1fr;padding:75px 0}.portrait-copy{position:static}.portrait-wrap{width:100%;max-width:650px;margin:auto}.section-head{grid-template-columns:1fr;gap:25px}}
     @media(max-width:650px){.chrome{height:180px;grid-template-columns:20% 1fr auto;gap:8px}.brand b{font-size:18px}.header-slot nav{margin-top:24px;font-size:16px}.audio,.inquiry{display:none}.language-toggle{right:14px;top:20px}.about-page{padding:0 20px}.topline span:nth-child(2){display:none}.hero{padding:68px 0 50px}.hero-title{font-size:clamp(48px,12vw,80px)}.intro-row{grid-template-columns:1fr;gap:16px;margin-top:35px}.hero-intro{font-size:15px}.about-stats{grid-template-columns:1fr 1fr;gap:26px 12px}.stat strong{font-size:clamp(58px,15vw,90px)}.stat-note{grid-column:1/-1}.stat-note>span{margin-bottom:12px}.stat-note p{font-size:15px}.portrait-copy h2{font-size:50px}.portrait-wrap{min-height:0}.portrait-hint{font-size:10px}.idea{width:42px;height:42px;font-size:21px}.idea-1{left:12%}.idea-4{right:2%}.content{padding:75px 0}.section-head h2{font-size:48px}.details-grid{grid-template-columns:1fr;gap:55px}.process{grid-template-columns:1fr;margin-top:70px}.process h4{margin:24px 0 10px}.site-footer{display:block;padding:28px 20px}.site-footer a{display:block;margin-top:18px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.portrait-button,.idea,.idea-note,.header-slot nav{transition:none}}
+
+    /* About narrative inspired by the reference site's editorial pacing. */
+    .hero-title{max-width:1180px;overflow:visible}
+    .hero-title span{width:max-content;max-width:100%}
+    .hero-title span:first-child{animation:hero-rise .9s cubic-bezier(.2,.8,.2,1) both}
+    .hero-title span:last-child{animation:hero-rise 1s .08s cubic-bezier(.2,.8,.2,1) both}
+    .intro-row{animation:hero-rise .9s .23s both}
+    @keyframes hero-rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .about-stats .stat{min-width:0}.stat strong{font-variant-numeric:tabular-nums}
+    .manifesto{margin:0 -5.2vw;background:#171717;color:#eeede9;padding:42px 5.2vw 100px}
+    .manifesto-top{display:flex;justify-content:space-between;gap:20px;border-top:1px solid #60605e;padding-top:18px;font-size:10px;letter-spacing:.1em;color:#aaa9a5}
+    .manifesto h2{max-width:1450px;margin:95px 0 100px;font-size:clamp(54px,7.7vw,116px);font-weight:600;line-height:1.13;letter-spacing:-.075em}
+    .manifesto h2 span{display:block}.manifesto h2 em{font-style:normal;color:#f0532e}
+    .manifesto-bottom{display:grid;grid-template-columns:1fr minmax(280px,450px);gap:40px;border-top:1px solid #60605e;padding-top:24px}
+    .manifesto-bottom span{font-size:10px;color:#aaa9a5;letter-spacing:.1em}.manifesto-bottom p{font-size:18px;line-height:1.6;margin:0}
+    .content{padding:110px 0 0}.section-head{border-top:1px solid #aaa;padding-top:20px;margin-bottom:90px}
+    .section-head h2{max-width:960px}.details-grid{gap:8vw}
+    .details-grid h3{font-size:11px;letter-spacing:.1em;color:#555;margin:0 0 28px}
+    .career-entry{display:grid;grid-template-columns:56px 1fr auto;gap:12px;border-top:1px solid #aaa;padding:21px 0 28px;align-items:start}
+    .career-entry>span{font-size:10px;color:#777;padding-top:5px}
+    .career-entry strong{display:block;font-weight:600;font-size:clamp(21px,2vw,30px);letter-spacing:-.045em;line-height:1.2}
+    .career-entry p{font-size:13px;line-height:1.4;margin:8px 0 0;color:#666}
+    .career-entry time{font-size:11px;color:#666;white-space:nowrap;padding-top:5px}
+    .capability-intro{font-size:19px!important;line-height:1.6!important;max-width:550px;margin:0 0 50px!important}
+    .capability-list{border-top:1px solid #aaa}.capability-list span{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #aaa;padding:15px 0;font-size:clamp(18px,1.65vw,26px);letter-spacing:-.045em;transition:padding .25s,color .25s}.capability-list span:after{content:'↗';font-size:17px;color:#888}.capability-list span:hover{padding-left:9px;color:#f0532e}
+    .approach-section{display:grid;grid-template-columns:32% 1fr;gap:30px;border-top:1px solid #aaa;margin-top:120px;padding:20px 0 125px}
+    .approach-label{font-size:10px;letter-spacing:.1em}.approach-body h3{font-size:clamp(48px,6vw,92px);font-weight:600;letter-spacing:-.075em;line-height:1.1;margin:0 0 60px;max-width:1010px}.approach-body h3 em{font-style:normal;color:#f0532e}
+    .approach-body p{font-size:18px;line-height:1.6;max-width:620px;margin:0 0 0 auto}
+    .process-section{border-top:1px solid #aaa;padding:22px 0 110px}.process-heading{display:grid;grid-template-columns:32% 1fr;gap:30px;margin-bottom:75px}.process-heading>span{font-size:10px;letter-spacing:.1em}.process-heading h3{font-size:clamp(48px,6vw,92px);font-weight:600;letter-spacing:-.075em;line-height:1.03;margin:0}.process-heading h3 em{font-style:normal;color:#f0532e}
+    .process{display:block;margin:0}.process article{display:grid;grid-template-columns:12% 35% 1fr;gap:20px;align-items:start;border-top:1px solid #aaa;padding:25px 16px 42px 0;transition:background .25s,padding .25s}.process article:last-child{border-bottom:1px solid #aaa}.process article:hover{background:#dededb;padding-left:16px}.process small{padding-top:10px;color:#777}.process h4{font-size:clamp(24px,3vw,44px);margin:0;font-weight:600}.process p{font-size:16px;line-height:1.55;margin:6px 0 0;max-width:510px}
+    .site-footer{background:#171717;color:#eeede9;padding:35px 5.2vw 48px;display:block}.site-footer>span{display:block;border-top:1px solid #666;padding-top:18px;color:#aaa9a5}.site-footer a{display:block;margin-top:65px;font-size:clamp(48px,7vw,110px);line-height:1.1;font-weight:600;letter-spacing:-.07em}.site-footer a:hover{color:#f0532e}.site-footer a em{font-style:normal;color:#f0532e}
+    @media(max-width:800px){.manifesto h2{font-size:clamp(49px,8vw,76px)}.career-entry{grid-template-columns:36px 1fr}.career-entry time{grid-column:2;padding:0}.details-grid{gap:45px}.approach-section,.process-heading{grid-template-columns:1fr}.process article{grid-template-columns:12% 32% 1fr}}
+    @media(max-width:650px){.hero-title span{width:auto}.manifesto{margin:0 -20px;padding:25px 20px 80px}.manifesto h2{font-size:clamp(44px,11vw,70px);margin:80px 0}.manifesto-bottom{grid-template-columns:1fr;gap:22px}.manifesto-bottom p{font-size:16px}.content{padding-top:75px}.section-head{margin-bottom:60px}.career-entry{grid-template-columns:32px 1fr}.approach-section{margin-top:80px;padding-bottom:85px}.approach-body h3{font-size:clamp(43px,11vw,65px);margin-bottom:40px}.approach-body p{font-size:16px}.process-section{padding-bottom:80px}.process-heading{margin-bottom:50px}.process-heading h3{font-size:50px}.process article{grid-template-columns:46px 1fr;gap:4px 12px;padding:22px 0 30px}.process article p{grid-column:2;margin-top:8px;font-size:14px}.site-footer{padding:30px 20px 50px}.site-footer a{font-size:clamp(40px,11vw,72px)}}
+    @media(prefers-reduced-motion:reduce){.hero-title span,.intro-row{animation:none}.capability-list span,.process article{transition:none}}
   </style>
 </head>
 <body>
@@ -54,34 +88,40 @@
         <button class="idea idea-6" type="button" aria-label="设计系统" aria-pressed="false" data-zh-note="设计系统：建立一致的体验" data-en-note="Design systems: build coherent experiences">⌘</button><p class="idea-note" id="idea-note" aria-live="polite"></p>
       </div>
     </section>
+
+    <section class="manifesto" aria-labelledby="manifesto-title">
+      <div class="manifesto-top"><span data-en="DESIGN PHILOSOPHY / 01">设计主张 / 01</span><span>JIUYUESHIWU © 2026</span></div>
+      <h2 id="manifesto-title"><span data-en="FIND THE ORDER">从复杂里，</span><span data-en="IN COMPLEXITY.">找到<em>清晰的秩序。</em></span></h2>
+      <div class="manifesto-bottom"><span data-en="CLARITY · INTENTION · CHARACTER">清晰 · 意图 · 个性</span><p data-en="Good design starts by understanding the real problem. I connect structure, interaction and visual language so useful products feel intuitive and distinct.">好的设计从理解真实问题开始。让信息结构、交互逻辑与视觉语言相互支撑，使产品既好用，也有自己的性格。</p></div>
+    </section>
     <section class="content" id="experience">
       <div class="content-inner">
         <div class="section-head"><span data-en="01 / EXPERIENCE">01 / 我的经历</span><h2 data-en="Thoughtful products,<br><em>made usable.</em>">认真设计产品，<br><em>让体验更好用。</em></h2></div>
         <div class="details-grid">
           <div>
-            <h3 data-en="WORK EXPERIENCE">工作经历</h3>
-            <div class="experience"><strong data-en="Yishi Technology · AI products">怡视科技 · AI 产品</strong><small>2020.11 — 至今</small></div>
-            <div class="experience"><strong data-en="Interaction & visual designer">交互与视觉设计师</strong><small data-en="Product design">产品设计</small></div>
-            <div class="experience"><strong data-en="Qi An Xin · Data products">奇安信 · 数据产品</strong><small>2017.04 — 2020.11</small></div>
-            <div class="experience"><strong data-en="Product UI designer / team lead">产品 UI 设计师 · 数据产品组长</strong><small>产品 UI</small></div>
-            <div class="experience"><strong data-en="Huazhu Graphics · Mobile & desktop">华筑图文 · 移动端与桌面应用</strong><small>2016.01 — 2017.03</small></div>
+            <h3 data-en="01 / EXPERIENCE">01 / 工作经历</h3>
+            <div class="career-entry"><span>01</span><div><strong data-en="Yishi Technology">怡视科技</strong><p data-en="Interaction & visual designer · AI products">交互与视觉设计师 · AI 产品</p></div><time>2020.11 — 至今</time></div>
+            <div class="career-entry"><span>02</span><div><strong data-en="Qi An Xin">奇安信</strong><p data-en="Product UI designer / team lead · Data products">产品 UI 设计师 · 数据产品组长</p></div><time>2017.04 — 2020.11</time></div>
+            <div class="career-entry"><span>03</span><div><strong data-en="Huazhu Graphics">华筑图文</strong><p data-en="Mobile & desktop applications">移动端与桌面应用</p></div><time>2016.01 — 2017.03</time></div>
           </div>
           <div>
-            <h3 data-en="HOW I WORK">工作方式</h3>
-            <p data-en="I start with the user context and product goal, organize the information and interaction flow, then shape a consistent visual language with product and engineering teams.">从需求和用户场景出发，梳理信息架构与交互流程，确立视觉方向，并与产品、研发团队一起打磨到落地。</p>
-            <h3 data-en="CAPABILITIES">专业能力</h3>
-            <div class="tags"><span data-en="Product strategy">产品策略</span><span data-en="User flows">用户流程</span><span data-en="B2B platforms">B 端产品</span><span data-en="Mobile UI">移动端 UI</span><span data-en="Design systems">设计系统</span><span data-en="Data visualization">数据可视化</span><span data-en="Motion & branding">动效与品牌</span></div>
+            <h3 data-en="02 / CAPABILITIES">02 / 专业能力</h3>
+            <p class="capability-intro" data-en="I start with the user context and product goal, organize the information and interaction flow, then shape a consistent visual language with product and engineering teams.">从需求和用户场景出发，梳理信息架构与交互流程，确立视觉方向，并与产品、研发团队一起打磨到落地。</p>
+            <div class="capability-list"><span data-en="Product strategy">产品策略</span><span data-en="User flows & interaction">用户流程与交互</span><span data-en="B2B & mobile products">B 端与移动端产品</span><span data-en="Design systems">设计系统</span><span data-en="Data visualization">数据可视化</span><span data-en="Motion & branding">动效与品牌</span></div>
           </div>
         </div>
-        <div class="process">
-          <article><small>01 / DISCOVER</small><h4 data-en="Define the problem">定义问题</h4><p data-en="Turn business needs and user scenarios into a clear product structure.">把业务需求和用户场景整理为清晰的产品结构。</p></article>
-          <article><small>02 / DESIGN</small><h4 data-en="Shape the experience">设计体验</h4><p data-en="Map flows, states and edge cases into a coherent interface.">把流程、状态与异常场景转化为一致且易用的界面。</p></article>
-          <article><small>03 / REFINE</small><h4 data-en="Refine together">协作打磨</h4><p data-en="Use prototypes and feedback to refine details before and during development.">借助原型和反馈，在开发前后持续打磨细节。</p></article>
-        </div>
+        <section class="approach-section" aria-labelledby="approach-title"><span class="approach-label" data-en="03 / APPROACH">03 / 工作方式</span><div class="approach-body"><h3 id="approach-title" data-en="EACH PROJECT HAS ITS OWN <em>PERSONALITY.</em>">每个项目，<br>都有自己的<em>性格。</em></h3><p data-en="I start with the user context and product goal, then work with product and engineering teams to turn research, flows and visual detail into one coherent experience.">从用户情境与产品目标出发，再与产品、研发团队协作，把洞察、流程和视觉细节连接成一致的体验。</p></div></section>
+        <section class="process-section" aria-labelledby="process-title"><div class="process-heading"><span data-en="04 / PROCESS">04 / 设计过程</span><h3 id="process-title" data-en="FROM FIRST THOUGHT<br>TO <em>FINISHING TOUCH.</em>">从最初想法，<br>到<em>最后细节。</em></h3></div>
+          <div class="process">
+            <article><small>01 / DISCOVER</small><h4 data-en="Define the problem">定义问题</h4><p data-en="Turn business needs and user scenarios into a clear product structure.">把业务需求和用户场景整理为清晰的产品结构。</p></article>
+            <article><small>02 / DESIGN</small><h4 data-en="Shape the experience">设计体验</h4><p data-en="Map flows, states and edge cases into a coherent interface.">把流程、状态与异常场景转化为一致且易用的界面。</p></article>
+            <article><small>03 / REFINE</small><h4 data-en="Refine together">协作打磨</h4><p data-en="Use prototypes and feedback to refine details before and during development.">借助原型和反馈，在开发前后持续打磨细节。</p></article>
+          </div>
+        </section>
       </div>
     </section>
   </main>
-  <footer class="site-footer"><span data-en="THANKS FOR STOPPING BY">感谢你看到这里</span><a href="../contact.html" data-en="Let's make something useful ↗">一起做出有用的产品 ↗</a></footer>
+  <footer class="site-footer"><span data-en="THANKS FOR STOPPING BY">感谢你看到这里</span><a href="../contact.html" data-en="LET’S MAKE SOMETHING <em>USEFUL ↗</em>">一起做出<em>有用的产品 ↗</em></a></footer>
   <script>
     (() => {
       const wrap = document.getElementById('portrait');
