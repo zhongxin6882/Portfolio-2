@@ -403,7 +403,8 @@
     height: 100vh;
     padding: 0;
     perspective: 1400px;
-    overflow: visible;
+    overflow: clip;
+    isolation: isolate;
   }
   .work-card, .work-card:first-child, .work-card:last-child {
     position: absolute;

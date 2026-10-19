@@ -42,8 +42,8 @@ function render(){
   cards.forEach((card,i)=>{const d=distance(i,position),abs=Math.abs(d),shown=abs<2.25;
     card.style.visibility=shown?'visible':'hidden';card.style.pointerEvents=abs<.75?'auto':'none';
     card.style.zIndex=String(30-Math.round(abs*6));card.style.opacity=shown?String(Math.max(0,1-Math.max(0,abs-1.65)*1.5)):'0';
-    card.style.setProperty('--stack-x',`${-d*Math.min(width*.29,600)}px`);
-    card.style.setProperty('--stack-y',`${d*height*.46}px`);
+    card.style.setProperty('--stack-x',`${-d*Math.min(width*.045,88)}px`);
+    card.style.setProperty('--stack-y',`${d*height*.23}px`);
     card.style.setProperty('--stack-rotation',`${d*15}deg`);
     card.style.setProperty('--stack-yaw',`${-d*9}deg`);
     card.style.setProperty('--stack-scale',String(1-Math.min(abs,2)*.035));
