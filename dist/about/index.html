@@ -1,42 +1,216 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>关于 — 九月十五</title><meta name="description" content="九月十五的 UI/UX 与产品设计实践。"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="../style.css?v=about-character-20261019f"><script>try{if(sessionStorage.getItem("portfolio-route-transition")){document.documentElement.classList.add("has-route-transition");const s=document.createElement("style");s.textContent="#intro-loader{display:none!important}";document.head.append(s)}}catch{}</script></head><body data-default-language="zh" data-language-key="jiuyueshiwu-about-language"><div class="cursor" aria-hidden="true"></div><header class="chrome"><a class="brand" href="../about/#top" aria-label="Back to top"><b>JIUYESHIWU</b><small>©<br>copyright 2026<br>home ↗<br>•84</small></a><div class="header-slot"><button id="menuToggle" aria-expanded="false">Menu</button><nav id="menu"><a href="../index.html#top">→ WORK</a><a href="../about/" aria-current="page">ABOUT</a><a href="../playground.html">PLAYGROUND</a><a href="../contact.html">CONTACT</a></nav></div><div class="audio">Audio <button id="audioToggle" aria-pressed="false">Off —</button></div><div class="location">Working globally<br><span id="clock">HCMC</span></div><div class="inquiry">商务合作 &nbsp; <a href="../contact.html">联系 / 项目合作</a></div><button class="language-toggle" type="button" aria-label="Switch language" aria-pressed="false">中文</button></header><main id="top"><section id="about" class="about-page" aria-labelledby="about-title">
-  <section class="about-showcase" aria-label="关于简介">
-    <div class="showcase-years" aria-label="10 years, 3 companies"><span>10</span><span>03</span></div>
-    <div class="showcase-personal"><span>FOR THE CURIOUS</span><p>UI/UX 设计师<br>产品设计师<br>B 端与 C 端产品<br>PC 与移动端设计<br>把复杂需求转化为清晰体验<br>持续学习中……</p></div>
-    <span class="showcase-and">AND</span>
-    <p class="showcase-statement">将复杂的产品需求，转化为清晰、实用且视觉统一的数字体验。</p>
-    <div class="about-character" id="about-character">
-      <button class="character-trigger" type="button" aria-label="展开人物脑中的创意元素" aria-expanded="false">
-        <span class="character-hint">想看看我脑中的<br>设计灵感吗？</span>
-        <img class="character-art" src="../pusher-character-v2.webp?v=about-fast-20261019e" alt="开屏动画中的人物正在推动页面">
-      </button>
-      <div class="character-ideas" role="group" aria-label="脑中的设计元素">
-        <button class="idea idea-one" type="button" aria-label="AI 产品" aria-pressed="false" data-note="AI 产品：从想法到可用体验">✳</button>
-        <button class="idea idea-two" type="button" aria-label="交互设计" aria-pressed="false" data-note="交互设计：让每一步都清晰自然">✎</button>
-        <button class="idea idea-three" type="button" aria-label="用户洞察" aria-pressed="false" data-note="用户洞察：从真实场景发现问题">◉</button>
-        <button class="idea idea-four" type="button" aria-label="视觉表达" aria-pressed="false" data-note="视觉表达：让复杂信息一眼读懂">↗</button>
-        <button class="idea idea-five" type="button" aria-label="数据可视化" aria-pressed="false" data-note="数据可视化：把信息变得直观">✦</button>
-        <button class="idea idea-six" type="button" aria-label="设计系统" aria-pressed="false" data-note="设计系统：建立一致且可扩展的体验">⌘</button>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="九月十五的 UI/UX 与产品设计实践。">
+  <title>关于 — 九月十五</title>
+  <style>
+    :root{color:#151515;background:#eeeef0;font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;font-synthesis:none}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;min-width:320px}
+    button,a{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit}
+    .site-header{position:relative;z-index:10;display:grid;grid-template-columns:1fr auto 1fr;align-items:start;gap:30px;padding:24px clamp(20px,3vw,48px);font-size:12px;line-height:1.25}
+    .brand{width:max-content;text-decoration:none;font-weight:800;letter-spacing:-.06em;font-size:22px;line-height:.9}
+    .brand small{display:block;margin-top:8px;font-size:9px;font-weight:400;letter-spacing:.02em}
+    .nav{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+    .nav a{text-decoration:none;white-space:nowrap}
+    .nav a:hover,.nav a[aria-current]{text-decoration:underline;text-underline-offset:5px}
+    .header-actions{justify-self:end;display:flex;gap:18px;align-items:center}
+    .header-actions a{text-decoration:none;white-space:nowrap}
+    .language-toggle{border:1px solid #171717;background:transparent;border-radius:50%;width:36px;height:36px;font-size:10px}
+    .hero{max-width:1600px;margin:auto;padding:54px clamp(20px,3vw,48px) 115px}
+    .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:700}
+    .hero-title{margin:32px 0 22px;font-size:clamp(54px,7.5vw,126px);line-height:.92;letter-spacing:-.09em;font-weight:700}
+    .hero-title span{display:block}
+    .hero-title em{color:#ef4a31;font-style:normal}
+    .hero-intro{max-width:660px;font-size:clamp(16px,1.5vw,22px);line-height:1.45;margin:0}
+    .hero-grid{display:grid;grid-template-columns:minmax(210px,.75fr) minmax(380px,1.45fr) minmax(210px,.8fr);align-items:end;gap:clamp(14px,2vw,36px);margin-top:45px}
+    .hero-left,.hero-right{align-self:center}
+    .micro-label{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#777}
+    .hero-left p{margin:20px 0 0;font-size:15px;line-height:1.55;max-width:220px}
+    .stat{margin:0 0 26px}
+    .stat strong{display:block;font-size:clamp(68px,7vw,112px);letter-spacing:-.09em;line-height:.9}
+    .stat span{display:block;margin-top:10px;font-size:12px;line-height:1.35}
+    .hero-right p{font-size:16px;line-height:1.45;max-width:245px}
+    .portrait-wrap{position:relative;min-width:0;min-height:580px;display:flex;align-items:end;justify-content:center}
+    .portrait-button{position:relative;z-index:1;display:block;width:100%;max-width:610px;border:0;padding:0;background:none;line-height:0;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+    .portrait-button:hover,.portrait-button:focus-visible{transform:translateY(-5px);outline:none}
+    .portrait-button:focus-visible{outline:2px solid #ef4a31;outline-offset:5px}
+    .portrait-button img{display:block;width:100%;height:auto;max-height:600px;object-fit:contain}
+    .portrait-hint{position:absolute;z-index:2;top:32%;left:2%;display:block;max-width:144px;background:#171717;color:#fff;padding:11px 12px;line-height:1.25;font-size:11px;text-align:left;transform:rotate(-5deg);box-shadow:5px 6px 0 #ef4a31}
+    .portrait-wrap.is-open .portrait-hint{opacity:0}
+    .idea{position:absolute;z-index:3;width:54px;height:54px;border:1.5px solid #171717;border-radius:50%;background:#f7f7f7;color:#171717;font-size:27px;line-height:1;opacity:0;pointer-events:none;transform:translateY(18px) scale(.7);transition:opacity .28s,transform .5s cubic-bezier(.16,1,.3,1),background .2s,color .2s}
+    .portrait-wrap.is-open .idea{opacity:1;pointer-events:auto;transform:translate(0,0) scale(1)}
+    .idea:hover,.idea:focus-visible,.idea[aria-pressed="true"]{background:#ef4a31;color:#fff;outline:none}
+    .idea-1{top:8%;left:19%}.idea-2{top:2%;left:37%}.idea-3{top:4%;left:58%}
+    .idea-4{top:16%;right:9%}.idea-5{top:36%;right:0}.idea-6{top:37%;left:3%}
+    .idea-note{position:absolute;z-index:4;left:50%;bottom:1%;width:max-content;max-width:90%;transform:translateX(-50%);margin:0;padding:9px 13px;background:#171717;color:#fff;font-size:12px;line-height:1.35;text-align:center;opacity:0;transition:opacity .2s;pointer-events:none}
+    .idea-note.is-visible{opacity:1}
+    .scroll-link{display:inline-block;margin-top:22px;font-size:12px;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:4px}
+    .content{background:#fff;padding:110px clamp(20px,5vw,80px)}
+    .content-inner{max-width:1440px;margin:auto}
+    .section-head{display:grid;grid-template-columns:25% 1fr;gap:20px;border-top:1px solid #171717;padding-top:22px;margin-bottom:80px}
+    .section-head span{font-size:12px}
+    .section-head h2{margin:0;font-size:clamp(40px,5.2vw,78px);line-height:1;letter-spacing:-.07em;max-width:820px}
+    .section-head h2 em{font-style:normal;color:#ef4a31}
+    .details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:70px 7vw}
+    .details-grid h3{font-size:12px;font-weight:400;color:#777;margin:0 0 24px}
+    .experience{border-top:1px solid #d7d7d7;padding:15px 0;display:grid;grid-template-columns:1fr auto;gap:14px;font-size:14px}
+    .experience strong{font-weight:600}.experience small{color:#777;white-space:nowrap}
+    .details-grid p{font-size:17px;line-height:1.55;max-width:540px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}.tags span{border:1px solid #bbb;border-radius:24px;padding:9px 12px;font-size:12px}
+    .process{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:90px}
+    .process article{border-top:1px solid #171717;padding:17px 0 30px}
+    .process small{font-size:11px;color:#777}.process h4{font-size:25px;margin:34px 0 12px;letter-spacing:-.04em}.process p{font-size:14px;line-height:1.5;max-width:300px}
+    .site-footer{background:#171717;color:#f4f4f4;padding:90px clamp(20px,5vw,80px);display:flex;align-items:end;justify-content:space-between;gap:20px}
+    .site-footer span{font-size:12px}.site-footer a{font-size:clamp(28px,4vw,58px);letter-spacing:-.06em;text-decoration:none}
+    @media(max-width:900px){
+      .site-header{grid-template-columns:1fr auto;gap:20px}.nav{grid-column:1/-1;grid-row:2}.header-actions{grid-column:2;grid-row:1}.header-actions>a{display:none}
+      .hero{padding-top:35px}.hero-grid{grid-template-columns:1fr 1fr}.portrait-wrap{grid-column:1/-1;grid-row:1;min-height:0;max-width:580px;margin:auto}.hero-left,.hero-right{align-self:start}.hero-title{font-size:clamp(54px,11vw,90px)}
+      .section-head{grid-template-columns:1fr;gap:28px}.process{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:600px){
+      .site-header{padding:18px}.brand{font-size:18px}.nav{gap:12px;font-size:11px}.hero{padding:40px 18px 75px}.hero-title{font-size:clamp(52px,14vw,78px)}
+      .hero-grid{display:flex;flex-direction:column;align-items:stretch;margin-top:15px;gap:24px}.portrait-wrap{order:0;width:100%;min-height:0}.portrait-button img{max-height:450px}
+      .portrait-hint{font-size:10px;top:28%;left:0}.idea{width:42px;height:42px;font-size:21px}.idea-1{left:12%}.idea-4{right:2%}
+      .hero-left{order:1}.hero-right{order:2;display:flex;gap:25px;align-items:start}.hero-right .stat{flex:1}.stat strong{font-size:62px}.hero-right p{display:none}
+      .content{padding:70px 18px}.section-head{margin-bottom:55px}.details-grid{grid-template-columns:1fr;gap:40px}.process{grid-template-columns:1fr;margin-top:65px}
+      .site-footer{display:block;padding:65px 18px}.site-footer a{display:block;margin-top:25px}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.portrait-button,.idea,.idea-note{transition:none}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html">JIUYUESHIWU<small>© 2026 · PORTFOLIO</small></a>
+    <nav class="nav" aria-label="主导航">
+      <a href="../index.html" data-en="WORK">作品</a>
+      <a href="./" aria-current="page" data-en="ABOUT">关于</a>
+      <a href="../playground.html" data-en="PLAYGROUND">灵感实验室</a>
+      <a href="../contact.html" data-en="CONTACT">联系</a>
+    </nav>
+    <div class="header-actions"><a href="../contact.html" data-en="Project inquiry ↗">项目合作 ↗</a><button class="language-toggle" type="button" aria-label="Switch to English">EN</button></div>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="about-title">
+      <span class="eyebrow" data-en="ABOUT / SEPTEMBER FIFTEEN">关于 / 九月十五</span>
+      <h1 class="hero-title" id="about-title"><span data-en="Make complexity">将复杂需求</span><span><em data-en="feel clear.">变得清晰。</em></span></h1>
+      <p class="hero-intro" data-en="I design useful digital products with clear structure and a human touch, from the first user flow to the final interface.">从用户流程到最终界面，把复杂的产品需求转化为清晰、实用且一致的数字体验。</p>
+      <div class="hero-grid">
+        <div class="hero-left">
+          <span class="micro-label" data-en="WHAT I DO">我的方向</span>
+          <p data-en="UI/UX and product design across AI, cybersecurity, B2B platforms and mobile experiences.">UI/UX 与产品设计，聚焦人工智能、网络安全、B 端平台和移动端体验。</p>
+          <a class="scroll-link" href="#experience" data-en="Explore my experience ↓">向下了解我的经历 ↓</a>
+        </div>
+        <div class="portrait-wrap" id="portrait">
+          <button class="portrait-button" id="portrait-trigger" type="button" aria-label="展开人物脑中的设计元素" aria-expanded="false">
+            <img src="../pusher-character-v2.webp?v=about-rebuild-1" width="1319" height="1192" alt="九月十五的开屏人物" decoding="async" fetchpriority="high">
+            <span class="portrait-hint" data-en="Tap to see what's on my mind">点击人物，看看我脑中的设计灵感</span>
+          </button>
+          <button class="idea idea-1" type="button" aria-label="AI 产品" aria-pressed="false" data-zh-note="AI 产品：从想法到可用体验" data-en-note="AI products: from idea to usable experience">✳</button>
+          <button class="idea idea-2" type="button" aria-label="交互设计" aria-pressed="false" data-zh-note="交互设计：让每一步都清晰自然" data-en-note="Interaction: make every step feel natural">✎</button>
+          <button class="idea idea-3" type="button" aria-label="用户洞察" aria-pressed="false" data-zh-note="用户洞察：从真实场景发现问题" data-en-note="Insight: find problems in real contexts">◉</button>
+          <button class="idea idea-4" type="button" aria-label="视觉表达" aria-pressed="false" data-zh-note="视觉表达：让复杂信息一眼读懂" data-en-note="Visuals: make complexity easy to grasp">↗</button>
+          <button class="idea idea-5" type="button" aria-label="数据可视化" aria-pressed="false" data-zh-note="数据可视化：把信息变得直观" data-en-note="Data visuals: make information intuitive">✦</button>
+          <button class="idea idea-6" type="button" aria-label="设计系统" aria-pressed="false" data-zh-note="设计系统：建立一致的体验" data-en-note="Design systems: build coherent experiences">⌘</button>
+          <p class="idea-note" id="idea-note" aria-live="polite"></p>
+        </div>
+        <div class="hero-right">
+          <div class="stat"><strong>10+</strong><span data-en="Years in UI/UX and product design">年 UI/UX 与产品设计经验</span></div>
+          <div class="stat"><strong>03</strong><span data-en="Product teams and companies">段产品团队经历</span></div>
+          <p data-en="I like turning complicated systems into experiences that people can understand and use.">我喜欢把复杂系统梳理成让人能理解、愿意使用的体验。</p>
+        </div>
       </div>
-      <p class="character-note" aria-live="polite">点击人物，看看脑中的设计想法</p>
-    </div>
-    <div class="showcase-index"><span>工作经历</span><span>产品设计</span><span>技能与工具</span><span>教育经历</span></div>
-    <div class="showcase-lists"><p>2016 — 至今<br>三段产品团队经历<br>覆盖多个行业</p><p>B 端平台<br>C 端体验<br>PC、移动端与手持终端</p><p>产品策略<br>用户流程与 UI 体系<br>视觉表达</p><p>Photoshop · Illustrator<br>After Effects · Sketch<br>C4D · Blender · HTML5</p></div>
-    <a class="showcase-scroll" href="#about-details">向下滚动探索 ↓</a>
-  </section>
-  <div id="about-details" class="about-topline"><span>UI/UX 与产品设计</span><span>人工智能 · 网络安全 · 数字产品</span><span>关于 / 01</span></div>
-  <div class="about-hero">
-    <p class="about-kicker">关于我的设计实践 <span>✳</span></p>
-    <h2 id="about-title">设计数字产品，坚持<i>清晰、结构与人本体验</i>——从用户流程到最终界面。</h2>
-    <div class="about-intro"><span>UI/UX 设计师 · 产品设计师 · 10 年经验</span><p>我是一名 UI/UX 与产品设计师，拥有网络安全、人工智能和移动产品设计经验，擅长将复杂需求转化为清晰的产品流程与视觉体系，并跟进从概念到落地的过程。</p></div>
-  </div>
-  <div class="about-stats"><div class="stat"><strong>10<span>+</span></strong><span>UI/UX 设计经验<br>与产品设计</span></div><div class="stat"><strong>03</strong><span>家公司<br>设计团队</span></div><div class="stat stat-note"><span>产品领域<br>与平台</span><p>B 端平台 · 城市安全产品 · AI 城市治理 · PC、移动端与手持终端体验</p></div></div>
-  <div class="about-columns">
-    <section class="about-block awards"><div class="section-heading"><span>01 / 工作经历</span><h3>打造产品<br>创造价值<span class="asterisk">✳</span></h3></div><ul><li><span>怡视科技 · AI 产品</span><b>2020.11 — 至今</b></li><li><span>交互与视觉设计师</span><b>产品设计</b></li><li><span>奇安信 · 数据产品</span><b>2017.04 — 2020.11</b></li><li><span>产品 UI 设计师 · 数据产品组长</span><b>产品 UI</b></li><li><span>华筑图文 · 移动端与桌面应用</span><b>2016.01 — 2017.03</b></li><li><span>UI 设计师</span><b>UI 设计</b></li></ul></section>
-    <section class="about-block capabilities"><div class="section-heading"><span>02 / 专业能力</span><h3>从产品思考<br>到精细 UI<span class="asterisk">↗</span></h3></div><p class="block-copy">我结合用户需求、产品逻辑与视觉语言，打造清晰、易用且一致的数字体验。</p><div class="capability-list"><span>Product strategy</span><span>用户流程</span><span>B 端产品设计</span><span>C 端体验</span><span>PC 与移动端 UI</span><span>Design systems</span><span>数据可视化</span><span>动效与品牌设计</span></div></section>
-  </div>
-  <section class="approach"><div class="approach-label"><span>03 / 工作方式</span><span>从构想到体验</span></div><div class="approach-content"><h3>让复杂产品变得 <i>清晰、一致且易用。</i></h3><p>从需求和用户场景出发，梳理信息架构与交互流程，确立视觉方向，并与产品、研发和研究团队协作打磨界面。</p></div></section>
-  <section class="process"><div class="process-head"><span>04 / 设计方法</span><h3>扎实的设计基础，<br>持续 <i>探索。</i></h3></div><div class="process-list"><article><span>01</span><h4>产品定义</h4><p>将业务需求和用户场景梳理为清晰的产品结构。</p></article><article><span>02</span><h4>交互设计</h4><p>将用户流程、状态和异常场景转化为易用体验。</p></article><article><span>03</span><h4>视觉体系</h4><p>建立一致的组件、设计语言与产品规范。</p></article><article><span>04</span><h4>原型设计</h4><p>快速验证方案，并在开发前清晰表达交互行为。</p></article><article><span>05</span><h4>数据可视化</h4><p>让复杂的运营信息更容易理解。</p></article><article><span>06</span><h4>动效与品牌</h4><p>将产品语言延伸到动效和宣传物料。</p></article><article><span>07</span><h4>设计工具</h4><p>Photoshop、Illustrator、After Effects、Sketch、C4D、Blender 与 HTML5。</p></article></div></section>
-  <section class="trusted"><span>05 / 教育经历</span><h3>学习塑造<br><i>我的设计方式。</i></h3><div><strong>东北师范大学</strong><span>美术学 · 本科</span><small>2020.03 — 2022.06</small></div></section>
-  <footer class="about-footer"><span>感谢你看到这里</span><a href="../contact.html">一起做出有用的产品 ↗</a></footer>
-</section>
-</main><script src="../about.js?v=about-character-20261019f"></script><script src="../page-transition.js?v=route-transition-20261019"></script><script src="../locale.js?v=about-zh-20261019b"></script></body></html>
+    </section>
+
+    <section class="content" id="experience">
+      <div class="content-inner">
+        <div class="section-head"><span data-en="01 / EXPERIENCE">01 / 我的经历</span><h2 data-en="Thoughtful products,<br><em>made usable.</em>">认真设计产品，<br><em>让体验更好用。</em></h2></div>
+        <div class="details-grid">
+          <div>
+            <h3 data-en="WORK EXPERIENCE">工作经历</h3>
+            <div class="experience"><strong data-en="Yishi Technology · AI products">怡视科技 · AI 产品</strong><small>2020.11 — 至今</small></div>
+            <div class="experience"><strong data-en="Interaction & visual designer">交互与视觉设计师</strong><small data-en="Product design">产品设计</small></div>
+            <div class="experience"><strong data-en="Qi An Xin · Data products">奇安信 · 数据产品</strong><small>2017.04 — 2020.11</small></div>
+            <div class="experience"><strong data-en="Product UI designer / team lead">产品 UI 设计师 · 数据产品组长</strong><small>产品 UI</small></div>
+            <div class="experience"><strong data-en="Huazhu Graphics · Mobile & desktop">华筑图文 · 移动端与桌面应用</strong><small>2016.01 — 2017.03</small></div>
+          </div>
+          <div>
+            <h3 data-en="HOW I WORK">工作方式</h3>
+            <p data-en="I start with the user context and product goal, organize the information and interaction flow, then shape a consistent visual language with product and engineering teams.">从需求和用户场景出发，梳理信息架构与交互流程，确立视觉方向，并与产品、研发团队一起打磨到落地。</p>
+            <h3 data-en="CAPABILITIES">专业能力</h3>
+            <div class="tags"><span data-en="Product strategy">产品策略</span><span data-en="User flows">用户流程</span><span data-en="B2B platforms">B 端产品</span><span data-en="Mobile UI">移动端 UI</span><span data-en="Design systems">设计系统</span><span data-en="Data visualization">数据可视化</span><span data-en="Motion & branding">动效与品牌</span></div>
+          </div>
+        </div>
+        <div class="process">
+          <article><small>01 / DISCOVER</small><h4 data-en="Define the problem">定义问题</h4><p data-en="Turn business needs and user scenarios into a clear product structure.">把业务需求和用户场景整理为清晰的产品结构。</p></article>
+          <article><small>02 / DESIGN</small><h4 data-en="Shape the experience">设计体验</h4><p data-en="Map flows, states and edge cases into a coherent interface.">把流程、状态与异常场景转化为一致且易用的界面。</p></article>
+          <article><small>03 / REFINE</small><h4 data-en="Refine together">协作打磨</h4><p data-en="Use prototypes and feedback to refine details before and during development.">借助原型和反馈，在开发前后持续打磨细节。</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><span data-en="THANKS FOR STOPPING BY">感谢你看到这里</span><a href="../contact.html" data-en="Let's make something useful ↗">一起做出有用的产品 ↗</a></footer>
+  <script>
+    (() => {
+      const wrap = document.getElementById('portrait');
+      const trigger = document.getElementById('portrait-trigger');
+      const note = document.getElementById('idea-note');
+      const ideas = Array.from(wrap.querySelectorAll('.idea'));
+      const languageButton = document.querySelector('.language-toggle');
+      const translations = Array.from(document.querySelectorAll('[data-en]')).map(el => [el, el.innerHTML, el.dataset.en]);
+      let language = 'zh';
+      let selected = null;
+      const render = () => {
+        const open = trigger.getAttribute('aria-expanded') === 'true';
+        wrap.classList.toggle('is-open', open);
+        ideas.forEach(idea => {
+          idea.tabIndex = open ? 0 : -1;
+          idea.setAttribute('aria-pressed', String(idea === selected));
+        });
+        note.classList.toggle('is-visible', !!selected);
+        note.textContent = selected ? selected.dataset[language + 'Note'] : '';
+      };
+      trigger.addEventListener('click', () => {
+        const open = trigger.getAttribute('aria-expanded') !== 'true';
+        trigger.setAttribute('aria-expanded', String(open));
+        if (!open) selected = null;
+        render();
+      });
+      ideas.forEach(idea => idea.addEventListener('click', () => {
+        selected = idea;
+        trigger.setAttribute('aria-expanded', 'true');
+        render();
+      }));
+      wrap.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          trigger.setAttribute('aria-expanded', 'false');
+          selected = null;
+          render();
+          trigger.focus();
+        }
+      });
+      languageButton.addEventListener('click', () => {
+        language = language === 'zh' ? 'en' : 'zh';
+        translations.forEach(([el, zh, en]) => { el.innerHTML = language === 'zh' ? zh : en; });
+        languageButton.textContent = language === 'zh' ? 'EN' : '中文';
+        languageButton.setAttribute('aria-label', language === 'zh' ? 'Switch to English' : '切换到中文');
+        document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
+        document.title = language === 'zh' ? '关于 — 九月十五' : 'About — September Fifteen';
+        render();
+      });
+      document.querySelectorAll('a[href]').forEach(link => link.addEventListener('click', () => {
+        const name = new URL(link.href).pathname.split('/').filter(Boolean).pop();
+        const label = {'index.html':'Work','playground.html':'Playground','contact.html':'Contact'}[name];
+        if (label) try { sessionStorage.setItem('portfolio-route-transition', label); } catch {}
+      }));
+      render();
+    })();
+  </script>
+</body>
+</html>
