@@ -230,8 +230,9 @@
   z-index: 40;
   overflow-y: auto;
   background: #e9e9e9;
-  animation: focus-in .6s cubic-bezier(.2,.75,.2,1) both;
+  animation: detail-fade .35s ease-out both;
 }
+@keyframes detail-fade { from { opacity: 0; } to { opacity: 1; } }
 .detail-close { position: fixed; top: auto; bottom: 28px; right: 28px; background: #111; color: #fff; }
 .detail-body { padding: 9vh 7% 0; }
 .detail-body h1 { margin: 0 0 8vh; font: 400 clamp(50px,7vw,115px)/.87 Georgia,serif; letter-spacing: -.07em; }

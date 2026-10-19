@@ -21,7 +21,10 @@ const projects=[
  ['DAFI TROPICDANE','Furniture','May 2019','A minimal Scandinavian-inspired furniture experience.','District2<br>Website Design','Behance UI Gallery','PbGu32LciyVQZHUuKJCNLLV2qZc.jpg']
 ].map(([name,type,date,description,role,awards,image],i)=>({name,type,date,description,role,awards,image:`assets/work/${String(i+1).padStart(2,'0')}.${image.split('.').pop()}`,remote:`https://framerusercontent.com/images/${image}?width=1138`,number:i+1}));
 // The reference sequence places DEFIANT directly after MAT VOYCE.
-const [defiant]=projects.splice(9,1);projects.splice(7,0,defiant);projects.forEach((p,i)=>p.number=i+1);
+const [defiant]=projects.splice(9,1);projects.splice(7,0,defiant);
+// The reference closes the loop through DAFI and then DISTRICT2 before 01.
+const [district2,dafi]=projects.splice(17,2);projects.push(dafi,district2);
+projects.forEach((p,i)=>p.number=i+1);
 const palettes=[['#090f25','#f5f1db','#075ad8'],['#14151e','#d9d7ed','#8a72e9'],['#c83e35','#e3ddd3','#ffac51'],['#332c25','#efe5d4','#90a2a6'],['#251e22','#e5b59b','#dc6058'],['#d453cc','#f4e2f3','#7e319d'],['#d9d5d3','#4a3b53','#ec9d48'],['#4236ce','#f1f1ee','#111'],['#e5c2b0','#24201e','#cf4660'],['#ef6b83','#10264e','#e8dbca'],['#071b5c','#d45c7c','#f0a760'],['#b9c7bf','#26201d','#bb5248']];
 const stack=document.getElementById('work-stack'),list=document.getElementById('work-index-items'),info={role:document.getElementById('work-role'),date:document.getElementById('work-date'),awards:document.getElementById('work-awards'),number:document.getElementById('work-number')};
 const cards=[],items=[];let active=-1,focused=-1;
