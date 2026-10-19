@@ -100,3 +100,35 @@ html.has-route-transition #intro-loader{display:none}
 body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 @media(max-width:800px){.about-showcase{margin:0 -20px;height:880px;min-height:0}.showcase-years{top:31%;width:100%;font-size:clamp(130px,36vw,280px)}.showcase-personal{top:13%;left:50%;font-size:clamp(15px,3vw,24px)}.showcase-and{top:51%;left:53%}.showcase-statement{top:62%;left:52%;width:42%;font-size:clamp(14px,2.4vw,21px)}.about-character{top:34%;left:16%;height:34%}.character-hint{left:-12%;top:-4%;font-size:10px}.showcase-index,.showcase-lists{grid-template-columns:repeat(2,1fr);left:5%;width:90%}.showcase-index{bottom:12%;display:none}.showcase-lists{bottom:3%;font-size:10px;gap:8px}.showcase-lists p:nth-child(n+3){display:none}.showcase-scroll{display:none}.idea{width:35px;height:35px;font-size:22px}.is-open .idea-one{transform:translate(-70px,-130px)}.is-open .idea-two{transform:translate(-25px,-170px)}.is-open .idea-three{transform:translate(30px,-150px)}.is-open .idea-four{transform:translate(80px,-115px)}.is-open .idea-five{transform:translate(85px,-65px)}.is-open .idea-six{transform:translate(-90px,-65px)}}
 @media(prefers-reduced-motion:reduce){.head-cap,.idea,.about-character{transition:none}}
+
+/* About character: reuse the opening pusher illustration and keep clicked ideas open. */
+.about-character{left:20%;top:17%;height:50%;aspect-ratio:1319/1192;overflow:visible}
+.character-trigger{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;transform:rotate(-2deg);transform-origin:center;transition:transform .85s cubic-bezier(.18,.8,.22,1)}
+.character-trigger:hover,.about-character.is-open .character-trigger,.character-trigger:focus-visible{transform:translate(1%,-1.2%) rotate(0) scale(1.015);outline:none}
+.character-art{display:block;width:100%;height:100%;object-fit:contain;overflow:visible;filter:drop-shadow(0 3px 0 #00000010);transform:translateX(-2%);transition:transform .85s cubic-bezier(.18,.8,.22,1)}
+.about-character.is-open .character-art{transform:translateX(0) scale(1.012)}
+.character-hint{left:-2%;top:11%;max-width:180px;padding:12px 14px;font-size:clamp(11px,.95vw,17px);line-height:1.15;transform:translateY(5px) rotate(-2deg);transition:opacity .35s,transform .55s cubic-bezier(.2,.8,.2,1)}
+.character-hint:after{right:-10px;bottom:4px;border:10px solid transparent;border-left-color:#111;border-bottom-color:transparent}
+.about-character.is-open .character-hint{opacity:0;transform:translateY(-10px) rotate(-2deg)}
+.character-ideas{inset:0;z-index:5;pointer-events:none}
+.idea{top:21%;left:68%;width:clamp(42px,3.8vw,62px);height:clamp(42px,3.8vw,62px);border:1.5px solid #151515;border-radius:50%;background:#ededeb;color:#151515;box-shadow:0 5px 18px #00000012;font:500 clamp(22px,2vw,32px)/1 "DM Sans",Arial,sans-serif;pointer-events:auto;cursor:pointer;transition:transform .72s cubic-bezier(.16,1,.3,1),opacity .3s,background .25s,color .25s,box-shadow .25s}
+.about-character.is-open .idea{opacity:1}
+.about-character.is-open .idea-one{transform:translate(-128px,-104px) rotate(-16deg)}
+.about-character.is-open .idea-two{transform:translate(-55px,-166px) rotate(11deg)}
+.about-character.is-open .idea-three{transform:translate(31px,-148px) rotate(-8deg)}
+.about-character.is-open .idea-four{transform:translate(116px,-104px) rotate(17deg)}
+.about-character.is-open .idea-five{transform:translate(132px,-25px) rotate(-12deg)}
+.about-character.is-open .idea-six{transform:translate(-118px,-19px) rotate(13deg)}
+.about-character.is-open .idea:hover,.about-character.is-open .idea:focus-visible{z-index:2;transform:translate(var(--idea-x,0),var(--idea-y,0)) scale(1.12) rotate(0);background:#f0532e;color:white;outline:none;box-shadow:0 10px 25px #0002}
+.about-character.is-open .idea.is-selected{z-index:3;background:#f0532e;color:white;box-shadow:0 10px 25px #0002}
+.about-character.is-open .idea-one{--idea-x:-128px;--idea-y:-104px}
+.about-character.is-open .idea-two{--idea-x:-55px;--idea-y:-166px}
+.about-character.is-open .idea-three{--idea-x:31px;--idea-y:-148px}
+.about-character.is-open .idea-four{--idea-x:116px;--idea-y:-104px}
+.about-character.is-open .idea-five{--idea-x:132px;--idea-y:-25px}
+.about-character.is-open .idea-six{--idea-x:-118px;--idea-y:-19px}
+.character-note{position:absolute;z-index:6;top:66%;left:42%;width:min(330px,50%);margin:0;padding:8px 12px;background:#151515;color:#fff;font:10px "DM Mono",monospace;letter-spacing:.02em;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .45s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.about-character.has-selection .character-note{opacity:1;transform:translateY(0)}
+.about-character.has-selection .character-trigger{transform:translate(1%,-1.2%) rotate(0) scale(1.015)}
+@media(max-width:800px){.about-character{left:4%;top:32%;height:30%}.character-hint{left:0;top:-7%;font-size:10px}.idea{width:36px;height:36px;font-size:21px}.about-character.is-open .idea-one{transform:translate(-72px,-78px) rotate(-16deg)}.about-character.is-open .idea-two{transform:translate(-29px,-120px) rotate(11deg)}.about-character.is-open .idea-three{transform:translate(20px,-108px) rotate(-8deg)}.about-character.is-open .idea-four{transform:translate(76px,-74px) rotate(17deg)}.about-character.is-open .idea-five{transform:translate(77px,-10px) rotate(-12deg)}.about-character.is-open .idea-six{transform:translate(-73px,-8px) rotate(13deg)}.about-character.is-open .idea-one{--idea-x:-72px;--idea-y:-78px}.about-character.is-open .idea-two{--idea-x:-29px;--idea-y:-120px}.about-character.is-open .idea-three{--idea-x:20px;--idea-y:-108px}.about-character.is-open .idea-four{--idea-x:76px;--idea-y:-74px}.about-character.is-open .idea-five{--idea-x:77px;--idea-y:-10px}.about-character.is-open .idea-six{--idea-x:-73px;--idea-y:-8px}.character-note{top:67%;left:9%;width:74%;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.character-trigger,.character-art,.character-hint,.idea,.character-note{transition:none!important}}
