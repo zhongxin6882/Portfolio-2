@@ -62,7 +62,8 @@
     else localStorage.setItem('jiuyueshiwu-language',lang);
   }
   const textObserver=new MutationObserver(records=>{for(const record of records){const nodes=record.type==='characterData'?[record.target]:[...record.addedNodes].filter(node=>node.nodeType===Node.TEXT_NODE);for(const node of nodes){const raw=node.nodeValue||'';const value=raw.trim().replace(/\s+/g,' ');if(zh[value]!==undefined||en[value]!==undefined){if(!sourceText.has(node)){sourceText.set(node,raw);stored.push([node,raw]);}else if(record.type==='characterData')sourceText.set(node,raw);const translated=language==='zh'?zh[value]:en[value];if(translated){const start=raw.match(/^\s*/)?.[0]||'';const end=raw.match(/\s*$/)?.[0]||'';node.nodeValue=start+translated+end;}}}}});
-  textObserver.observe(document.body,{subtree:true,characterData:true,childList:true});
+  // About is static; avoid a body-wide observer during its initial render.
+  if(!document.querySelector('.about-page')) textObserver.observe(document.body,{subtree:true,characterData:true,childList:true});
   if(toggle) toggle.addEventListener('click',()=>apply(language==='en'?'zh':'en'));
   apply(language);
 })();
