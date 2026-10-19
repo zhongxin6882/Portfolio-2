@@ -140,3 +140,12 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
   .showcase-and{left:auto;right:4%;top:31%}
   .showcase-statement{left:auto;right:4%;top:51%;width:22%;font-size:clamp(17px,1.35vw,25px);line-height:1.05}
 }
+
+
+/* Navigation indicator follows the active page and turns on selection. */
+.header-slot nav a{position:relative;transition:transform .3s,padding-left .36s cubic-bezier(.22,1,.36,1)}
+.header-slot nav a[aria-current="page"]{padding-left:1.12em}
+.header-slot nav a::before{content:"→";position:absolute;left:0;top:0;opacity:0;pointer-events:none;transform-origin:center}
+.header-slot nav a[aria-current="page"]::before{animation:nav-arrow-select .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes nav-arrow-select{0%{opacity:0;transform:translate(-.45em,.18em) rotate(0) scale(.75)}60%{opacity:1;transform:translate(.08em,-.12em) rotate(-52deg) scale(1.08)}100%{opacity:1;transform:translate(0,-.06em) rotate(-45deg) scale(1)}}
+@media(prefers-reduced-motion:reduce){.header-slot nav a,.header-slot nav a::before{animation:none;transition:none}.header-slot nav a[aria-current="page"]::before{opacity:1;transform:translate(0,-.06em) rotate(-45deg)}}
