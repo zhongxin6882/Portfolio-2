@@ -60,12 +60,19 @@
     @media(max-width:800px){.manifesto h2{font-size:clamp(49px,8vw,76px)}.career-entry{grid-template-columns:36px 1fr}.career-entry time{grid-column:2;padding:0}.details-grid{gap:45px}.approach-section,.process-heading{grid-template-columns:1fr}.process article{grid-template-columns:12% 32% 1fr}}
     @media(max-width:650px){.hero-title span{width:auto}.manifesto{margin:0 -20px;padding:25px 20px 80px}.manifesto h2{font-size:clamp(44px,11vw,70px);margin:80px 0}.manifesto-bottom{grid-template-columns:1fr;gap:22px}.manifesto-bottom p{font-size:16px}.content{padding-top:75px}.section-head{margin-bottom:60px}.career-entry{grid-template-columns:32px 1fr}.approach-section{margin-top:80px;padding-bottom:85px}.approach-body h3{font-size:clamp(43px,11vw,65px);margin-bottom:40px}.approach-body p{font-size:16px}.process-section{padding-bottom:80px}.process-heading{margin-bottom:50px}.process-heading h3{font-size:50px}.process article{grid-template-columns:46px 1fr;gap:4px 12px;padding:22px 0 30px}.process article p{grid-column:2;margin-top:8px;font-size:14px}.site-footer{padding:30px 20px 50px}.site-footer a{font-size:clamp(40px,11vw,72px)}}
     @media(prefers-reduced-motion:reduce){.hero-title span,.intro-row{animation:none}.capability-list span,.process article{transition:none}}
-  </style>
+  
+    .header-slot nav a{position:relative;transition:transform .3s,padding-left .36s cubic-bezier(.22,1,.36,1)}
+    .header-slot nav a[aria-current="page"]{padding-left:1.12em}
+    .header-slot nav a::before{content:"→";position:absolute;left:0;top:0;opacity:0;pointer-events:none;transform-origin:center}
+    .header-slot nav a[aria-current="page"]::before{animation:nav-arrow-select .5s cubic-bezier(.22,1,.36,1) both}
+    @keyframes nav-arrow-select{0%{opacity:0;transform:translate(-.45em,.18em) rotate(0) scale(.75)}60%{opacity:1;transform:translate(.08em,-.12em) rotate(-52deg) scale(1.08)}100%{opacity:1;transform:translate(0,-.06em) rotate(-45deg) scale(1)}}
+    @media(prefers-reduced-motion:reduce){.header-slot nav a,.header-slot nav a::before{animation:none;transition:none}.header-slot nav a[aria-current="page"]::before{opacity:1;transform:translate(0,-.06em) rotate(-45deg)}}
+</style>
 </head>
 <body>
   <header class="chrome">
     <a class="brand" href="../index.html" aria-label="Work home"><b>JIUYUESHIWU</b><small>©<br>copyright 2026<br>home ↗<br>•84</small></a>
-    <div class="header-slot"><button id="menuToggle" type="button" aria-expanded="true">Menu</button><nav id="menu" aria-label="主导航"><a href="../index.html" data-en="→ WORK">→ 作品</a><a href="./" aria-current="page" data-en="ABOUT">关于</a><a href="../playground.html" data-en="PLAYGROUND">灵感实验室</a><a href="../contact.html" data-en="CONTACT">联系</a></nav></div>
+    <div class="header-slot"><button id="menuToggle" type="button" aria-expanded="true">Menu</button><nav id="menu" aria-label="主导航"><a href="../index.html" data-en="WORK">作品</a><a href="./" aria-current="page" data-en="ABOUT">关于</a><a href="../playground.html" data-en="PLAYGROUND">灵感实验室</a><a href="../contact.html" data-en="CONTACT">联系</a></nav></div>
     <div class="audio">Audio <strong>Off —</strong></div><div class="location">Working globally<br>HCMC</div><div class="inquiry"><a href="mailto:zhongxin6882@gmail.com">zhongxin6882@gmail.com</a></div>
     <button class="language-toggle" type="button" aria-label="Switch to English">EN</button>
   </header>
