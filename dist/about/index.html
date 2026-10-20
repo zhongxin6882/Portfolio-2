@@ -298,6 +298,9 @@
 .art-stage .art-ideas .coffee{--x:51%;--y:24%;--w:10%;--ratio:461/718}
 .art-stage .art-ideas .tablet{--x:79%;--y:34%;--w:31%;--ratio:1387/881}
 .art-stage .art-ideas .watch{--x:93%;--y:67%;--w:11%;--ratio:577/676}
+.art-stage .watch .clock-face{left:29%;top:37%;width:42%;border:0;background:transparent;z-index:2}
+.art-stage .watch .clock-face::after{width:3px;height:3px;left:calc(50% - 1.5px);top:calc(50% - 1.5px)}
+.art-stage .watch .clock-face i{width:1.5px}
 .art-stage .art-ideas .art-orbit{overflow:visible}
 .art-panel.is-open .art-stage .ball:hover img{animation:ball-spin-hop .85s cubic-bezier(.35,.05,.4,1) infinite}
 @keyframes ball-spin-hop{0%,100%{transform:translateY(0) rotate(0)}38%{transform:translateY(-9px) rotate(70deg)}72%{transform:translateY(1px) rotate(145deg)}}
@@ -340,7 +343,7 @@
       <button class="art-orbit orbit-3 tablet" type="button" data-title="视觉表达" data-description="用层级、字体与画面讲清产品的信息。" aria-label="了解视觉表达"><img src="../assets/about/tablet-reference.webp" alt="" draggable="false"></button>
       <button class="art-orbit orbit-4 gamepad" type="button" data-title="产品体验" data-description="让功能和使用场景自然地连接起来。" aria-label="了解产品体验"><svg viewBox="75 535 320 310" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg><span class="game-keys" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
       <button class="art-orbit orbit-5 cat" type="button" data-title="用户洞察" data-description="理解真实问题，再定义值得解决的设计目标。" aria-label="了解用户洞察"><svg viewBox="795 542 235 196" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg><span class="cat-heart" aria-hidden="true">♥</span></button>
-      <button class="art-orbit orbit-6 watch" type="button" data-title="设计系统" data-description="建立一致的组件与规范，支持产品长期迭代。" aria-label="了解设计系统"><img src="../assets/about/watch-reference.webp" alt="" draggable="false"></button>
+      <button class="art-orbit orbit-6 watch" type="button" data-title="设计系统" data-description="建立一致的组件与规范，支持产品长期迭代。" aria-label="了解设计系统"><img src="../assets/about/watch-reference.webp" alt="" draggable="false"><span class="clock-face" aria-hidden="true"><i class="hour-hand"></i><i class="minute-hand"></i></span></button>
       <button class="art-orbit orbit-7 plant" type="button" data-title="生活灵感" data-description="从日常兴趣中收集新的设计视角。" aria-label="了解生活灵感"><svg viewBox="890 775 345 312" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></button>
       <button class="art-orbit orbit-8 paper" type="button" data-title="数据可视化" data-description="让复杂数据清楚、直观，也更容易探索。" aria-label="了解数据可视化"><svg viewBox="65 845 285 250" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></button>
     </div>
