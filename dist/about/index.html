@@ -276,6 +276,12 @@
 .line-3{left:6%;top:71%}.line-4{right:5%;top:73%;transform:rotate(-52deg) scaleX(.2)}
 @media(max-width:760px){.art-stage .art-ideas .ball{--x:23%;--y:22%;--w:22%}.art-stage .art-ideas .tablet{--x:78%;--y:24%;--w:30%}.art-stage .art-ideas .gamepad{--x:18%;--y:56%}.art-stage .art-ideas .watch{--x:92%;--y:57%}.art-stage .art-ideas .plant{--x:84%;--y:76%;--w:18%}.art-stage .art-ideas .paper{--x:20%;--y:78%}}
 @media(prefers-reduced-motion:reduce){.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:hover svg,.art-panel.is-open .art-ideas .art-orbit:hover i,.art-panel.is-open .art-ideas .art-orbit:hover .cat-heart{animation:none!important}}
+
+/* Keep the established idle portrait. Place the hover note in the open space to its right. */
+.art-stage .art-hover-note{top:39%;left:auto;right:-10%;width:min(225px,40vw);min-width:0;max-width:225px;padding:16px 18px;transform:translateY(calc(-50% + 9px)) scale(.92) rotate(1deg);transform-origin:left center}
+.art-panel:not(.is-open).is-face-hover .art-stage .art-hover-note,.art-stage .art-trigger:focus-visible~.art-hover-note{transform:translateY(-50%) scale(1) rotate(0)}
+.art-stage .art-hover-note span{position:absolute;right:auto;left:-17px;top:50%;bottom:auto;margin-top:-9px;padding:0;width:0;height:0;font-size:0;border:9px solid transparent;border-right-color:#111;border-left-color:transparent}
+@media(max-width:760px){.art-stage .art-hover-note{right:-3%;width:44%;max-width:180px;padding:11px 12px;font-size:clamp(12px,3.4vw,16px);top:39%}}
 </style>
 </head>
 <body>
@@ -289,7 +295,7 @@
   <section class="art-panel" id="art-panel" aria-label="九月十五人物插画">
     <div class="art-stage">
       <span class="portrait-stage" aria-hidden="true">
-        <img class="portrait-idle" src="../assets/about/portrait-character.webp" width="1342" height="1172" alt="">
+        <img class="portrait-idle" src="../assets/about/portrait-default-v2.webp" width="1342" height="1172" alt="">
         <img class="portrait-smile" src="../assets/about/portrait-smile.webp" width="1342" height="1172" alt="">
         <img class="portrait-character" src="../assets/about/portrait-character.webp" width="1324" height="1188" alt="">
         <span class="art-hover-note">EVER WONDERED<br>WHAT’S GOING ON<br>INSIDE MY HEAD?<span aria-hidden="true">↗</span></span>
