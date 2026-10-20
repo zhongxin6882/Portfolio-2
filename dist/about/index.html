@@ -73,8 +73,8 @@
 .portrait-stage img{width:100%;height:100%;object-fit:contain;transition:opacity .38s ease,transform .7s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}
 .portrait-idle{opacity:1;transform:translateY(0) scale(1)}
 .portrait-character{opacity:0;transform:translateY(12%) scale(.76);mask-image:none!important}
-.art-panel.is-open .portrait-idle{opacity:0;transform:translateY(12px) scale(.96)}
-.art-panel.is-open .portrait-character{opacity:1;transform:translateY(8%) scale(.82)}
+.art-panel.is-open .art-trigger .portrait-idle{opacity:0;transform:translateY(12px) scale(.96)}
+.art-panel.is-open .art-trigger .portrait-character{opacity:1;transform:translateY(8%) scale(.82)}
 .art-trigger:hover .portrait-stage,.art-trigger:focus-visible .portrait-stage{transform:translateY(-7px) rotate(-1.2deg)}
 .art-panel.is-open .art-trigger:hover .portrait-stage{transform:translateY(-5px) rotate(.8deg)}
 .art-hover-note{position:absolute;z-index:3;top:8%;left:47%;display:block;max-width:170px;padding:10px 12px;background:#111;color:#fff;font-size:12px;line-height:1.2;letter-spacing:-.02em;white-space:nowrap;opacity:0;transform:translateY(9px) scale(.92) rotate(-3deg);transform-origin:left bottom;transition:opacity .24s ease,transform .42s cubic-bezier(.2,1.4,.3,1);pointer-events:none}
@@ -83,16 +83,16 @@
 .art-panel.is-open .art-hover-note{opacity:0}
 .art-ideas{z-index:4;pointer-events:none}
 .art-ideas .art-orbit{position:absolute;inset:0;left:0!important;top:0!important;display:block;width:100%;height:100%;padding:0;border:0;border-radius:0;background:transparent url(../assets/about/portrait-elements.webp) center/100% 100% no-repeat!important;box-shadow:none!important;font-size:0;opacity:0;pointer-events:none;scale:1;clip-path:inset(var(--t) var(--r) var(--b) var(--l));transform:translate(var(--tx),var(--ty)) scale(.12) rotate(var(--rot));transform-origin:50% 36%;transition:opacity .2s ease,transform .75s cubic-bezier(.16,1.4,.28,1),filter .22s ease;transition-delay:0s;will-change:transform}
-.art-panel.is-open .art-ideas .art-orbit{opacity:1;pointer-events:auto;transform:translate(0,0) scale(1) rotate(0);transition-delay:var(--delay)}
-.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:focus-visible{filter:drop-shadow(0 0 5px #ff641e);outline:0;transform:translateY(-4px) scale(1.04)}
-.art-ideas .orbit-1{--t:14%;--r:62%;--b:60%;--l:13%;--tx:23%;--ty:8%;--rot:-24deg;--delay:.05s}
-.art-ideas .orbit-2{--t:9%;--r:43%;--b:69%;--l:40%;--tx:0%;--ty:12%;--rot:16deg;--delay:.12s}
-.art-ideas .orbit-3{--t:13%;--r:0%;--b:54%;--l:58%;--tx:-26%;--ty:6%;--rot:20deg;--delay:.19s}
-.art-ideas .orbit-4{--t:45%;--r:68%;--b:29%;--l:7%;--tx:30%;--ty:-21%;--rot:-30deg;--delay:.26s}
-.art-ideas .orbit-5{--t:46%;--r:21%;--b:36%;--l:60%;--tx:-19%;--ty:-20%;--rot:20deg;--delay:.33s}
-.art-ideas .orbit-6{--t:45%;--r:0%;--b:33%;--l:81%;--tx:-38%;--ty:-20%;--rot:25deg;--delay:.4s}
-.art-ideas .orbit-7{--t:64%;--r:4%;--b:8%;--l:69%;--tx:-30%;--ty:-41%;--rot:27deg;--delay:.47s}
-.art-ideas .orbit-8{--t:70%;--r:74%;--b:8%;--l:7%;--tx:35%;--ty:-44%;--rot:-22deg;--delay:.54s}
+.art-panel.is-open .art-ideas .art-orbit{opacity:1;pointer-events:auto;transform:translate(var(--end-x),var(--end-y)) scale(1) rotate(0);transition-delay:var(--delay)}
+.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:focus-visible{filter:drop-shadow(0 0 5px #ff641e);outline:0;transform:translate(var(--end-x),calc(var(--end-y) - 4px)) scale(1.04)}
+.art-ideas .orbit-1{--t:14%;--r:62%;--b:60%;--l:13%;--tx:23%;--ty:8%;--end-x:-8%;--end-y:-14%;--rot:-24deg;--delay:.05s}
+.art-ideas .orbit-2{--t:9%;--r:43%;--b:69%;--l:40%;--tx:0%;--ty:12%;--end-x:0%;--end-y:-25%;--rot:16deg;--delay:.12s}
+.art-ideas .orbit-3{--t:13%;--r:0%;--b:54%;--l:58%;--tx:-26%;--ty:6%;--end-x:15%;--end-y:-18%;--rot:20deg;--delay:.19s}
+.art-ideas .orbit-4{--t:45%;--r:68%;--b:29%;--l:7%;--tx:30%;--ty:-21%;--end-x:-10%;--end-y:0%;--rot:-30deg;--delay:.26s}
+.art-ideas .orbit-5{--t:46%;--r:21%;--b:36%;--l:60%;--tx:-19%;--ty:-20%;--end-x:16%;--end-y:-2%;--rot:20deg;--delay:.33s}
+.art-ideas .orbit-6{--t:45%;--r:0%;--b:33%;--l:81%;--tx:-38%;--ty:-20%;--end-x:13%;--end-y:-4%;--rot:25deg;--delay:.4s}
+.art-ideas .orbit-7{--t:64%;--r:4%;--b:8%;--l:69%;--tx:-30%;--ty:-41%;--end-x:13%;--end-y:2%;--rot:27deg;--delay:.47s}
+.art-ideas .orbit-8{--t:70%;--r:74%;--b:8%;--l:7%;--tx:35%;--ty:-44%;--end-x:-10%;--end-y:0%;--rot:-22deg;--delay:.54s}
 /* Editorial typography and quiet information rows, inspired by the reference layout. */
 .right-panel{padding:118px clamp(30px,3vw,54px) 68px}
 .hero-copy{display:grid;grid-template-columns:27% minmax(0,1fr);column-gap:4%;row-gap:7px;max-width:none;margin:0}
