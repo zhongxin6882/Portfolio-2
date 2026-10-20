@@ -1,4 +1,15 @@
-<!doctype html>
+<!doctype html><!--
+  about/index.html — 关于页，ABOUT 的唯一正式路由（/about/）
+  旧的 about.html 文件已删除，全站导航统一指向本目录路由。
+  本文件是**已格式化**的（441 行），可以正常编辑，与其他压缩单行页面不同。
+
+  脚本：site-header.js → page-transition.js
+  ⚠️ 已知缺口：本页有 .language-toggle 语言切换按钮，但**不加载 locale.js**，
+     因此按钮点击无反应。页面文案是用中文直接写死的（lang="zh-CN"）。
+     修复方式见 AGENTS.md 第 5 节末尾。
+  ⚠️ 本页未设 data-default-language 与 data-language-key。
+  交互插画（.about-character）的行为逻辑在 about.js 里，样式在 style.css 的 About 分区。
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">

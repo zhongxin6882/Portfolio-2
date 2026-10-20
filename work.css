@@ -1,3 +1,29 @@
+/* ==========================================================================
+ * work.css — 首页作品画廊专用样式（仅 index.html 加载）
+ *
+ * 本文件是**已格式化**的（一属性一行），可以正常编辑，与 style.css 的压缩风格不同。
+ * 全局令牌（--font-* 等）定义在 style.css 的 :root，本文件直接引用，两者加载顺序为
+ * style.css 在前、work.css 在后。
+ *
+ * 与 work.js 的耦合点（改这里前先看 AGENTS.md 第 7 节）：
+ *   .work-home              页面根类，定义 --work-header-height 与 --work-left(31%) 三栏比例
+ *   .work-card              卡片本体。桌面端的位移/旋转/缩放全部由 work.js 写入的
+ *                           --stack-x / --stack-y / --stack-rotation / --stack-yaw / --stack-scale
+ *                           驱动；本文件只负责把这些变量组装成 transform。
+ *   .work-index-item        右侧索引项，含 --index-y 变量与 .active 高亮态
+ *   .work-palette           索引卡片上的配色 chips（数据来自 work.js 的 palettes）
+ *   .work-focus / .work-detail  两级浮层，靠 hidden 属性控制显隐，body 会被锁 overflow
+ *   .work-info / .work-meta-*   左侧信息栏
+ *
+ * 断点：innerWidth > 850 时 work.js 走「循环堆叠」模式；≤850 走原生滚动，
+ *       此时 JS 会清空写在元素上的内联样式，交还给本文件的移动端规则。
+ *
+ * 分区导览（文件内已有英文分区注释，可直接 grep）：
+ *   Navigation occupies its own band above the three-column work layout.
+ *   The existing two-step preview and case study stay attached to the gallery.
+ *   Video reference: cards travel diagonally through the three-column stage.
+ *   The work sequence is a circular stack driven by the wheel or touch gesture.
+ * ======================================================================== */
 .work-home {
   --work-header-height: clamp(160px, 18.3vh, 190px);
   --work-left: 31%;
