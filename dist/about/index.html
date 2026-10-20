@@ -130,12 +130,14 @@
 .chrome{grid-template-columns:12.8% 25.2% 16.7% 1fr auto;padding:21px 3.2% 0 12px;height:180px}
 .brand b{font-size:clamp(19px,1.3vw,27px)}
 .header-slot nav{margin-top:33px}.header-slot nav a{font-size:clamp(18px,1.3vw,24px);line-height:.95}
+.header-slot nav{gap:4px}.header-slot nav a{line-height:1.15}
 .inquiry{font-size:12px;color:#111}.chrome .inquiry .language-toggle{position:static;display:inline-block;margin-top:12px;padding:4px 9px;border:1px solid #aaa;background:transparent;color:#111;font-size:10px}
 .inquiry-language{display:flex;justify-content:flex-end}
 .art-panel{min-height:850px}.right-panel{padding-top:185px}
 .portrait-stage{transform:translateY(6%)}
 .portrait-stage,.art-ideas{width:82%;max-width:600px}
 .portrait-stage img{mask-image:none!important}
+.portrait-idle,.portrait-smile{mix-blend-mode:multiply}
 .portrait-idle{opacity:1}
 .portrait-smile{opacity:0;transform:translateY(0) scale(1);transition:opacity .26s ease!important}
 .art-panel:not(.is-open) .art-trigger:hover .portrait-smile,.art-panel:not(.is-open) .art-trigger:focus-visible .portrait-smile{opacity:1}

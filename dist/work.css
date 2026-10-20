@@ -19,7 +19,8 @@
 .work-home .header-slot nav {
   margin-top: 33px;
   font-size: clamp(18px, 1.3vw, 24px);
-  line-height: .95;
+  line-height: 1.15;
+  gap: 4px;
 }
 .work-home .header-slot nav a[aria-current] { font-weight: 700; }
 .work-home .inquiry { color: #111; padding-right: 0; font-size: 12px; }
