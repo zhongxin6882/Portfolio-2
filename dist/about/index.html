@@ -1,4 +1,15 @@
-<!doctype html>
+<!doctype html><!--
+  about/index.html — 关于页，ABOUT 的唯一正式路由（/about/）
+  旧的 about.html 文件已删除，全站导航统一指向本目录路由。
+  本文件是**已格式化**的（441 行），可以正常编辑，与其他压缩单行页面不同。
+
+  脚本：site-header.js → page-transition.js
+  ⚠️ 已知缺口：本页有 .language-toggle 语言切换按钮，但**不加载 locale.js**，
+     因此按钮点击无反应。页面文案是用中文直接写死的（lang="zh-CN"）。
+     修复方式见 AGENTS.md 第 5 节末尾。
+  ⚠️ 本页未设 data-default-language 与 data-language-key。
+  交互插画（.about-character）的行为逻辑在 about.js 里，样式在 style.css 的 About 分区。
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -320,7 +331,7 @@
 
 </style>
 </head>
-<body>
+<body data-default-language="zh" data-language-key="jiuyueshiwu-about-language">
 <header class="chrome">
     <a class="brand" href="../index.html" aria-label="Work home"><b>JIUYUESHIWU</b><small>©<br>copyright 2026<br>home ↗<br>•84</small></a>
     <div class="header-slot"><button id="menuToggle" type="button" aria-expanded="true">Menu</button><nav id="menu" aria-label="主导航"><a href="../index.html" data-en="WORK">作品</a><a href="./" aria-current="page" data-en="ABOUT">关于</a><a href="../playground.html" data-en="PLAYGROUND">灵感实验室</a><a href="../contact.html" data-en="CONTACT">联系</a></nav></div>
@@ -419,7 +430,7 @@
 })();
 </script>
 <script src="../site-header.js?v=2"></script>
-<script src="../page-transition.js?v=about-unified-20261020"></script>
+<script src="../page-transition.js?v=about-unified-20261020"></script><script src="../locale.js?v=zh-default-20261020"></script>
 <style>
 /* Fine alignment pass: show complete artwork and keep animation accents on their own objects. */
 .art-stage .art-ideas .coffee{--ratio:180/140;--w:16%}
@@ -437,5 +448,120 @@
 .art-stage .art-decor .line-4{right:4%;top:94%}
 @media(max-width:760px){.art-stage .art-ideas .tablet{--w:30%}.art-stage .art-ideas .paper{--w:15%}.art-stage .art-decor .line-4{top:93%}}
 </style>
+<style>
+/* 24-frame hover sprites: the original artwork remains the base frame (0). */
+.art-stage .art-ideas .art-orbit[data-frame] { animation: none !important; }
+.art-stage .art-ideas .art-orbit[data-frame] > img,
+.art-stage .art-ideas .art-orbit[data-frame] > svg { animation: none !important; }
+.art-stage .art-ideas .art-orbit[data-frame]::after { pointer-events: none; }
+.art-stage .art-ideas .ball > img,
+.art-stage .art-ideas .coffee > img,
+.art-stage .art-ideas .watch > img { transform-origin: 50% 50%; }
+.art-stage .art-ideas .steam { z-index: 3; }
+.art-stage .art-ideas .steam i { opacity: 0; }
+.art-stage .art-ideas .game-keys i { transition: none; }
+.art-stage .art-ideas .cat-heart { opacity: 0; }
+.art-stage .art-ideas .paper::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  left: 27%; top: 55%;
+  width: 46%; height: 3px;
+  border-radius: 999px;
+  background: #ff641e;
+  transform-origin: left center;
+  transform: rotate(-18deg) scaleX(var(--paper-progress, 0));
+  opacity: var(--paper-opacity, 0);
+  box-shadow: 7px -7px 0 -1px #ff641e;
+}
+@media (prefers-reduced-motion: reduce) {
+  .art-stage .art-ideas .art-orbit[data-frame] > img,
+  .art-stage .art-ideas .art-orbit[data-frame] > svg { transform: none !important; }
+}
+</style>
+<script>
+/* Keep every hover animation on an exact 24-frame timeline and reverse the same frames on leave. */
+(() => {
+  const FRAME_COUNT = 24;
+  const FRAME_MS = 1000 / 24;
+  const ideas = [...document.querySelectorAll('.art-stage .art-orbit')];
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const addSteam = (idea) => {
+    if (!idea.classList.contains('coffee') || idea.querySelector('.steam')) return;
+    const steam = document.createElement('span');
+    steam.className = 'steam';
+    steam.setAttribute('aria-hidden', 'true');
+    steam.innerHTML = '<i></i><i></i><i></i>';
+    idea.appendChild(steam);
+  };
+  const setFrame = (idea, frame) => {
+    const safeFrame = clamp(Math.round(frame), 0, FRAME_COUNT - 1);
+    const p = safeFrame / (FRAME_COUNT - 1);
+    const eased = 1 - Math.pow(1 - p, 2);
+    const svg = idea.querySelector('svg');
+    const img = idea.querySelector(':scope > img');
+    idea.dataset.frame = String(safeFrame);
+    idea.style.setProperty('--sprite-progress', p.toFixed(4));
+    if (idea.classList.contains('ball') && img) {
+      const hop = Math.sin(p * Math.PI) * 16;
+      img.style.transform = `translateY(${-hop.toFixed(2)}px) rotate(${(p * 360).toFixed(2)}deg)`;
+    } else if (idea.classList.contains('coffee') && img) {
+      img.style.transform = `translateY(${(-Math.sin(p * Math.PI) * 3).toFixed(2)}px) scale(${(1 + Math.sin(p * Math.PI) * .015).toFixed(4)})`;
+      idea.querySelectorAll('.steam i').forEach((line, index) => {
+        const phase = clamp((p * 1.35 - index * .16) / .72, 0, 1);
+        line.style.opacity = phase && phase < 1 ? String(Math.sin(phase * Math.PI) * .9) : '0';
+        line.style.transform = `translateY(${(-phase * 24).toFixed(2)}px) scaleY(${(.65 + phase * .75).toFixed(3)})`;
+      });
+    } else if (idea.classList.contains('watch')) {
+      idea.querySelector('.hour-hand').style.transform = `rotate(${(45 + p * 360).toFixed(2)}deg)`;
+      idea.querySelector('.minute-hand').style.transform = `rotate(${(72 + p * 360).toFixed(2)}deg)`;
+    } else if (idea.classList.contains('gamepad') && svg) {
+      svg.style.transform = `translateY(${(-Math.sin(p * Math.PI) * 3).toFixed(2)}px) rotate(${(Math.sin(p * Math.PI) * 2).toFixed(2)}deg)`;
+      idea.querySelectorAll('.game-keys i').forEach((key, index) => {
+        const press = clamp((p - index * .18) / .18, 0, 1);
+        key.style.opacity = press > 0 && press < 1 ? '.9' : '0';
+        key.style.transform = `scale(${(press ? 1.12 : .72).toFixed(2)})`;
+      });
+    } else if (idea.classList.contains('cat') && svg) {
+      svg.style.transform = `translateY(${(-Math.sin(p * Math.PI) * 4).toFixed(2)}px) rotate(${(Math.sin(p * Math.PI) * 6).toFixed(2)}deg) scale(${(1 + Math.sin(p * Math.PI) * .035).toFixed(4)})`;
+      const heart = idea.querySelector('.cat-heart');
+      heart.style.opacity = p > .55 ? String((p - .55) / .45) : '0';
+      heart.style.transform = `translateY(${(-p * 16).toFixed(2)}px) scale(${(.6 + p * .5).toFixed(2)})`;
+    } else if (idea.classList.contains('plant') && svg) {
+      svg.style.transform = `translateY(${(-eased * 3).toFixed(2)}px) scale(${(.88 + eased * .12).toFixed(4)}) rotate(${(Math.sin(p * Math.PI) * 3).toFixed(2)}deg)`;
+      svg.style.transformOrigin = 'center bottom';
+    } else if (idea.classList.contains('paper') && svg) {
+      svg.style.transform = `translateY(${(-Math.sin(p * Math.PI) * 4).toFixed(2)}px) rotate(${(p * 8).toFixed(2)}deg)`;
+      idea.style.setProperty('--paper-progress', p.toFixed(4));
+      idea.style.setProperty('--paper-opacity', p > 0 ? '1' : '0');
+    }
+  };
+  const animate = (idea, target) => {
+    cancelAnimationFrame(idea._spriteRaf);
+    const start = Number(idea.dataset.frame || 0);
+    const distance = target - start;
+    if (!distance) return;
+    const started = performance.now();
+    const duration = Math.abs(distance) * FRAME_MS;
+    const tick = (now) => {
+      const progress = clamp((now - started) / duration, 0, 1);
+      setFrame(idea, start + distance * progress);
+      if (progress < 1) idea._spriteRaf = requestAnimationFrame(tick);
+    };
+    idea._spriteRaf = requestAnimationFrame(tick);
+  };
+  ideas.forEach((idea) => {
+    addSteam(idea);
+    setFrame(idea, 0);
+    const forward = () => animate(idea, FRAME_COUNT - 1);
+    const reverse = () => animate(idea, 0);
+    idea.addEventListener('pointerenter', (event) => { if (event.pointerType === 'mouse') forward(); });
+    idea.addEventListener('pointerleave', (event) => { if (event.pointerType === 'mouse') reverse(); });
+    idea.addEventListener('focus', forward);
+    idea.addEventListener('blur', reverse);
+  });
+})();
+</script>
 </body>
 </html>
+
