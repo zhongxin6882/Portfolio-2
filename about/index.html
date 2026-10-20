@@ -72,9 +72,9 @@
 .portrait-stage,.art-ideas{width:72%;max-width:520px;aspect-ratio:1}
 .portrait-stage img{width:100%;height:100%;object-fit:contain;transition:opacity .38s ease,transform .7s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}
 .portrait-idle{opacity:1;transform:translateY(0) scale(1)}
-.portrait-character{opacity:0;transform:translateY(10px) scale(.94);mask-image:none!important}
+.portrait-character{opacity:0;transform:translateY(12%) scale(.76);mask-image:none!important}
 .art-panel.is-open .portrait-idle{opacity:0;transform:translateY(12px) scale(.96)}
-.art-panel.is-open .portrait-character{opacity:1;transform:translateY(0) scale(1)}
+.art-panel.is-open .portrait-character{opacity:1;transform:translateY(8%) scale(.82)}
 .art-trigger:hover .portrait-stage,.art-trigger:focus-visible .portrait-stage{transform:translateY(-7px) rotate(-1.2deg)}
 .art-panel.is-open .art-trigger:hover .portrait-stage{transform:translateY(-5px) rotate(.8deg)}
 .art-hover-note{position:absolute;z-index:3;top:8%;left:47%;display:block;max-width:170px;padding:10px 12px;background:#111;color:#fff;font-size:12px;line-height:1.2;letter-spacing:-.02em;white-space:nowrap;opacity:0;transform:translateY(9px) scale(.92) rotate(-3deg);transform-origin:left bottom;transition:opacity .24s ease,transform .42s cubic-bezier(.2,1.4,.3,1);pointer-events:none}
@@ -82,7 +82,7 @@
 .art-trigger:hover .art-hover-note,.art-trigger:focus-visible .art-hover-note{opacity:1;transform:translateY(0) scale(1) rotate(-2deg)}
 .art-panel.is-open .art-hover-note{opacity:0}
 .art-ideas{z-index:4;pointer-events:none}
-.art-ideas .art-orbit{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;border:0;border-radius:0;background:transparent url(../assets/about/portrait-elements.webp) center/100% 100% no-repeat!important;box-shadow:none!important;font-size:0;opacity:0;pointer-events:none;clip-path:inset(var(--t) var(--r) var(--b) var(--l));transform:translate(var(--tx),var(--ty)) scale(.12) rotate(var(--rot));transform-origin:50% 36%;transition:opacity .2s ease,transform .75s cubic-bezier(.16,1.4,.28,1),filter .22s ease;transition-delay:0s;will-change:transform}
+.art-ideas .art-orbit{position:absolute;inset:0;left:0!important;top:0!important;display:block;width:100%;height:100%;padding:0;border:0;border-radius:0;background:transparent url(../assets/about/portrait-elements.webp) center/100% 100% no-repeat!important;box-shadow:none!important;font-size:0;opacity:0;pointer-events:none;scale:1;clip-path:inset(var(--t) var(--r) var(--b) var(--l));transform:translate(var(--tx),var(--ty)) scale(.12) rotate(var(--rot));transform-origin:50% 36%;transition:opacity .2s ease,transform .75s cubic-bezier(.16,1.4,.28,1),filter .22s ease;transition-delay:0s;will-change:transform}
 .art-panel.is-open .art-ideas .art-orbit{opacity:1;pointer-events:auto;transform:translate(0,0) scale(1) rotate(0);transition-delay:var(--delay)}
 .art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:focus-visible{filter:drop-shadow(0 0 5px #ff641e);outline:0;transform:translateY(-4px) scale(1.04)}
 .art-ideas .orbit-1{--t:14%;--r:62%;--b:60%;--l:13%;--tx:23%;--ty:8%;--rot:-24deg;--delay:.05s}
