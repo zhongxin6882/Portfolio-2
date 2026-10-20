@@ -238,6 +238,43 @@
 .art-panel.is-open .paper:hover svg{animation:paper-flutter .7s ease-in-out infinite alternate}
 @keyframes paper-flutter{to{transform:rotate(9deg) translateY(-4px)}}
 @media(max-width:760px){.art-stage{width:95%;transform:translate(-50%,-50%) translateY(3%)}.art-ideas .ball{--x:20%;--y:29%}.art-ideas .coffee{--x:49%;--y:20%}.art-ideas .tablet{--x:80%;--y:29%}.art-ideas .gamepad{--x:14%;--y:66%}.art-ideas .cat{--x:85%;--y:61%}.art-ideas .watch{--x:91%;--y:79%}.art-ideas .plant{--x:78%;--y:86%}.art-ideas .paper{--x:19%;--y:85%}}
+/* One shared square canvas keeps the portrait, sprites, and accents aligned. */
+.art-stage .art-ideas{inset:0;left:0;top:0;width:100%;height:100%;transform:none}
+.art-stage .art-ideas .art-orbit{transition:opacity .3s ease,transform .68s cubic-bezier(.2,.85,.24,1);transform:translate(-50%,calc(-50% + 36px)) scale(.55) rotate(var(--rot));transform-origin:center center}
+.art-panel.is-open .art-stage .art-ideas .art-orbit{transform:translate(-50%,-50%) scale(1) rotate(0);transition-delay:var(--delay)}
+.art-panel.is-open .art-stage .art-ideas .art-orbit:hover,.art-panel.is-open .art-stage .art-ideas .art-orbit:focus-visible{transform:translate(-50%,-50%) scale(1) rotate(0);animation:none!important;transition-delay:0s;filter:none}
+.art-stage .art-ideas .ball{--x:24%;--y:24%;--w:23%;--ratio:390/270}
+.art-stage .art-ideas .coffee{--x:49%;--y:17%;--w:17%;--ratio:194/154}
+.art-stage .art-ideas .tablet{--x:77%;--y:25%;--w:32%;--ratio:552/365}
+.art-stage .art-ideas .gamepad{--x:17%;--y:56%;--w:19%;--ratio:320/310}
+.art-stage .art-ideas .cat{--x:79%;--y:53%;--w:18%;--ratio:235/196}
+.art-stage .art-ideas .watch{--x:94%;--y:57%;--w:12%;--ratio:173/225}
+.art-stage .art-ideas .plant{--x:78%;--y:76%;--w:22%;--ratio:345/312}
+.art-stage .art-ideas .paper{--x:18%;--y:78%;--w:15%;--ratio:240/210}
+.art-stage .art-ideas .art-orbit svg{transform-origin:center;overflow:hidden}
+.art-panel.is-open .art-stage .ball:hover svg{animation:ball-dance .75s cubic-bezier(.25,.65,.3,1) infinite}
+@keyframes ball-dance{0%,100%{transform:translateY(0) rotate(0)}42%{transform:translateY(-7px) rotate(18deg)}70%{transform:translateY(-2px) rotate(10deg)}}
+.art-panel.is-open .art-stage .tablet:hover svg{animation:tablet-draw .8s ease-in-out infinite alternate}
+@keyframes tablet-draw{to{transform:rotate(2deg) scale(1.025)}}
+.art-panel.is-open .art-stage .plant:hover svg{animation:plant-breathe 1.2s ease-in-out infinite alternate}
+@keyframes plant-breathe{to{transform:scale(1.035) rotate(2deg)}}
+.art-stage .steam{bottom:77%;height:52%}
+.art-stage .cat-heart{right:2%;top:-12%}
+.art-decor{position:absolute;z-index:3;inset:0;pointer-events:none}
+.spark{position:absolute;display:block;width:var(--size);aspect-ratio:1;left:var(--x);top:var(--y);opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(-16deg);transition:opacity .35s ease,transform .7s cubic-bezier(.18,1.2,.28,1);transition-delay:0s}
+.spark svg{display:block;width:100%;height:100%;overflow:hidden}
+.art-panel.is-open .spark{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0);transition-delay:var(--delay)}
+.spark-1{--x:38%;--y:17%;--size:4%;--delay:.12s}.spark-2{--x:65%;--y:8%;--size:5%;--delay:.18s}
+.spark-3{--x:34%;--y:35%;--size:4%;--delay:.25s}.spark-4{--x:66%;--y:38%;--size:5%;--delay:.31s}
+.spark-5{--x:31%;--y:47%;--size:3.8%;--delay:.37s}.spark-6{--x:73%;--y:47%;--size:3%;--delay:.42s}
+.spark-7{--x:91%;--y:73%;--size:3.5%;--delay:.48s}.spark-8{--x:31%;--y:74%;--size:3%;--delay:.54s}
+.accent-line{position:absolute;display:block;width:8%;height:2px;background:#171717;opacity:0;transform:rotate(52deg) scaleX(.2);transition:opacity .3s ease,transform .7s cubic-bezier(.2,1,.3,1)}
+.accent-line::after{content:"";position:absolute;left:25%;top:12px;width:78%;height:2px;background:#171717}
+.art-panel.is-open .accent-line{opacity:1;transform:rotate(52deg) scaleX(1)}
+.line-1{left:5%;top:35%}.line-2{right:4%;top:35%;transform:rotate(-52deg) scaleX(.2)}
+.art-panel.is-open .line-2,.art-panel.is-open .line-4{transform:rotate(-52deg) scaleX(1)}
+.line-3{left:6%;top:71%}.line-4{right:5%;top:73%;transform:rotate(-52deg) scaleX(.2)}
+@media(max-width:760px){.art-stage .art-ideas .ball{--x:23%;--y:22%;--w:22%}.art-stage .art-ideas .tablet{--x:78%;--y:24%;--w:30%}.art-stage .art-ideas .gamepad{--x:18%;--y:56%}.art-stage .art-ideas .watch{--x:92%;--y:57%}.art-stage .art-ideas .plant{--x:78%;--y:76%}.art-stage .art-ideas .paper{--x:20%;--y:78%}}
 @media(prefers-reduced-motion:reduce){.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:hover svg,.art-panel.is-open .art-ideas .art-orbit:hover i,.art-panel.is-open .art-ideas .art-orbit:hover .cat-heart{animation:none!important}}
 </style>
 </head>
@@ -258,7 +295,6 @@
         <span class="art-hover-note">EVER WONDERED<br>WHAT’S GOING ON<br>INSIDE MY HEAD?<span aria-hidden="true">↗</span></span>
       </span>
       <button class="art-trigger" id="art-trigger" type="button" aria-label="点击人物，展开设计灵感" aria-pressed="false"></button>
-    </div>
     <div class="art-ideas" id="art-ideas" aria-label="灵感元素">
       <button class="art-orbit orbit-1 ball" type="button" data-title="交互设计" data-description="从场景和流程出发，让复杂操作变得清晰自然。" aria-label="了解交互设计"><svg viewBox="145 185 390 270" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></button>
       <button class="art-orbit orbit-2 coffee" type="button" data-title="AI 产品" data-description="将新技术转化为真正可用、易懂的产品体验。" aria-label="了解AI 产品"><svg viewBox="548 207 194 154" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg><span class="steam" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -268,6 +304,18 @@
       <button class="art-orbit orbit-6 watch" type="button" data-title="设计系统" data-description="建立一致的组件与规范，支持产品长期迭代。" aria-label="了解设计系统"><svg viewBox="1063 545 173 225" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg><span class="clock-face" aria-hidden="true"><i class="hour-hand"></i><i class="minute-hand"></i></span></button>
       <button class="art-orbit orbit-7 plant" type="button" data-title="生活灵感" data-description="从日常兴趣中收集新的设计视角。" aria-label="了解生活灵感"><svg viewBox="890 775 345 312" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></button>
       <button class="art-orbit orbit-8 paper" type="button" data-title="数据可视化" data-description="让复杂数据清楚、直观，也更容易探索。" aria-label="了解数据可视化"><svg viewBox="80 860 240 210" aria-hidden="true" focusable="false"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></button>
+    </div>
+    <div class="art-decor" aria-hidden="true">
+      <span class="spark spark-1"><svg viewBox="470 185 62 64"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></span>
+      <span class="spark spark-2"><svg viewBox="742 90 86 88"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></span>
+      <span class="spark spark-3"><svg viewBox="485 373 70 88"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></span>
+      <span class="spark spark-4"><svg viewBox="778 471 76 81"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></span>
+      <span class="spark spark-5"><svg viewBox="373 457 70 83"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></span>
+      <span class="spark spark-6"><svg viewBox="1026 546 39 54"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></span>
+      <span class="spark spark-7"><svg viewBox="1023 702 46 62"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></span>
+      <span class="spark spark-8"><svg viewBox="275 968 60 76"><image href="../assets/about/portrait-elements-hd.webp" width="1324" height="1188"/></svg></span>
+      <span class="accent-line line-1"></span><span class="accent-line line-2"></span><span class="accent-line line-3"></span><span class="accent-line line-4"></span>
+    </div>
     </div><aside class="idea-preview" id="idea-preview" aria-hidden="true"><span>DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></aside>
     <span class="art-caption" data-en="CLICK TO EXPLORE IDEAS">点击探索灵感</span>
   </section>
