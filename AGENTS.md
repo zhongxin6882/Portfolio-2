@@ -103,10 +103,18 @@ Portfolio-2/
 - `site-header.js` 的菜单和音频监听用了**捕获阶段 + `stopImmediatePropagation()`**，目的是抢在其他旧脚本的同类监听器之前独占处理权。若在别处新增 `#menuToggle` / `#audioToggle` 的监听器，注意这个优先级关系。
 - `about.js` 被 `playground.html` 和 `contact.html` 复用，**只为拿到开场动画收尾逻辑**（`#intro-loader` 加 `.is-done`）。这两页并没有关于页插画，`about.js` 里的 `.about-character` 分支会因为选择器取不到元素而自动跳过。
 
-### ⚠️ `about/index.html` 没有加载 `locale.js`
+### `about/index.html` 的 i18n 方向与其他页相反
 
-该页有语言切换按钮（`.language-toggle`），但**不加载 `locale.js`，也没有 `data-language-key`**，所以按钮点了没反应。页面内容是用中文直接写死的（`lang="zh-CN"`）。
-这是当前已知的功能缺口，不是 bug 也不是有意设计。要修复：给它加上 `locale.js` 引用 + `data-default-language` + `data-language-key="jiuyueshiwu-about-language"`，并把它所有中文文案以「中文 → 英文」的形式补进 `locale.js` 的 `en` 显式覆盖块（因为该页源文是中文，方向与其他页相反）。
+该页文案是**用中文直接写死**的（`lang="zh-CN"`），而其他四页源文是英文、靠字典译成中文。
+所以它的翻译方向是反的：
+
+- 页内 **24 条中文** → 需要「中 → 英」映射，写在 `locale.js` 的 **`en` 显式覆盖块**里
+  （反转字典覆盖不到，因为 `zh` 里没有对应的英文源文）
+- 页内 **17 条英文**（技能名、日期区间、共享页头文案等）→ 需要「英 → 中」映射，写在 `zh` 里
+
+本页已配置 `data-default-language="zh"` 与 `data-language-key="jiuyueshiwu-about-language"`
+（语言记忆与其他页相互独立），并在 `page-transition.js` 之后加载 `../locale.js`。
+
 
 ## 6. 国际化系统（`locale.js`）
 
@@ -157,6 +165,14 @@ let language =
 - 页面通过 `<body data-default-language="zh">` 指定默认语言
 - **当前只有 `index.html` 设了 `data-default-language="zh"`**，其余页面兜底为 `'en'`（英文）
 - 有 `data-language-key` 的页面语言记忆相互独立；没有的共用 `jiuyueshiwu-language`
+
+### ⚠️ 字典方向规则（放错会导致两种语言都翻译错乱）
+
+- **`zh` 的键必须是英文源文**，值是中文。
+- **中文源文的文案不能放进 `zh`**，必须放进 `en` 的显式覆盖块（键中文、值英文）。
+- 放错的后果是双向都错：中文模式下 `zh[中文]` 命中会把它换成英文；英文模式下反转字典又把英文换回中文。
+- 键里**含**中文但整体是「混合源文 → 中文」的条目属于正常情况，例如
+  `'怡视科技 · AI products':'怡视科技 · AI 产品'`（源文本身就是中英混排）。判断标准是**源文方向**，不是键里有没有汉字。
 
 ### 新增文案的标准流程
 
@@ -345,15 +361,18 @@ projects.forEach((p, i) => p.number = i + 1);   // 重排后重新编号
 
 | # | 问题 | 位置 | 影响 |
 |---|---|---|---|
-| 1 | `about/index.html` 有语言切换按钮但不加载 `locale.js`，按钮点了无效 | `about/index.html` | 关于页无法切换语言 |
-| 2 | 只有 `index.html` 设了 `data-default-language="zh"`，其余页面默认英文 | 各页 `<body>` | 从其他页进入时首屏是英文 |
-| 3 | 页头静态文案写 `HCMC`，但时钟时区写死 `Asia/Shanghai` | `site-header.js` / 各页 HTML | 城市名与实际时间不符 |
+| ~~1~~ | ~~`about/index.html` 语言切换按钮无效~~ | — | ✅ **已修复**：已接入 `locale.js` + `data-language-key`，24 条中文全部补上「中→英」映射 |
+| ~~2~~ | ~~只有首页默认中文~~ | — | ✅ **已修复**：五个页面全部 `data-default-language="zh"`，且已验证双向覆盖率 100% |
+| ~~3~~ | ~~页头写 `HCMC` 但时区是 `Asia/Shanghai`~~ | — | ✅ **已修复**：`contact.html` 顶栏改为 `WORKING GLOBALLY · BEIJING`，词典同步 |
 | 4 | `README.md` 内容过时：说"Open `dist/index.html`"、说音频是视觉-only | `README.md` | 误导协作者 |
 | 5 | 部分 css/js 引用没有 `?v=` 版本号 | `playground.html`、`fromanother.html` | 改动可能不生效 |
 | 6 | `app.js`、`playground.js` 的图片全部热链 `framerusercontent.com` | 同左 | 依赖第三方 CDN，有失效与授权风险 |
 | 7 | 画廊计数器分母 `/19` 在 HTML 里硬编码 | `index.html` | 增删项目易漏改 |
 | 8 | `page-transition.js` 仍保留已删除的 `about.html` 路由映射 | `page-transition.js` | 死配置，无害 |
 | 9 | 三个脚本的开场动画时长不一致（4700ms / 5500ms） | `about.js` vs `work.js`、`app.js` | 各页开场节奏不统一 |
+| 10 | `zh` 词典里残留大量旧英文版关于页的死词条（`ABOUT MY PRACTICE`、`01 / EXPERIENCE`、`YEARS IN UI/UX` 等），当前页面已不用 | `locale.js` | 无害，但词典体积虚高、易误判覆盖率 |
+| 11 | `enTitles` Map 声明后从未被使用（标题实际走 `zh`/`en` + `data-en-title`） | `locale.js` | 死代码 |
+| 12 | `contact.html` 的 `.contact-credits` 署名区仍是模板原作者团队 | `contact.html` | 待确认授权后再决定去留 |
 
 ## 12. 常见任务操作指引
 

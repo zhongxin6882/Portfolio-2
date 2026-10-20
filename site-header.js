@@ -25,7 +25,8 @@
   }, true);
 
   // ── 2) 时钟：Asia/Shanghai 时区、en-GB 24 小时制、每秒刷新。
-  // ⚠️ 时区写死在此，但页头静态文案写的是 HCMC（胡志明市），两者不一致。
+  // ⚠️ 时区写死在此。页头静态文案已改为 “Working China beijing”，与时区一致；
+  // 若日后改动时区，记得同步各页 .location 文案与 locale.js 里的对应词条。
   const clock = header.querySelector('#clock');
   if (clock) {
     const format = new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
