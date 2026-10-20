@@ -158,6 +158,23 @@
 .art-panel.is-open .art-ideas .orbit-6:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.04) rotate(15deg)}
 .art-panel.is-open .art-ideas .orbit-7:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.045) rotate(-8deg)}
 .art-panel.is-open .art-ideas .orbit-8:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.07) rotate(6deg)}
+.art-panel.is-open .art-ideas .orbit-1:hover{animation:idea-bounce .55s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-2:hover{animation:idea-steam 1s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-3:hover{animation:idea-draw .7s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-4:hover{animation:idea-game .36s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-5:hover{animation:idea-cat .9s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-6:hover{animation:idea-tick .8s steps(2,end) infinite alternate}
+.art-panel.is-open .art-ideas .orbit-7:hover{animation:idea-grow 1s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-8:hover{animation:idea-page .75s ease-in-out infinite alternate}
+@keyframes idea-bounce{to{transform:translate(var(--end-x),calc(var(--end-y) - 4%)) scale(1.04) rotate(12deg)}}
+@keyframes idea-steam{to{transform:translate(var(--end-x),calc(var(--end-y) - 2%)) scale(1.035) rotate(-4deg)}}
+@keyframes idea-draw{to{transform:translate(var(--end-x),var(--end-y)) scale(1.025) rotate(5deg)}}
+@keyframes idea-game{to{transform:translate(var(--end-x),var(--end-y)) scale(1.04) rotate(5deg)}}
+@keyframes idea-cat{to{transform:translate(var(--end-x),calc(var(--end-y) - 1%)) scale(1.055) rotate(-5deg)}}
+@keyframes idea-tick{to{transform:translate(var(--end-x),var(--end-y)) scale(1.035) rotate(8deg)}}
+@keyframes idea-grow{to{transform:translate(var(--end-x),calc(var(--end-y) - 2%)) scale(1.05) rotate(5deg)}}
+@keyframes idea-page{to{transform:translate(var(--end-x),var(--end-y)) scale(1.055) rotate(-8deg)}}
+@media(prefers-reduced-motion:reduce){.art-panel.is-open .art-ideas .art-orbit:hover{animation:none}}
 @media(max-width:760px){.chrome{height:185px;grid-template-columns:20% 42% minmax(0,1fr);grid-template-rows:28px 35px auto;padding:15px 14px;background:#fcfaf8}.chrome .brand{grid-column:1;grid-row:1/4}.chrome .header-slot{grid-column:2;grid-row:1/4}.chrome .audio{grid-column:3;grid-row:1}.chrome .location{grid-column:3;grid-row:2}.chrome .inquiry{grid-column:3;grid-row:3;overflow-wrap:anywhere;text-align:left}.chrome .inquiry-language{justify-content:flex-start}.audio,.location{display:block;font-size:9px}.inquiry{display:block;font-size:9px;white-space:normal}.chrome .inquiry .language-toggle{font-size:9px}.art-panel{height:min(110vw,620px);min-height:0}.portrait-stage{transform:translateY(3%)}.art-ideas{top:50%;transform:translate(-50%,-50%) translateY(3%)}.portrait-stage,.art-ideas{width:95%}.art-hover-note{left:5%;top:5%;min-width:0;padding:10px;font-size:14px}.right-panel{padding-top:72px}}
 </style>
 </head>
