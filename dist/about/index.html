@@ -122,22 +122,58 @@
 @media(max-width:760px){.portrait-stage,.art-ideas{width:84%;max-width:450px}.right-panel{padding:58px 24px 48px}.hero-copy h1{font-size:58px}.resume{margin-top:45px}}
 @media(prefers-reduced-motion:reduce){.art-ideas .art-orbit,.portrait-stage img,.art-hover-note{transition:none;will-change:auto}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* Shared Work header and portrait refinements. */
+.audio button{border:0;padding:0;background:none;color:#111;display:inline-flex;align-items:center;gap:6px;font:inherit}.audio-wave{display:none;height:13px;align-items:center;gap:2px}.audio button[aria-pressed="true"] .audio-wave{display:inline-flex}.audio-wave i{width:2px;height:5px;background:currentColor;animation:audio-wave .78s ease-in-out infinite alternate}.audio-wave i:nth-child(2){animation-delay:-.18s}.audio-wave i:nth-child(3){animation-delay:-.44s}.audio-wave i:nth-child(4){animation-delay:-.3s}.audio-wave i:nth-child(5){animation-delay:-.59s}@keyframes audio-wave{to{height:13px}}
+.header-slot nav.typing a{overflow:hidden;animation:nav-type .45s steps(12,end) both}.header-slot nav.typing a:nth-child(2){animation-delay:.12s}.header-slot nav.typing a:nth-child(3){animation-delay:.24s}.header-slot nav.typing a:nth-child(4){animation-delay:.36s}@keyframes nav-type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.page-transition__title{opacity:1;filter:none;transform:none;animation:none}
+
+.chrome{grid-template-columns:12.8% 25.2% 16.7% 1fr auto;padding:21px 3.2% 0 12px;height:180px}
+.brand b{font-size:clamp(19px,1.3vw,27px)}
+.header-slot nav{margin-top:33px}.header-slot nav a{font-size:clamp(18px,1.3vw,24px);line-height:.95}
+.inquiry{font-size:12px;color:#111}.chrome .inquiry .language-toggle{position:static;display:inline-block;margin-top:12px;padding:4px 9px;border:1px solid #aaa;background:transparent;color:#111;font-size:10px}
+.inquiry-language{display:flex;justify-content:flex-end}
+.art-panel{min-height:850px}.right-panel{padding-top:185px}
+.portrait-stage{transform:translateY(6%)}
+.portrait-stage,.art-ideas{width:82%;max-width:600px}
+.portrait-stage img{mask-image:none!important}
+.portrait-idle{opacity:1}
+.portrait-smile{opacity:0;transform:translateY(0) scale(1);transition:opacity .26s ease!important}
+.art-panel:not(.is-open) .art-trigger:hover .portrait-smile,.art-panel:not(.is-open) .art-trigger:focus-visible .portrait-smile{opacity:1}
+.art-panel.is-open .art-trigger .portrait-smile{opacity:0}
+.art-panel.is-open .art-trigger .portrait-character{transform:translateY(14%) scale(.72)}
+.art-hover-note{top:4%;left:11%;max-width:none;padding:16px 20px;font:700 clamp(16px,1.6vw,24px)/1.05 Georgia,serif;letter-spacing:-.035em;white-space:normal;min-width:250px}
+.art-hover-note span{position:absolute;right:-17px;bottom:0;padding:0;width:0;height:0;font-size:0;border:9px solid transparent;border-left-color:#111}
+.art-ideas{top:52%;transform:translate(-50%,-50%) translateY(6%)}
+.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:focus-visible{filter:none!important}
+.art-ideas .orbit-1{--end-x:-3%;--end-y:-7%}.art-ideas .orbit-2{--end-x:0%;--end-y:-10%}.art-ideas .orbit-3{--end-x:4%;--end-y:-7%}
+.art-ideas .orbit-4{--end-x:-2%;--end-y:2%}.art-ideas .orbit-5{--end-x:4%;--end-y:2%}.art-ideas .orbit-6{--end-x:1%;--end-y:1%}
+.art-ideas .orbit-7{--end-x:0%;--end-y:0%}.art-ideas .orbit-8{--end-x:0%;--end-y:0%}
+.art-panel.is-open .art-ideas .orbit-1:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.045) rotate(-10deg)}
+.art-panel.is-open .art-ideas .orbit-2:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.035) rotate(7deg)}
+.art-panel.is-open .art-ideas .orbit-3:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.025) rotate(-4deg)}
+.art-panel.is-open .art-ideas .orbit-4:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.055) rotate(-12deg)}
+.art-panel.is-open .art-ideas .orbit-5:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.08) rotate(9deg)}
+.art-panel.is-open .art-ideas .orbit-6:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.04) rotate(15deg)}
+.art-panel.is-open .art-ideas .orbit-7:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.045) rotate(-8deg)}
+.art-panel.is-open .art-ideas .orbit-8:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.07) rotate(6deg)}
+@media(max-width:760px){.chrome{height:185px;grid-template-columns:20% 42% minmax(0,1fr);grid-template-rows:28px 35px auto;padding:15px 14px;background:#fcfaf8}.chrome .brand{grid-column:1;grid-row:1/4}.chrome .header-slot{grid-column:2;grid-row:1/4}.chrome .audio{grid-column:3;grid-row:1}.chrome .location{grid-column:3;grid-row:2}.chrome .inquiry{grid-column:3;grid-row:3;overflow-wrap:anywhere;text-align:left}.chrome .inquiry-language{justify-content:flex-start}.audio,.location{display:block;font-size:9px}.inquiry{display:block;font-size:9px;white-space:normal}.chrome .inquiry .language-toggle{font-size:9px}.art-panel{height:min(110vw,620px);min-height:0}.portrait-stage{transform:translateY(3%)}.art-ideas{top:50%;transform:translate(-50%,-50%) translateY(3%)}.portrait-stage,.art-ideas{width:95%}.art-hover-note{left:5%;top:5%;min-width:0;padding:10px;font-size:14px}.right-panel{padding-top:72px}}
 </style>
 </head>
 <body>
 <header class="chrome">
     <a class="brand" href="../index.html" aria-label="Work home"><b>JIUYUESHIWU</b><small>©<br>copyright 2026<br>home ↗<br>•84</small></a>
     <div class="header-slot"><button id="menuToggle" type="button" aria-expanded="true">Menu</button><nav id="menu" aria-label="主导航"><a href="../index.html" data-en="WORK">作品</a><a href="./" aria-current="page" data-en="ABOUT">关于</a><a href="../playground.html" data-en="PLAYGROUND">灵感实验室</a><a href="../contact.html" data-en="CONTACT">联系</a></nav></div>
-    <div class="audio">Audio <strong>Off —</strong></div><div class="location">Working globally<br>HCMC</div><div class="inquiry"><a href="mailto:zhongxin6882@gmail.com">zhongxin6882@gmail.com</a></div>
-    <button class="language-toggle" type="button" aria-label="Switch to English">EN</button>
+    <div class="audio">Audio <button id="audioToggle" type="button" aria-pressed="false"><span class="audio-label">Off —</span><span class="audio-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div class="location">Working China beijing<br><span id="clock" aria-label="Beijing local time">--:--:--</span></div><div class="inquiry">For inquiries &nbsp; <a href="mailto:zhongxin6882@gmail.com">zhongxin6882@gmail.com</a><div class="inquiry-language"><button class="language-toggle" type="button" aria-label="Switch to English">EN</button></div></div>
+
   </header>
 <main class="about-page" id="top">
   <section class="art-panel" id="art-panel" aria-label="九月十五人物插画">
     <button class="art-trigger" id="art-trigger" type="button" aria-label="点击人物，展开设计灵感" aria-pressed="false">
       <span class="portrait-stage" aria-hidden="true">
-        <img class="portrait-idle" src="../assets/about/portrait-default.webp" width="1342" height="1172" alt="">
+        <img class="portrait-idle" src="../assets/about/portrait-default-v2.webp" width="1342" height="1172" alt="">
+        <img class="portrait-smile" src="../assets/about/portrait-smile.webp" width="1342" height="1172" alt="">
         <img class="portrait-character" src="../assets/about/portrait-character.webp" width="1324" height="1188" alt="">
-        <span class="art-hover-note">脑袋里在想什么？<span aria-hidden="true">↗</span></span>
+        <span class="art-hover-note">EVER WONDERED<br>WHAT’S GOING ON<br>INSIDE MY HEAD?<span aria-hidden="true">↗</span></span>
       </span>
     </button>
     <div class="art-ideas" id="art-ideas" aria-label="灵感元素">
@@ -197,13 +233,6 @@
   });
   document.getElementById('idea-close').addEventListener('click', () => { selected = hovered = null; renderPreview(); trigger.focus(); });
   document.addEventListener('keydown', event => { if (event.key === 'Escape') { selected = hovered = null; renderPreview(); } });
-  const menuButton = document.getElementById('menuToggle');
-  const menu = document.getElementById('menu');
-  menuButton.addEventListener('click', () => {
-    const expanded = menuButton.getAttribute('aria-expanded') !== 'true';
-    menuButton.setAttribute('aria-expanded', String(expanded));
-    menu.classList.toggle('closed', !expanded);
-  });
   const languageButton = document.querySelector('.language-toggle');
   const originals = [...document.querySelectorAll('[data-en]')].map(el => [el, el.innerHTML, el.dataset.en]);
   languageButton.addEventListener('click', () => {
@@ -216,6 +245,7 @@
   });
 })();
 </script>
+<script src="../site-header.js?v=2"></script>
 <script src="../page-transition.js?v=about-unified-20261020"></script>
 </body>
 </html>

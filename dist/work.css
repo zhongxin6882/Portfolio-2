@@ -305,6 +305,14 @@
 }
 
 /* Video reference: cards travel diagonally through the three-column stage. */
+@media(max-width:850px){
+  .work-home{--work-header-height:185px}
+  .work-home .chrome{height:185px;grid-template-columns:20% 42% minmax(0,1fr);grid-template-rows:28px 35px auto;padding:15px 14px}
+  .work-home .audio{grid-column:3;grid-row:1;padding:0;text-align:left}
+  .work-home .location{display:block;grid-column:3;grid-row:2;font-size:9px}
+  .work-home .inquiry{display:block;grid-column:3;grid-row:3;text-align:left;font-size:9px;white-space:normal;overflow-wrap:anywhere}
+  .work-home .header-slot nav{margin-top:18px;font-size:16px}
+}
 @media (min-width: 851px) {
   .work-home { --work-left: 32%; }
   .work-home .chrome {
