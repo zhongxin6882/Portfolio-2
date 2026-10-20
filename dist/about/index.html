@@ -68,6 +68,59 @@
 .art-orbit:hover,.art-orbit:focus-visible,.art-orbit[aria-pressed="true"]{background:transparent;color:transparent;box-shadow:0 0 0 2px #ff641e80;outline:0}
 @media(max-width:760px){.portrait-stage,.art-ideas{width:72%}.portrait-stage img{width:100%;height:100%;margin:0}}
 @media(prefers-reduced-motion:reduce){.portrait-stage img{will-change:auto}}
+/* A larger, crisp character remains in place while independent ideas spring out above it. */
+.portrait-stage,.art-ideas{width:72%;max-width:520px;aspect-ratio:1}
+.portrait-stage img{width:100%;height:100%;object-fit:contain;transition:opacity .38s ease,transform .7s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}
+.portrait-idle{opacity:1;transform:translateY(0) scale(1)}
+.portrait-character{opacity:0;transform:translateY(10px) scale(.94);mask-image:none!important}
+.art-panel.is-open .portrait-idle{opacity:0;transform:translateY(12px) scale(.96)}
+.art-panel.is-open .portrait-character{opacity:1;transform:translateY(0) scale(1)}
+.art-trigger:hover .portrait-stage,.art-trigger:focus-visible .portrait-stage{transform:translateY(-7px) rotate(-1.2deg)}
+.art-panel.is-open .art-trigger:hover .portrait-stage{transform:translateY(-5px) rotate(.8deg)}
+.art-hover-note{position:absolute;z-index:3;top:8%;left:47%;display:block;max-width:170px;padding:10px 12px;background:#111;color:#fff;font-size:12px;line-height:1.2;letter-spacing:-.02em;white-space:nowrap;opacity:0;transform:translateY(9px) scale(.92) rotate(-3deg);transform-origin:left bottom;transition:opacity .24s ease,transform .42s cubic-bezier(.2,1.4,.3,1);pointer-events:none}
+.art-hover-note span{padding-left:8px;color:#ff641e}
+.art-trigger:hover .art-hover-note,.art-trigger:focus-visible .art-hover-note{opacity:1;transform:translateY(0) scale(1) rotate(-2deg)}
+.art-panel.is-open .art-hover-note{opacity:0}
+.art-ideas{z-index:4;pointer-events:none}
+.art-ideas .art-orbit{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;border:0;border-radius:0;background:transparent url(../assets/about/portrait-elements.webp) center/100% 100% no-repeat!important;box-shadow:none!important;font-size:0;opacity:0;pointer-events:none;clip-path:inset(var(--t) var(--r) var(--b) var(--l));transform:translate(var(--tx),var(--ty)) scale(.12) rotate(var(--rot));transform-origin:50% 36%;transition:opacity .2s ease,transform .75s cubic-bezier(.16,1.4,.28,1),filter .22s ease;transition-delay:0s;will-change:transform}
+.art-panel.is-open .art-ideas .art-orbit{opacity:1;pointer-events:auto;transform:translate(0,0) scale(1) rotate(0);transition-delay:var(--delay)}
+.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:focus-visible{filter:drop-shadow(0 0 5px #ff641e);outline:0;transform:translateY(-4px) scale(1.04)}
+.art-ideas .orbit-1{--t:14%;--r:62%;--b:60%;--l:13%;--tx:23%;--ty:8%;--rot:-24deg;--delay:.05s}
+.art-ideas .orbit-2{--t:9%;--r:43%;--b:69%;--l:40%;--tx:0%;--ty:12%;--rot:16deg;--delay:.12s}
+.art-ideas .orbit-3{--t:13%;--r:0%;--b:54%;--l:58%;--tx:-26%;--ty:6%;--rot:20deg;--delay:.19s}
+.art-ideas .orbit-4{--t:45%;--r:68%;--b:29%;--l:7%;--tx:30%;--ty:-21%;--rot:-30deg;--delay:.26s}
+.art-ideas .orbit-5{--t:46%;--r:21%;--b:36%;--l:60%;--tx:-19%;--ty:-20%;--rot:20deg;--delay:.33s}
+.art-ideas .orbit-6{--t:45%;--r:0%;--b:33%;--l:81%;--tx:-38%;--ty:-20%;--rot:25deg;--delay:.4s}
+.art-ideas .orbit-7{--t:64%;--r:4%;--b:8%;--l:69%;--tx:-30%;--ty:-41%;--rot:27deg;--delay:.47s}
+.art-ideas .orbit-8{--t:70%;--r:74%;--b:8%;--l:7%;--tx:35%;--ty:-44%;--rot:-22deg;--delay:.54s}
+/* Editorial typography and quiet information rows, inspired by the reference layout. */
+.right-panel{padding:118px clamp(30px,3vw,54px) 68px}
+.hero-copy{display:grid;grid-template-columns:27% minmax(0,1fr);column-gap:4%;row-gap:7px;max-width:none;margin:0}
+.hero-copy h1{grid-column:2;margin:0 0 42px;white-space:normal;font:750 clamp(55px,5.25vw,78px)/1.05 Arial,sans-serif;letter-spacing:-.07em}
+.hero-copy::before{content:"INFO";grid-column:1;grid-row:2/span 3;font-size:11px;color:#858585;letter-spacing:.08em;padding-top:5px}
+.orange-square{display:none}
+.hero-copy h2,.hero-role,.hero-summary{grid-column:2}
+.hero-copy h2{font-size:24px;font-weight:650;letter-spacing:-.04em}
+.hero-role{margin:0;color:#686868;font-size:14px}
+.hero-summary{margin:21px 0 0;max-width:420px;font-size:14px;line-height:1.7}
+.resume,.skills-block,.contact-block{display:grid;grid-template-columns:27% minmax(0,1fr);column-gap:4%;margin-top:53px}
+.section-label{grid-column:1;padding-top:3px;font-size:11px;letter-spacing:.08em;color:#858585}
+.experience-list{grid-column:2;gap:0}
+.experience-item{grid-template-columns:30% 1fr;min-height:0;padding:17px 0;border-top:1px solid #ddd9d5;column-gap:3%}
+.experience-item::before,.experience-item::after,.experience-item>div:first-child{display:none}
+.experience-item>div:nth-child(2){grid-column:1}
+.experience-item time{grid-column:auto;font-size:13px;font-weight:600}
+.experience-item .career-role{grid-column:2;font-size:13px;white-space:normal}
+.experience-item p{margin:5px 0 0;color:#777;font-size:12px;line-height:1.5}
+.skills-block,.contact-block{margin-top:34px}
+.skills-list{gap:5px 0;max-width:480px}
+.skills-list span{padding:0;border:0;border-radius:0;font-size:12px;line-height:1.55;white-space:normal}
+.skills-list span:not(:last-child)::after{content:" / ";padding:0 8px;color:#aaa}
+.contact-items{gap:16px 24px;font-size:13px}
+.contact-items i{width:25px;height:25px;border:0;font-size:14px}
+@media(max-width:1100px){.right-panel{padding:112px 27px 50px}.hero-copy{grid-template-columns:1fr}.hero-copy h1,.hero-copy h2,.hero-role,.hero-summary,.hero-copy::before{grid-column:1}.hero-copy::before{grid-row:auto}.hero-copy h1{margin-bottom:24px}.resume,.skills-block,.contact-block{grid-template-columns:1fr;gap:15px}.section-label,.experience-list{grid-column:1}}
+@media(max-width:760px){.portrait-stage,.art-ideas{width:84%;max-width:450px}.right-panel{padding:58px 24px 48px}.hero-copy h1{font-size:58px}.resume{margin-top:45px}}
+@media(prefers-reduced-motion:reduce){.art-ideas .art-orbit,.portrait-stage img,.art-hover-note{transition:none;will-change:auto}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -83,14 +136,24 @@
     <button class="art-trigger" id="art-trigger" type="button" aria-label="点击人物，展开设计灵感" aria-pressed="false">
       <span class="portrait-stage" aria-hidden="true">
         <img class="portrait-idle" src="../assets/about/portrait-default.webp" width="1342" height="1172" alt="">
-        <img class="portrait-reveal" src="../assets/about/portrait-open.webp" width="729" height="653" alt="">
+        <img class="portrait-character" src="../assets/about/portrait-character.webp" width="1324" height="1188" alt="">
+        <span class="art-hover-note">脑袋里在想什么？<span aria-hidden="true">↗</span></span>
       </span>
     </button>
-    <div class="art-ideas" id="art-ideas"><button class="art-orbit orbit-1" type="button" data-title="交互设计" data-description="从场景和流程出发，让复杂操作变得清晰自然。" aria-label="了解交互设计">✎</button><button class="art-orbit orbit-2" type="button" data-title="AI 产品" data-description="将新技术转化为真正可用、易懂的产品体验。" aria-label="了解 AI 产品">✳</button><button class="art-orbit orbit-3" type="button" data-title="用户洞察" data-description="理解真实问题，再定义值得解决的设计目标。" aria-label="了解用户洞察">◉</button><button class="art-orbit orbit-4" type="button" data-title="视觉表达" data-description="用层级、字体与画面讲清产品的信息。" aria-label="了解视觉表达">⌘</button><button class="art-orbit orbit-5" type="button" data-title="设计系统" data-description="建立一致的组件与规范，支持产品长期迭代。" aria-label="了解设计系统">◈</button><button class="art-orbit orbit-6" type="button" data-title="数据可视化" data-description="让复杂数据清楚、直观，也更容易探索。" aria-label="了解数据可视化">✦</button></div><aside class="idea-preview" id="idea-preview" aria-hidden="true"><span>DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></aside>
+    <div class="art-ideas" id="art-ideas" aria-label="灵感元素">
+      <button class="art-orbit orbit-1" type="button" data-title="交互设计" data-description="从场景和流程出发，让复杂操作变得清晰自然。" aria-label="了解交互设计"></button>
+      <button class="art-orbit orbit-2" type="button" data-title="AI 产品" data-description="将新技术转化为真正可用、易懂的产品体验。" aria-label="了解AI 产品"></button>
+      <button class="art-orbit orbit-3" type="button" data-title="视觉表达" data-description="用层级、字体与画面讲清产品的信息。" aria-label="了解视觉表达"></button>
+      <button class="art-orbit orbit-4" type="button" data-title="产品体验" data-description="让功能和使用场景自然地连接起来。" aria-label="了解产品体验"></button>
+      <button class="art-orbit orbit-5" type="button" data-title="用户洞察" data-description="理解真实问题，再定义值得解决的设计目标。" aria-label="了解用户洞察"></button>
+      <button class="art-orbit orbit-6" type="button" data-title="设计系统" data-description="建立一致的组件与规范，支持产品长期迭代。" aria-label="了解设计系统"></button>
+      <button class="art-orbit orbit-7" type="button" data-title="生活灵感" data-description="从日常兴趣中收集新的设计视角。" aria-label="了解生活灵感"></button>
+      <button class="art-orbit orbit-8" type="button" data-title="数据可视化" data-description="让复杂数据清楚、直观，也更容易探索。" aria-label="了解数据可视化"></button>
+    </div><aside class="idea-preview" id="idea-preview" aria-hidden="true"><span>DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></aside>
     <span class="art-caption" data-en="CLICK TO EXPLORE IDEAS">点击探索灵感</span>
   </section>
   <div class="right-panel">
-    <section class="hero-copy" aria-labelledby="about-title"><h1 id="about-title">ABOUT ME</h1><span class="orange-square" aria-hidden="true"></span><h2 data-en="September Fifteen">九月十五</h2><p class="hero-role" data-en="Interaction &amp; Visual Designer">交互与视觉设计师</p><p class="hero-summary" data-en="I design clear, useful digital experiences from user flows to final interfaces. My work spans AI products, cybersecurity platforms and mobile applications, connecting structure, interaction and visual detail.">我是一名专注于交互与视觉设计的设计师，<br>热爱通过设计解决真实问题，让复杂的产品变得简单、易用且有温度。<br>从用户需求出发，结合商业目标与技术实现，持续探索更好的数字产品体验。</p></section>
+    <section class="hero-copy" aria-labelledby="about-title"><h1 id="about-title" data-en="About me">关于我</h1><span class="orange-square" aria-hidden="true"></span><h2 data-en="September Fifteen">九月十五</h2><p class="hero-role" data-en="Interaction &amp; Visual Designer">交互与视觉设计师</p><p class="hero-summary" data-en="I design clear, useful digital experiences from user flows to final interfaces. My work spans AI products, cybersecurity platforms and mobile applications, connecting structure, interaction and visual detail.">我是一名专注于交互与视觉设计的设计师，<br>热爱通过设计解决真实问题，让复杂的产品变得简单、易用且有温度。<br>从用户需求出发，结合商业目标与技术实现，持续探索更好的数字产品体验。</p></section>
     <section class="resume" aria-label="工作经历"><span class="section-label" data-en="EXPERIENCE">工作经历</span><div class="experience-list">
       <article class="experience-item"><div></div><div><time>2020 — NOW</time><p data-en="Yishi Technology">怡视科技</p></div><div class="career-role"><span data-en="Interaction &amp; Visual Designer">交互与视觉设计师</span><p data-en="AI product interaction and visual design, from user flows to consistent product interfaces.">负责 AI 产品的交互与视觉设计，构建清晰一致的产品体验。</p></div></article>
       <article class="experience-item"><div></div><div><time>2017 — 2020</time><p data-en="Qi An Xin">奇安信</p></div><div class="career-role"><span data-en="Product UI Designer">产品 UI 设计师</span><p data-en="Designed cybersecurity data products and led interface design for the product team.">参与网络安全数据产品设计，担任数据产品组长。</p></div></article>
