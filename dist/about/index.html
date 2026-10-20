@@ -42,7 +42,7 @@
 .about-page,.art-panel,.right-panel{background:#fcfaf8}
 .art-panel,.right-panel{border:0}
 .art-trigger{display:flex;align-items:center;justify-content:center}
-.art-trigger img{width:50%;height:auto;aspect-ratio:1;max-width:none;max-height:none;margin:0;object-fit:cover;object-position:left center;transform-origin:center;mask-image:radial-gradient(ellipse 75% 75% at center,#000 74%,transparent 100%)}
+.art-trigger img{width:50%;height:auto;aspect-ratio:1;max-width:none;max-height:none;margin:0;object-fit:cover;object-position:left center;transform-origin:center;mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent),linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);mask-composite:intersect}
 .art-trigger:hover img,.art-trigger:focus-visible img{transform:scale(1.025)}
 .art-panel.is-open .art-trigger img{transform:scale(1.045)}
 @media(max-width:760px){.art-panel{border:0}.art-trigger img{width:50%;height:auto;max-height:none;margin:0}.chrome{border-bottom:0}}
