@@ -156,8 +156,9 @@ def make_frame(name, original, index):
     if name == "ball":
         sphere = local(name, (212, 190, 469, 449))
         layer, frame = extracted(frame, sphere)
-        # The hoop/ring and stars stay fixed; spin the ball about its own center.
-        return compose_crop_at(frame, layer, sphere, dy=-9*swell, angle=-360*p)
+        # A centered rocking spin keeps the hand-drawn seam pattern readable
+        # instead of turning it into the radial fan seen at quarter turns.
+        return compose_crop_at(frame, layer, sphere, dy=-9*swell, angle=-22*sin(phase))
 
     if name == "coffee":
         steam = local(name, (575, 75, 695, 217))
@@ -350,13 +351,22 @@ STAR_BOXES = [
 REMOVED_STARS = {
     (1165,173,1238,256), (477,376,558,470), (777,475,851,553),
     (1236,630,1302,709), (1019,694,1068,759), (1117,985,1197,1082),
+    (470,187,523,250), (1019,555,1064,613), (73,768,148,857),
+    (268,968,326,1035), (878,949,939,1021),
 }
 stars = Image.new("RGBA", SOURCE.size)
 lines = decor.copy()
 for box in STAR_BOXES:
     if box not in REMOVED_STARS:
         stars.alpha_composite(decor.crop(box),box[:2])
-    ImageDraw.Draw(lines).rectangle(box,fill=(0,0,0,0))
+    x1,y1,x2,y2 = box
+    # Clear the antialiased fringe too; exact crop edges left orphaned pixels.
+    ImageDraw.Draw(lines).rectangle((max(0,x1-8),max(0,y1-8),
+                                     min(lines.width,x2+8),min(lines.height,y2+8)),
+                                    fill=(0,0,0,0))
+# Remove the two short sweeps marked out beside the coffee and tablet.
+ImageDraw.Draw(lines).rectangle((450,265,555,385),fill=(0,0,0,0))
+ImageDraw.Draw(lines).rectangle((695,285,780,395),fill=(0,0,0,0))
 stars.save(OUT / "decor-stars.webp", lossless=True, method=6)
 lines.save(OUT / "decor-lines.webp", lossless=True, method=6)
 
