@@ -357,7 +357,13 @@ stars = Image.new("RGBA", SOURCE.size)
 lines = decor.copy()
 for box in STAR_BOXES:
     if box not in REMOVED_STARS:
-        stars.alpha_composite(decor.crop(box),box[:2])
+        if box == (1236,630,1302,709):
+            # Give the watch-side star breathing room without clipping the canvas.
+            star = decor.crop(box)
+            star = star.resize((50, 60), Image.Resampling.LANCZOS)
+            stars.alpha_composite(star, (1253, 646))
+        else:
+            stars.alpha_composite(decor.crop(box),box[:2])
     x1,y1,x2,y2 = box
     # Clear the antialiased fringe too; exact crop edges left orphaned pixels.
     ImageDraw.Draw(lines).rectangle((max(0,x1-8),max(0,y1-8),

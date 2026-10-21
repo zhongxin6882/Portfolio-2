@@ -5,20 +5,6 @@
     <path d="M65 516l47 65M47 553l44 62"/>
     <path d="M1280 908l-44 66M1308 936l-43 65"/>
   </g>
-  <!-- Hollow, folded ribbon outlines; no solid fill or bitmap recoloring. -->
-  <g stroke="#171717" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <g transform="translate(325 540) rotate(-12 28 40)">
-      <path d="M7 10c14-8 25-4 39 8l-13 5c-9-7-15-7-24-2l13 10"/>
-      <path d="M22 31c15-8 29-2 35 11l-14 2c-6-5-12-6-20-2l13 12"/>
-      <path d="M36 54c12-5 22-1 29 9l-14 3c-5-4-9-4-15-1"/>
-    </g>
-    <g transform="translate(1202 91) rotate(12 25 20)">
-      <path d="M6 36C11 18 20 7 31 7c6 0 12 5 22 14l13 11-13 4-17-13c-7-5-11-6-15-1l-7 16"/>
-    </g>
-    <g transform="translate(87 981) rotate(-11 29 40)">
-      <path d="M7 12c13-9 25-6 39 6l-13 5c-9-6-15-7-23-2l14 11"/>
-      <path d="M23 32c14-6 26-1 34 10l-13 3c-6-5-12-6-19-1l14 13"/>
-      <path d="M39 57c12-4 22 0 28 9l-13 3c-5-4-9-5-15-1"/>
-    </g>
-  </g>
+  <!-- Restore only the short arc below the small star at the basketball's right. -->
+  <path d="M474 281 C501 285 520 293 518 307 C516 321 496 337 473 346" stroke="#343330" stroke-width="2.5" stroke-linecap="round"/>
 </svg>

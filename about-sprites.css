@@ -9,7 +9,7 @@
   aspect-ratio: 1324 / 1188;
   max-width: none;
   background:
-    url("assets/about/decor-accents.svg?v=decor-outline-20261021") center / 100% 100% no-repeat,
+    url("assets/about/decor-accents.svg?v=arc-ribbons-sticky-20261021") center / 100% 100% no-repeat,
     url("assets/about/sprites/decor-stars.webp?v=decor-outline-20261021") center / 100% 100% no-repeat,
     url("assets/about/sprites/decor-lines.webp?v=decor-outline-20261021") center / 100% 100% no-repeat;
   transform: translateY(-50%);
@@ -18,6 +18,14 @@
   transition: opacity .35s ease;
 }
 .art-panel.is-open .art-stage .art-ideas.sprite-composition { opacity: 1; }
+
+/* Use the supplied transparent ribbon pixels exactly; blacken white ink for the light canvas. */
+.sprite-composition .ribbon{position:absolute;z-index:2;display:block;background-position:center;background-size:contain;background-repeat:no-repeat;filter:brightness(0);pointer-events:none}
+.sprite-composition .ribbon-three{left:24.5%;top:45.5%;width:5.75%;height:8.1%;background-image:url("assets/about/ribbon-three.png")}
+.sprite-composition .ribbon-bend{left:90.8%;top:7.7%;width:7.85%;height:5.9%;background-image:url("assets/about/ribbon-bend.png")}
+.sprite-composition .ribbon-swirl{left:6.6%;top:82.6%;width:7.4%;height:8.75%;background-image:url("assets/about/ribbon-swirl.png")}
+/* The right column supplies document height; keep the left illustration in view. */
+@media(min-width:851px){.about-page .art-panel{position:sticky;top:0;align-self:start;height:100svh;min-height:0}}
 
 .art-panel .art-stage .art-ideas.sprite-composition .art-orbit,
 .art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit:hover,
