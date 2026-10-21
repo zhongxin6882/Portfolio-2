@@ -1,7 +1,23 @@
-# FROMANOTHER project page study
+# 九月十五作品集
 
-A static, responsive recreation of the [FROMANOTHER case study](https://huyml.co/project/fromanother). Open `dist/index.html` or serve `dist/` with a static server.
+四个主页面和案例页由 Vite 构建。Playground 的动画使用 npm 安装的 GSAP，后续新动画也请直接从 `gsap` 包导入，不再添加 CDN 脚本。
 
-Implemented: intro reveal, fixed utility navigation, project information, 11 image gallery, parallax scroll, reveal transitions, gallery position rail, mobile layout, menu and audio visual toggle. Gallery images are hotlinked to the original Framer CDN for study purposes; obtain licensed originals before redistribution. The audio switch is visual only because no audio asset was supplied.
+## 本地开发
 
-For high fidelity, provide licensed BT Glyphius and BT Grotesk font files, the original logo/illustration and Rive source, any background audio, and a desktop/mobile screen recording of the exact interaction timing. Replace hotlinked images with authorized local assets before production use.
+```bash
+npm ci
+npm run dev
+```
+
+构建与预览：
+
+```bash
+npm run build
+npm run preview
+```
+
+Vite 输出到 `dist/`，不提交生成文件。旧的普通脚本仍保持原有执行顺序，由 `vite.config.js` 在构建后复制到输出目录；新 GSAP 代码写在 Vite 模块中。生产环境项目根路径是 `/Portfolio-2/`。
+
+## GitHub Pages
+
+推送到 `main` 会触发 `.github/workflows/deploy.yml`：`npm ci` → `npm run build` → 部署 `dist/`。仓库 Settings → Pages → Build and deployment → Source 应设为 **GitHub Actions**。
