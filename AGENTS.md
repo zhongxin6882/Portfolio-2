@@ -1,5 +1,15 @@
 # AGENTS.md — 九月十五 JIUYUESHIWU 作品集站点
 
+## 2026-10-21 构建迁移（优先于下文旧的静态部署说明）
+
+- 源码在仓库根目录；`npm ci`、`npm run dev`、`npm run build`，Vite 输出 `dist/`。
+- GitHub Pages 发布源改为 **GitHub Actions**，`.github/workflows/deploy.yml` 在每次推送 `main` 后构建并部署 `dist/`；仓库里的旧 `dist/` 是历史文件，生成目录由 Vite 清空重建。
+- 新动画统一从 npm 包 `gsap` 以 ES module 导入，交给 Vite 打包，不能再用 CDN。Playground 的 `playground.js` 是示例；更新依赖时同步提交 `package-lock.json`。
+- 旧版经典脚本仍按页面原顺序加载；构建插件将根目录经典 JS 与本地素材复制到产物。新增经典脚本时检查构建产物；新增模块交由 Vite 处理。
+- Vite 设置 `base: '/Portfolio-2/'`、五个 HTML 输入（WORK、ABOUT、PLAYGROUND、CONTACT、FROMANOTHER）。验证构建、Pages 工作流成功和线上路由后才声明已发布。
+- 下文第 2 节关于“直接从 main 根目录发布”、第 3 节关于 `dist/` 不参与发布，以及第 5 节关于 GSAP CDN 的文字是迁移前说明。
+
+
 > 本文件面向接手开发的 AI agent 与人类协作者。开始任何改动前先读完本文件。
 > 最后核对时间：2026-10-20，对应提交见 `git log`。
 
