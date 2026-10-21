@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { copyFileSync, cpSync, existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const root = process.cwd();
@@ -13,12 +13,31 @@ function copyClassicAssets() {
       mkdirSync(output, { recursive: true });
       for (const name of readdirSync(root)) {
         if (/^(?:vite\.config|playground)\.js$/.test(name)) continue;
-        if (/\.(?:js|svg|png|webp|jpg|jpeg|gif|ico)$/i.test(name)) {
+        if (/\.(?:css|js|svg|png|webp|jpg|jpeg|gif|ico)$/i.test(name)) {
           copyFileSync(resolve(root, name), resolve(output, name));
         }
       }
       if (existsSync(resolve(root, 'assets'))) {
         cpSync(resolve(root, 'assets'), resolve(output, 'assets'), { recursive: true });
+      }
+      // Keep the same stylesheet cascade as the source HTML. Vite's generated
+      // links can reorder independent CSS files across multiple entry pages.
+      for (const page of ['index.html', 'about/index.html', 'playground.html', 'contact.html', 'fromanother.html']) {
+        const source = readFileSync(resolve(root, page), 'utf8');
+        const originalStyles = [...source.matchAll(/<link\b[^>]*rel="stylesheet"[^>]*>/g)]
+          .map(([tag]) => tag)
+          .filter(tag => /href="(?:\.\.\/)?[^/:]+\.css(?:\?[^"]*)?"/.test(tag));
+        if (!originalStyles.length) continue;
+        const destination = resolve(output, page);
+        let built = readFileSync(destination, 'utf8');
+        let inserted = false;
+        built = built.replace(/<link rel="stylesheet" crossorigin href="\/Portfolio-2\/assets\/[^"]+\.css">/g, () => {
+          if (inserted) return '';
+          inserted = true;
+          return originalStyles.join('');
+        });
+        if (!inserted) throw new Error(`No bundled stylesheet found in ${page}`);
+        writeFileSync(destination, built);
       }
       writeFileSync(resolve(output, '.nojekyll'), '');
     }
