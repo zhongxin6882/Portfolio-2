@@ -4,7 +4,7 @@ The reference images guide placement; sprite pixels come only from the existing
 portrait-elements-hd.webp. Both ends of each loop match its original artwork.
 """
 
-from math import cos, pi, sin
+from math import cos, pi, sin, radians
 from pathlib import Path
 from collections import deque
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
@@ -100,6 +100,41 @@ def compose_layer(background, layer, dx=0, dy=0, angle=0, scale=1):
     return background
 
 
+def compose_crop_at(background, layer, box, dx=0, dy=0, angle=0):
+    """Rotate a cutout around its own center, not its much larger sprite cell."""
+    piece = transformed(layer.crop(box), angle=angle)
+    cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+    background.alpha_composite(piece, (round(cx + dx - piece.width/2),
+                                       round(cy + dy - piece.height/2)))
+    return background
+
+
+def pen_at_tip(background, pen, box, original_tip, target_tip, angle):
+    """Keep the actual pen nib on the drawn stroke through its rotation."""
+    piece = pen.crop(box)
+    rotated = transformed(piece, angle=angle)
+    theta = radians(angle)
+    tip_x = original_tip[0] - box[0] - piece.width/2
+    tip_y = original_tip[1] - box[1] - piece.height/2
+    turned_x = tip_x*cos(theta) + tip_y*sin(theta) + rotated.width/2
+    turned_y = -tip_x*sin(theta) + tip_y*cos(theta) + rotated.height/2
+    background.alpha_composite(rotated, (round(target_tip[0] - turned_x),
+                                         round(target_tip[1] - turned_y)))
+    return background
+
+
+def stroke_until(points, progress):
+    position = max(0, min(len(points)-1, progress * (len(points)-1)))
+    whole = int(position)
+    result = list(points[:whole+1])
+    if whole < len(points)-1:
+        fraction = position - whole
+        a, b = points[whole], points[whole+1]
+        result.append((a[0] + (b[0]-a[0])*fraction,
+                       a[1] + (b[1]-a[1])*fraction))
+    return result
+
+
 def draw_heart(draw, cx, cy, scale):
     s = scale
     points = [(cx, cy + 10*s), (cx - 14*s, cy - 2*s),
@@ -121,9 +156,8 @@ def make_frame(name, original, index):
     if name == "ball":
         sphere = local(name, (212, 190, 469, 449))
         layer, frame = extracted(frame, sphere)
-        # Keep the orbital ring and surrounding stars in their original cells.
-        # One full spin with a readable bounce that stays clear of the portrait.
-        return compose_layer(frame, layer, dy=22*swell, angle=-360*p)
+        # The hoop/ring and stars stay fixed; spin the ball about its own center.
+        return compose_crop_at(frame, layer, sphere, dy=-9*swell, angle=-360*p)
 
     if name == "coffee":
         steam = local(name, (580, 108, 690, 218))
@@ -152,66 +186,111 @@ def make_frame(name, original, index):
         return frame
 
     if name == "plant":
-        # Include tiny disconnected ink flecks on the leaves, but not the stars.
-        mask = Image.new("L", frame.size)
-        ink = ImageDraw.Draw(mask)
-        ink.rectangle((20, 0, 375, 319), fill=255)
-        ink.ellipse((0, 178, 78, 272), fill=0)
-        ink.ellipse((242, 230, 370, 320), fill=0)
-        layer = frame.copy()
-        layer.putalpha(ImageChops.multiply(frame.getchannel("A"), mask))
-        frame.paste((0, 0, 0, 0), (0, 0, frame.width, frame.height), mask)
-        # Pot stays planted while the leaves curl in and grow fully open again.
-        shrink = .20*swell
-        return compose_layer(frame, layer, dy=frame.height*shrink/2,
-                             angle=3*sin(phase), scale=1-shrink)
+        # Shift upper leaf rows like a light gust; stems taper to zero motion at
+        # the pot, which remains exactly where it was in the original artwork.
+        leaf_left, leaf_right, hinge = 20, 375, 174
+        leaves = frame.crop((leaf_left, 0, leaf_right, hinge))
+        frame.paste((0, 0, 0, 0), (leaf_left, 0, leaf_right, hinge))
+        wind = 7 * (sin(phase) + .18*sin(2*phase))
+        for y in range(hinge):
+            weight = ((hinge-y)/hinge) ** 1.7
+            offset = round(wind * weight)
+            frame.alpha_composite(leaves.crop((0,y,leaf_right-leaf_left,y+1)),
+                                  (leaf_left+offset,y))
+        return frame
 
     if name == "cat":
         layer, frame = extract_component(frame, (904-REGIONS[name][0], 680-REGIONS[name][1]))
-        frame = compose_layer(frame, layer, dx=9*sin(phase), dy=5*swell,
-                              angle=3*sin(phase))
-        draw = ImageDraw.Draw(frame, "RGBA")
-        heart = max(0, sin(pi*min(1, max(0, (p-.14)/.72))))
+        # Compress the two existing eye drawings into blinks; no extra pupils.
+        blink = max(0, 1-abs(p-.30)/.055, 1-abs(p-.68)/.055)
+        if blink:
+            for box in (local(name,(855,621,898,663)),
+                        local(name,(917,630,958,672))):
+                eye = layer.crop(box)
+                ImageDraw.Draw(layer).rectangle(box, fill=(255,255,255,255))
+                height = max(3, round(eye.height * (1-.91*blink)))
+                eye = eye.resize((eye.width,height), Image.Resampling.BICUBIC)
+                layer.alpha_composite(eye,(box[0],round((box[1]+box[3]-height)/2)))
+        frame = compose_layer(frame, layer, dx=3*sin(phase), dy=2*swell,
+                              angle=2*sin(phase))
+        heart = max(0, sin(pi*min(1, max(0, (p-.13)/.72))))
         if heart > .15:
-            draw_heart(draw, 995-REGIONS[name][0], 572-REGIONS[name][1]-round(18*heart), .4+.65*heart)
+            draw_heart(ImageDraw.Draw(frame,"RGBA"),
+                       1018-REGIONS[name][0], 582-REGIONS[name][1]-round(4*heart),
+                       .27+.25*heart)
         return frame
 
     if name == "gamepad":
-        controller, frame = extract_component(frame, (200-REGIONS[name][0], 700-REGIONS[name][1]))
-        draw = ImageDraw.Draw(controller, "RGBA")
-        # Each of the four original dark buttons receives a short depressed state.
-        for n, (x, y) in enumerate(((255,578),(278,580),(255,603),(278,605))):
-            key_phase = p*4 - n
-            strength = sin(pi*(key_phase-.1)/.8) if .1 < key_phase < .9 else 0
-            if strength:
-                xx, yy = x-REGIONS[name][0], y-REGIONS[name][1]
-                radius = 8 + 5*strength
-                draw.ellipse((xx-radius,yy-radius,xx+radius,yy+radius),
-                             fill=(35,35,35,round(235*strength)))
-                draw.arc((xx-radius,yy-radius,xx+radius,yy+radius),185,345,
-                         fill=(255,255,255,round(210*strength)),width=3)
-        return compose_layer(frame, controller, dy=5*swell, angle=4*sin(phase))
+        # Darken pixels *inside* the six actual button centers. No new circles
+        # or controller tilt, so no duplicated/misaligned button outlines.
+        buttons = ((256,575,6),(279,577,6),(257,599,6),(279,600,6),
+                   (261,632,7),(206,680,7))
+        pixels = frame.load()
+        for n,(x,y,radius) in enumerate(buttons):
+            key_phase = p*len(buttons)-n
+            strength = sin(pi*(key_phase-.08)/.84) if .08 < key_phase < .92 else 0
+            if strength <= 0:
+                continue
+            cx,cy = x-REGIONS[name][0],y-REGIONS[name][1]
+            for yy in range(cy-radius,cy+radius+1):
+                for xx in range(cx-radius,cx+radius+1):
+                    distance = ((xx-cx)**2+(yy-cy)**2)**.5
+                    if distance > radius:
+                        continue
+                    red,green,blue,alpha = pixels[xx,yy]
+                    if alpha and 45 < (red+green+blue)/3 < 230:
+                        factor = 1-.83*strength*(1-.32*distance/radius)
+                        pixels[xx,yy] = (round(red*factor),round(green*factor),
+                                         round(blue*factor),alpha)
+        return frame
 
     if name == "tablet":
-        # The original pen glides onto the screen, draws a short flourish, exits.
+        # Put the original nib on the screen, then follow a visible five-point
+        # sketch in the right-hand sky before returning to its starting pose.
         pen, frame = extract_component(frame, (1255-REGIONS[name][0], 345-REGIONS[name][1]))
-        travel = swell
-        frame = compose_layer(frame, pen, dx=-88*travel, dy=-54*travel)
-        draw = ImageDraw.Draw(frame, "RGBA")
-        progress = max(0, min(1, (p-.10)/.53))
-        fade = max(0, min(1, (.97-p)/.20))
-        path = [(1088,447),(1081,440),(1074,441),(1067,432),(1059,433),(1052,426)]
+        box = pen.getbbox()
+        original_tip = (1157-REGIONS[name][0],486-REGIONS[name][1])
+        path = [(1025,342),(1035,321),(1045,341),(1021,328),(1049,328),(1025,342)]
         path = [(x-REGIONS[name][0],y-REGIONS[name][1]) for x,y in path]
-        upto = max(1, round(progress*(len(path)-1)))
+        if p < .24:
+            travel = (p/.24)**2 * (3-2*p/.24)
+            tip = tuple(original_tip[i]+(path[0][i]-original_tip[i])*travel for i in (0,1))
+            angle = -30*travel
+            progress = 0
+        elif p < .72:
+            progress = (p-.24)/.48
+            tip = stroke_until(path,progress)[-1]
+            angle = -30
+        else:
+            travel = ((p-.72)/.28)**2 * (3-2*(p-.72)/.28)
+            tip = tuple(path[-1][i]+(original_tip[i]-path[-1][i])*travel for i in (0,1))
+            angle = -30*(1-travel)
+            progress = 1
         if progress:
-            draw.line(path[:upto+1], fill=(20,20,20,round(255*fade)),width=4,joint="curve")
+            fade = min(1,max(0,(1-p)/.18))
+            ImageDraw.Draw(frame,"RGBA").line(stroke_until(path,progress),
+                                                fill=(20,20,20,round(255*fade)),
+                                                width=4,joint="curve")
+        frame = pen_at_tip(frame,pen,box,original_tip,tip,angle)
         return frame
 
     if name == "paper":
-        progress = sin(pi*p)**2
-        x0, y0 = 147-REGIONS[name][0], 983-REGIONS[name][1]
-        draw.line((x0,y0,x0+round(58*progress),y0+round(17*progress)),
-                  fill=(25,25,25,round(255*progress)),width=4)
+        # Reveal/hide the actual top line printed on the paper, not a new mark.
+        ink = Image.new("L",frame.size)
+        ImageDraw.Draw(ink).polygon([(181-REGIONS[name][0],912-REGIONS[name][1]),
+                                     (243-REGIONS[name][0],929-REGIONS[name][1]),
+                                     (241-REGIONS[name][0],941-REGIONS[name][1]),
+                                     (179-REGIONS[name][0],924-REGIONS[name][1])],fill=255)
+        paper = original.load()
+        pixels = frame.load()
+        for y in range(61,92):
+            for x in range(108,175):
+                if ink.getpixel((x,y)):
+                    pixels[x,y] = paper[x,y-16]
+        visible = Image.new("L",frame.size)
+        cutoff = round((182-REGIONS[name][0]) + 60*(1-.78*swell))
+        ImageDraw.Draw(visible).rectangle((0,0,cutoff,frame.height),fill=255)
+        frame.paste(original,(0,0),ImageChops.multiply(ink,visible))
         return frame
     raise ValueError(name)
 
@@ -229,11 +308,11 @@ for name, rectangle in REGIONS.items():
     for index in range(FRAME_COUNT):
         frame = make_frame(name, original, index)
         if index == FRAME_COUNT - 1:
-            assert ImageChops.difference(frame, original).getbbox() is None, f"{name} does not end on its original pixels"
+            assert frame.tobytes() == original.tobytes(), f"{name} does not end on its original pixels"
         atlas.alpha_composite(frame, ((index%COLUMNS)*width, (index//COLUMNS)*height))
     atlas.save(OUT / f"{name}-loop.webp", lossless=True, method=6)
-    rebuilt.alpha_composite(original, rectangle[:2])
+    rebuilt.paste(original, rectangle[:2])
     print(f"{name}: {width}x{height} × {FRAME_COUNT}, {atlas.width}x{atlas.height}")
 
-assert ImageChops.difference(rebuilt, SOURCE).getbbox() is None, "Frame 0 shifted from the original"
+assert rebuilt.tobytes() == SOURCE.tobytes(), "Frame 0 shifted from the original"
 print("Frame 0 reconstruction matches the original composition pixel for pixel")
