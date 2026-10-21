@@ -6,10 +6,24 @@
     <path d="M1190 761l-50 69M1217 792l-48 66"/>
   </g>
   <g stroke="#343330" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4">
-    <path d="M570 307c-17 10-27 23-25 35 2 13 12 19 23 23"/>
-    <path d="M711 323c-19 8-31 23-28 36 2 8 10 15 18 18"/>
     <path d="M86 856c18-17 35-18 52-6 7 5 13 14 21 14"/>
     <path d="M1180 907c-18-14-34-15-50-6-8 5-11 12-19 14"/>
+  </g>
+  <!-- Two light, separated ink arcs requested beside the tablet/pen. -->
+  <g stroke="#111" stroke-width="4" stroke-linecap="round" fill="none">
+    <path d="M1281 248c-28 54-34 112-20 166"/>
+    <path d="M1312 220c-25 58-31 118-18 177"/>
+  </g>
+  <!-- Ribbon confetti, traced as small ink-fold motifs to match the reference. -->
+  <g stroke="#111" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M176 612c8-13 18-15 30-7l18 13-16 2 17 13-22-1-18-12 14-2z"/>
+    <path d="M185 618l12 1m2 9 13 2"/>
+    <path d="M1107 286c8-15 18-18 29-11l17 11-16 3 16 12-21-2-18-11 13-3z"/>
+    <path d="M1117 292l12 0m2 9 12 2"/>
+    <path d="M250 1001c7-12 17-15 27-8l17 12-15 2 16 12-21-1-17-11 13-3z"/>
+    <path d="M260 1007l11 1m2 8 12 2"/>
+    <path d="M1050 840c-10-13-8-25 3-34l14-11-2 16 14-12-6 20-14 14 1-13z"/>
+    <path d="M1055 828l7-9m9 4 8-9"/>
   </g>
   <g stroke="#aaa49e" stroke-width="2" opacity=".55" stroke-linecap="round">
     <path d="M480 252l8 15 15-5M742 560l10 12 14-7"/>
