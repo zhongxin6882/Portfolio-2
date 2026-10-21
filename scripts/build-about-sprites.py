@@ -1,7 +1,7 @@
-"""Build pixel-aligned 24-frame About sprites from the original composition.
+"""Build seamless 48-frame looping About sprites from the original artwork.
 
-The reference PNGs are visual guides only. Frame zero is copied directly from
-portrait-elements-hd.webp; every rectangle is returned to the same coordinates.
+The reference images guide placement; sprite pixels come only from the existing
+portrait-elements-hd.webp. Both ends of each loop match its original artwork.
 """
 
 from math import cos, pi, sin
@@ -15,6 +15,9 @@ ASSETS = ROOT / "assets" / "about"
 SOURCE = Image.open(ASSETS / "portrait-elements-hd.webp").convert("RGBA")
 OUT = ASSETS / "sprites"
 OUT.mkdir(exist_ok=True)
+FRAME_COUNT = 48
+COLUMNS = 8
+ROWS = FRAME_COUNT // COLUMNS
 
 # Non-overlapping source rectangles in the original 1324 × 1188 composition.
 REGIONS = {
@@ -41,6 +44,8 @@ def extracted(frame, box, mask_shape="ellipse"):
     draw = ImageDraw.Draw(mask)
     if mask_shape == "ellipse":
         draw.ellipse(box, fill=255)
+    elif mask_shape == "rectangle":
+        draw.rectangle(box, fill=255)
     else:
         draw.polygon(box, fill=255)
     layer = frame.copy()
@@ -105,9 +110,11 @@ def draw_heart(draw, cx, cy, scale):
 
 
 def make_frame(name, original, index):
-    if index in (0, 23):
+    if index in (0, FRAME_COUNT - 1):
         return original.copy()
-    p = index / 23
+    p = index / (FRAME_COUNT - 1)
+    phase = 2 * pi * p
+    swell = (1 - cos(phase)) / 2
     frame = original.copy()
     draw = ImageDraw.Draw(frame, "RGBA")
 
@@ -115,21 +122,17 @@ def make_frame(name, original, index):
         sphere = local(name, (212, 190, 469, 449))
         layer, frame = extracted(frame, sphere)
         # Keep the orbital ring and surrounding stars in their original cells.
-        hop = 28 * sin(pi * p)
-        return compose_layer(frame, layer, dy=-hop, angle=-360*p)
+        # One full spin with a readable bounce that stays clear of the portrait.
+        return compose_layer(frame, layer, dy=22*swell, angle=-360*p)
 
     if name == "coffee":
-        steam = local(name, (590, 112, 681, 224))
-        layer, frame = extracted(frame, steam)
-        # The cup is untouched; only the three existing ink strokes drift up.
-        for i in range(3):
-            alpha = .52 + .48 * sin(pi * (p + i * .22)) ** 2
-            band = Image.new("L", layer.size)
-            x0 = steam[0] + i * 28
-            ImageDraw.Draw(band).rectangle((x0, steam[1], x0 + 29, steam[3]), fill=255)
-            piece = layer.copy()
-            piece.putalpha(ImageChops.multiply(layer.getchannel("A"), band).point(lambda a: round(a * alpha)))
-            frame.alpha_composite(piece, (0, -round(15 * p + 3 * sin(pi * p + i))))
+        steam = local(name, (580, 108, 690, 218))
+        layer, frame = extracted(frame, steam, "rectangle")
+        # Existing ink steam stretches, curls and settles back into the cup.
+        steam_ink = layer.crop(steam)
+        height = max(1, round(steam_ink.height * (1 - .32*swell)))
+        steam_ink = steam_ink.resize((steam_ink.width, height), Image.Resampling.BICUBIC)
+        frame.alpha_composite(steam_ink, (steam[0] + round(9*sin(phase)), steam[3] - height))
         return frame
 
     if name == "watch":
@@ -158,52 +161,57 @@ def make_frame(name, original, index):
         layer = frame.copy()
         layer.putalpha(ImageChops.multiply(frame.getchannel("A"), mask))
         frame.paste((0, 0, 0, 0), (0, 0, frame.width, frame.height), mask)
-        growth = sin(pi*p)
-        # Grow back from a brief, gentle inward curl; never clip the top leaf.
-        return compose_layer(frame, layer, dy=5*growth, angle=2*sin(2*pi*p), scale=1-.07*growth)
+        # Pot stays planted while the leaves curl in and grow fully open again.
+        shrink = .20*swell
+        return compose_layer(frame, layer, dy=frame.height*shrink/2,
+                             angle=3*sin(phase), scale=1-shrink)
 
     if name == "cat":
         layer, frame = extract_component(frame, (904-REGIONS[name][0], 680-REGIONS[name][1]))
-        frame = compose_layer(frame, layer, dy=-5*sin(pi*p), angle=3*sin(2*pi*p))
+        frame = compose_layer(frame, layer, dx=9*sin(phase), dy=5*swell,
+                              angle=3*sin(phase))
         draw = ImageDraw.Draw(frame, "RGBA")
-        heart = max(0, sin(pi*min(1, max(0, (p-.25)/.65))))
+        heart = max(0, sin(pi*min(1, max(0, (p-.14)/.72))))
         if heart > .15:
-            draw_heart(draw, 995-REGIONS[name][0], 572-REGIONS[name][1]-round(10*heart), .3+.35*heart)
+            draw_heart(draw, 995-REGIONS[name][0], 572-REGIONS[name][1]-round(18*heart), .4+.65*heart)
         return frame
 
     if name == "gamepad":
+        controller, frame = extract_component(frame, (200-REGIONS[name][0], 700-REGIONS[name][1]))
+        draw = ImageDraw.Draw(controller, "RGBA")
         # Each of the four original dark buttons receives a short depressed state.
         for n, (x, y) in enumerate(((255,578),(278,580),(255,603),(278,605))):
-            phase = (p - n*.21)/.16
-            strength = max(0, 1-abs(phase-.5)*2)
+            key_phase = p*4 - n
+            strength = sin(pi*(key_phase-.1)/.8) if .1 < key_phase < .9 else 0
             if strength:
                 xx, yy = x-REGIONS[name][0], y-REGIONS[name][1]
-                radius = 8 - 2*strength
+                radius = 8 + 5*strength
                 draw.ellipse((xx-radius,yy-radius,xx+radius,yy+radius),
-                             fill=(45,45,45,round(205*strength)))
-                draw.arc((xx-6,yy-6,xx+6,yy+6),180,345,
-                         fill=(255,255,255,round(160*strength)),width=2)
-        return frame
+                             fill=(35,35,35,round(235*strength)))
+                draw.arc((xx-radius,yy-radius,xx+radius,yy+radius),185,345,
+                         fill=(255,255,255,round(210*strength)),width=3)
+        return compose_layer(frame, controller, dy=5*swell, angle=4*sin(phase))
 
     if name == "tablet":
         # The original pen glides onto the screen, draws a short flourish, exits.
         pen, frame = extract_component(frame, (1255-REGIONS[name][0], 345-REGIONS[name][1]))
-        travel = sin(pi*p)
-        frame = compose_layer(frame, pen, dx=-62*travel, dy=-35*travel)
+        travel = swell
+        frame = compose_layer(frame, pen, dx=-88*travel, dy=-54*travel)
         draw = ImageDraw.Draw(frame, "RGBA")
-        progress = max(0, min(1, (p-.18)/.58))
-        path = [(996,353),(1005,348),(1015,354),(1025,346),(1037,352)]
+        progress = max(0, min(1, (p-.10)/.53))
+        fade = max(0, min(1, (.97-p)/.20))
+        path = [(1088,447),(1081,440),(1074,441),(1067,432),(1059,433),(1052,426)]
         path = [(x-REGIONS[name][0],y-REGIONS[name][1]) for x,y in path]
         upto = max(1, round(progress*(len(path)-1)))
         if progress:
-            draw.line(path[:upto+1], fill=(20,20,20,round(255*progress)),width=3,joint="curve")
+            draw.line(path[:upto+1], fill=(20,20,20,round(255*fade)),width=4,joint="curve")
         return frame
 
     if name == "paper":
-        progress = sin(pi*p)
-        x0, y0 = 172-REGIONS[name][0], 987-REGIONS[name][1]
-        draw.line((x0,y0,x0+round(50*progress),y0+round(15*progress)),
-                  fill=(25,25,25,round(240*progress)),width=3)
+        progress = sin(pi*p)**2
+        x0, y0 = 147-REGIONS[name][0], 983-REGIONS[name][1]
+        draw.line((x0,y0,x0+round(58*progress),y0+round(17*progress)),
+                  fill=(25,25,25,round(255*progress)),width=4)
         return frame
     raise ValueError(name)
 
@@ -217,15 +225,15 @@ rebuilt = base.copy()
 for name, rectangle in REGIONS.items():
     original = SOURCE.crop(rectangle)
     width, height = original.size
-    atlas = Image.new("RGBA", (width*6, height*4))
-    for index in range(24):
+    atlas = Image.new("RGBA", (width*COLUMNS, height*ROWS))
+    for index in range(FRAME_COUNT):
         frame = make_frame(name, original, index)
-        if index == 23:
+        if index == FRAME_COUNT - 1:
             assert ImageChops.difference(frame, original).getbbox() is None, f"{name} does not end on its original pixels"
-        atlas.alpha_composite(frame, ((index%6)*width, (index//6)*height))
-    atlas.save(OUT / f"{name}-24.webp", lossless=True, method=6)
+        atlas.alpha_composite(frame, ((index%COLUMNS)*width, (index//COLUMNS)*height))
+    atlas.save(OUT / f"{name}-loop.webp", lossless=True, method=6)
     rebuilt.alpha_composite(original, rectangle[:2])
-    print(f"{name}: {width}x{height} × 24, {atlas.width}x{atlas.height}")
+    print(f"{name}: {width}x{height} × {FRAME_COUNT}, {atlas.width}x{atlas.height}")
 
 assert ImageChops.difference(rebuilt, SOURCE).getbbox() is None, "Frame 0 shifted from the original"
 print("Frame 0 reconstruction matches the original composition pixel for pixel")

@@ -1,55 +1,56 @@
 (() => {
-  const FRAME_MAX = 23;
-  const FRAME_INTERVAL = 1000 / 24;
+  const FRAME_COUNT = 48;
+  const COLUMNS = 8;
+  const durations = {
+    ball: 2400,
+    coffee: 2850,
+    tablet: 3150,
+    gamepad: 2700,
+    cat: 3100,
+    watch: 3500,
+    plant: 3400,
+    paper: 3000
+  };
+  const panel = document.getElementById('art-panel');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const sprites = [...document.querySelectorAll('.sprite-composition [data-sprite]')];
+  let request = 0;
+  let started = 0;
 
-  document.querySelectorAll('.sprite-composition [data-sprite]').forEach(sprite => {
-    let frame = 0;
-    let target = 0;
-    let request = 0;
-    let lastTime = 0;
-    let carry = 0;
+  const show = (sprite, frame) => {
+    if (sprite.dataset.frame === String(frame)) return;
+    sprite.style.setProperty('--sprite-x', `${(frame % COLUMNS) * 100 / (COLUMNS - 1)}%`);
+    sprite.style.setProperty('--sprite-y', `${Math.floor(frame / COLUMNS) * 20}%`);
+    sprite.dataset.frame = String(frame);
+  };
 
-    const show = next => {
-      frame = Math.max(0, Math.min(FRAME_MAX, next));
-      const column = frame % 6;
-      const row = Math.floor(frame / 6);
-      sprite.style.setProperty('--sprite-x', `${column * 20}%`);
-      sprite.style.setProperty('--sprite-y', `${row * 100 / 3}%`);
-      sprite.dataset.frame = String(frame);
-    };
+  const tick = time => {
+    if (!started) started = time;
+    const elapsed = time - started;
+    for (const sprite of sprites) {
+      const duration = durations[sprite.dataset.sprite];
+      const frame = Math.floor((elapsed % duration) / duration * FRAME_COUNT);
+      show(sprite, frame);
+    }
+    request = requestAnimationFrame(tick);
+  };
 
-    const tick = time => {
-      if (!lastTime) lastTime = time;
-      carry += Math.min(time - lastTime, 80);
-      lastTime = time;
-      while (carry >= FRAME_INTERVAL && frame !== target) {
-        show(frame + Math.sign(target - frame));
-        carry -= FRAME_INTERVAL;
+  const sync = () => {
+    if (panel.classList.contains('is-open') && !reducedMotion.matches) {
+      if (!request) {
+        started = 0;
+        request = requestAnimationFrame(tick);
       }
-      if (frame !== target) request = requestAnimationFrame(tick);
-      else { request = 0; lastTime = 0; carry = 0; }
-    };
+    } else {
+      cancelAnimationFrame(request);
+      request = 0;
+      started = 0;
+      sprites.forEach(sprite => show(sprite, 0));
+    }
+  };
 
-    const aim = next => {
-      target = next;
-      if (reducedMotion.matches) {
-        cancelAnimationFrame(request);
-        request = 0;
-        show(target);
-        return;
-      }
-      if (!request && frame !== target) request = requestAnimationFrame(tick);
-    };
-
-    show(0);
-    sprite.addEventListener('pointerenter', event => {
-      if (event.pointerType === 'mouse' || event.pointerType === 'pen') aim(FRAME_MAX);
-    });
-    sprite.addEventListener('pointerleave', event => {
-      if (event.pointerType === 'mouse' || event.pointerType === 'pen') aim(0);
-    });
-    sprite.addEventListener('focus', () => aim(FRAME_MAX));
-    sprite.addEventListener('blur', () => aim(0));
-  });
+  sprites.forEach(sprite => show(sprite, 0));
+  new MutationObserver(sync).observe(panel, { attributes: true, attributeFilter: ['class'] });
+  reducedMotion.addEventListener('change', sync);
+  sync();
 })();
