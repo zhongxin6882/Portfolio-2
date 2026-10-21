@@ -86,8 +86,41 @@
 }
 .art-panel.is-open .art-stage .portrait-stage::before { opacity: 1; }
 .art-stage .portrait-stage img { z-index: 1; }
-.art-stage .portrait-idle { transform: translateY(-2%) scale(1); mix-blend-mode: normal; }
+.art-stage .portrait-idle { transform: translateY(-2%) scale(1.1); transform-origin: center; mix-blend-mode: normal; }
 .art-panel.is-open .art-stage .portrait-character { transform: translateY(3%) scale(.76); }
+
+/* Keep the idle expression swap centered on the face in the original portrait. */
+.art-stage .portrait-smile {
+  clip-path: ellipse(12% 10% at 52% 47%) !important;
+  mask-image: radial-gradient(ellipse 12% 10% at 52% 47%, #000 52%, transparent 100%) !important;
+  transform: translateY(-2%) scale(1.1);
+  transform-origin: center;
+}
+.art-panel.is-open .art-stage .portrait-character { transform: translateY(3%) scale(.836); }
+.art-stage .art-hover-note {
+  top: 35%;
+  left: calc(52% + 15%);
+  right: auto;
+}
+.art-stage .art-hover-note span {
+  left: -12px;
+  top: auto;
+  bottom: 9px;
+  margin: 0;
+  transform: rotate(-45deg);
+}
+.art-panel:not(.is-open).is-face-hover .art-stage .art-hover-note,
+.art-stage .art-trigger:focus-visible ~ .art-hover-note {
+  transform: translateY(-50%) scale(1) rotate(-25deg);
+}
+
+@media (max-width: 760px) {
+  .art-stage .art-hover-note {
+    top: 35%;
+    left: calc(52% + 11%);
+    right: auto;
+  }
+}
 .art-panel .sprite-composition .coffee { background-image: url("assets/about/sprites/coffee-loop.webp?v=decor-restored-20261021") !important; }
 .art-panel .sprite-composition .tablet { background-image: url("assets/about/sprites/tablet-loop.webp?v=decor-restored-20261021") !important; }
 .art-panel .sprite-composition .gamepad { background-image: url("assets/about/sprites/gamepad-loop.webp?v=decor-restored-20261021") !important; }
