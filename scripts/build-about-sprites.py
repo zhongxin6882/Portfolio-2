@@ -369,8 +369,8 @@ for box in STAR_BOXES:
     ImageDraw.Draw(lines).rectangle((max(0,x1-8),max(0,y1-8),
                                      min(lines.width,x2+8),min(lines.height,y2+8)),
                                     fill=(0,0,0,0))
-# Remove the two short sweeps marked out beside the coffee and tablet.
-ImageDraw.Draw(lines).rectangle((450,265,555,385),fill=(0,0,0,0))
+# Preserve the original basketball-side sweep from the source illustration.
+# Only the unwanted sweep beside the tablet is cleared.
 ImageDraw.Draw(lines).rectangle((695,285,780,395),fill=(0,0,0,0))
 stars.save(OUT / "decor-stars.webp", lossless=True, method=6)
 lines.save(OUT / "decor-lines.webp", lossless=True, method=6)

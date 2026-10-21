@@ -5,6 +5,4 @@
     <path d="M65 516l47 65M47 553l44 62"/>
     <path d="M1280 908l-44 66M1308 936l-43 65"/>
   </g>
-  <!-- Restore only the short arc below the small star at the basketball's right. -->
-  <path d="M474 281 C501 285 520 293 518 307 C516 321 496 337 473 346" stroke="#343330" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
