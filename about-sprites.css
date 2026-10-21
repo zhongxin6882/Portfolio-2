@@ -9,9 +9,9 @@
   aspect-ratio: 1324 / 1188;
   max-width: none;
   background:
-    url("assets/about/decor-accents.svg?v=ribbon-cleanup-20261021") center / 100% 100% no-repeat,
-    url("assets/about/sprites/decor-stars.webp?v=ribbon-cleanup-20261021") center / 100% 100% no-repeat,
-    url("assets/about/sprites/decor-lines.webp?v=ribbon-cleanup-20261021") center / 100% 100% no-repeat;
+    url("assets/about/decor-accents.svg?v=decor-outline-20261021") center / 100% 100% no-repeat,
+    url("assets/about/sprites/decor-stars.webp?v=decor-outline-20261021") center / 100% 100% no-repeat,
+    url("assets/about/sprites/decor-lines.webp?v=decor-outline-20261021") center / 100% 100% no-repeat;
   transform: translateY(-50%);
   opacity: 0;
   pointer-events: none;
@@ -68,16 +68,16 @@
 .sprite-composition .plant { --sx:70.7%;--sy:60.7582%;--sw:29.4562%;--sh:27.7778%;--idle-scale:.9;--hover-scale:.94; }
 .sprite-composition .paper { --sx:2.3%;--sy:67.3%;--sw:24.1692%;--sh:19.3603%;--idle-scale:.9;--hover-scale:.94; }
 
-.art-panel .sprite-composition .ball { background-image: url("assets/about/sprites/ball-loop.webp?v=ribbon-cleanup-20261021") !important; }
+.art-panel .sprite-composition .ball { background-image: url("assets/about/sprites/ball-loop.webp?v=decor-outline-20261021") !important; }
 
 .art-stage .portrait-stage::before {
   content: "";
   position: absolute;
   z-index: 0;
   left: 20%;
-  top: 84.8%;
+  top: 82.4%;
   width: 60%;
-  height: 4.5%;
+  height: 5%;
   border-radius: 50%;
   background: #e0e0e0;
   filter: none;

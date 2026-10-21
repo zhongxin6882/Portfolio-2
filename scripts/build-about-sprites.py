@@ -156,9 +156,8 @@ def make_frame(name, original, index):
     if name == "ball":
         sphere = local(name, (212, 190, 469, 449))
         layer, frame = extracted(frame, sphere)
-        # A centered rocking spin keeps the hand-drawn seam pattern readable
-        # instead of turning it into the radial fan seen at quarter turns.
-        return compose_crop_at(frame, layer, sphere, dy=-9*swell, angle=-22*sin(phase))
+        # Restore the previous full centered spin and bounce, unchanged.
+        return compose_crop_at(frame, layer, sphere, dy=-9*swell, angle=-360*p)
 
     if name == "coffee":
         steam = local(name, (575, 75, 695, 217))
@@ -350,8 +349,8 @@ STAR_BOXES = [
 ]
 REMOVED_STARS = {
     (1165,173,1238,256), (477,376,558,470), (777,475,851,553),
-    (1236,630,1302,709), (1019,694,1068,759), (1117,985,1197,1082),
-    (470,187,523,250), (1019,555,1064,613), (73,768,148,857),
+    (1019,694,1068,759),
+    (1019,555,1064,613),
     (268,968,326,1035), (878,949,939,1021),
 }
 stars = Image.new("RGBA", SOURCE.size)
