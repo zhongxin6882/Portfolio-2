@@ -1,0 +1,69 @@
+/* The original 1324 × 1188 composition is split into disjoint pixel-aligned cells. */
+.art-panel .art-stage .art-ideas.sprite-composition {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1324 / 1188;
+  max-width: none;
+  background: url("assets/about/sprites/composition-base.webp") center / 100% 100% no-repeat;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+}
+.art-panel.is-open .art-stage .art-ideas.sprite-composition { opacity: 1; }
+
+.art-panel .art-stage .art-ideas.sprite-composition .art-orbit,
+.art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit:hover,
+.art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit:focus-visible {
+  position: absolute;
+  z-index: 4;
+  inset: auto;
+  left: var(--sx) !important;
+  top: var(--sy) !important;
+  width: var(--sw) !important;
+  height: var(--sh) !important;
+  aspect-ratio: auto !important;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent !important;
+  background-repeat: no-repeat !important;
+  background-size: 600% 400% !important;
+  background-position: var(--sprite-x, 0%) var(--sprite-y, 0%) !important;
+  clip-path: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  overflow: hidden;
+  pointer-events: none;
+}
+.art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit { pointer-events: auto; }
+.art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit:focus-visible {
+  outline: 2px solid #f0532e;
+  outline-offset: 2px;
+}
+
+.sprite-composition .ball { --sx:6.0423%;--sy:15.1515%;--sw:35.4985%;--sh:24.4108%; }
+.sprite-composition .coffee { --sx:41.5408%;--sy:8.8384%;--sw:14.7281%;--sh:22.3064%; }
+.sprite-composition .tablet { --sx:56.2689%;--sy:14.3098%;--sw:43.7311%;--sh:31.5657%; }
+.sprite-composition .gamepad { --sx:6.0423%;--sy:45.4545%;--sw:26.4350%;--sh:26.0943%; }
+.sprite-composition .cat { --sx:59.6677%;--sy:45.8754%;--sw:18.8822%;--sh:18.0976%; }
+.sprite-composition .watch { --sx:78.5498%;--sy:45.8754%;--sw:21.4502%;--sh:19.7811%; }
+.sprite-composition .plant { --sx:65.7100%;--sy:65.6566%;--sw:29.4562%;--sh:26.9360%; }
+.sprite-composition .paper { --sx:5.2870%;--sy:71.5488%;--sw:24.1692%;--sh:19.3603%; }
+
+.art-panel .sprite-composition .ball { background-image: url("assets/about/sprites/ball-24.webp") !important; }
+.art-panel .sprite-composition .coffee { background-image: url("assets/about/sprites/coffee-24.webp") !important; }
+.art-panel .sprite-composition .tablet { background-image: url("assets/about/sprites/tablet-24.webp") !important; }
+.art-panel .sprite-composition .gamepad { background-image: url("assets/about/sprites/gamepad-24.webp") !important; }
+.art-panel .sprite-composition .cat { background-image: url("assets/about/sprites/cat-24.webp") !important; }
+.art-panel .sprite-composition .watch { background-image: url("assets/about/sprites/watch-24.webp") !important; }
+.art-panel .sprite-composition .plant { background-image: url("assets/about/sprites/plant-24.webp") !important; }
+.art-panel .sprite-composition .paper { background-image: url("assets/about/sprites/paper-24.webp") !important; }
