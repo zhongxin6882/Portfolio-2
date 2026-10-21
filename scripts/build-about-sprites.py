@@ -22,12 +22,12 @@ ROWS = FRAME_COUNT // COLUMNS
 # Non-overlapping source rectangles in the original 1324 × 1188 composition.
 REGIONS = {
     "ball": (80, 180, 550, 470),
-    "coffee": (550, 105, 745, 370),
+    "coffee": (550, 70, 745, 370),
     "tablet": (745, 170, 1324, 545),
     "gamepad": (80, 540, 430, 850),
     "cat": (790, 545, 1040, 760),
-    "watch": (1040, 545, 1324, 780),
-    "plant": (870, 780, 1260, 1100),
+    "watch": (1040, 545, 1324, 770),
+    "plant": (870, 770, 1260, 1100),
     "paper": (70, 850, 390, 1080),
 }
 
@@ -61,7 +61,7 @@ def extract_component(frame, seed):
     alpha = frame.getchannel("A")
     pixels = alpha.tobytes()
     start = seed[1] * width + seed[0]
-    assert pixels[start] >= 90, f"Seed {seed} is outside the artwork"
+    assert pixels[start] >= 1, f"Seed {seed} is outside the artwork"
     selected = bytearray(width * height)
     selected[start] = 255
     queue = deque([start])
@@ -72,10 +72,10 @@ def extract_component(frame, seed):
                          current + 1 if x < width - 1 else -1,
                          current - width if y else -1,
                          current + width if y < height - 1 else -1):
-            if neighbor >= 0 and not selected[neighbor] and pixels[neighbor] >= 90:
+            if neighbor >= 0 and not selected[neighbor] and pixels[neighbor] >= 1:
                 selected[neighbor] = 255
                 queue.append(neighbor)
-    mask = Image.frombytes("L", frame.size, bytes(selected)).filter(ImageFilter.MaxFilter(5))
+    mask = Image.frombytes("L", frame.size, bytes(selected)).filter(ImageFilter.MaxFilter(9))
     layer = frame.copy()
     layer.putalpha(ImageChops.multiply(alpha, mask))
     cleared = frame.copy()
@@ -160,7 +160,7 @@ def make_frame(name, original, index):
         return compose_crop_at(frame, layer, sphere, dy=-9*swell, angle=-360*p)
 
     if name == "coffee":
-        steam = local(name, (580, 108, 690, 218))
+        steam = local(name, (575, 75, 695, 217))
         layer, frame = extracted(frame, steam, "rectangle")
         # Existing ink steam stretches, curls and settles back into the cup.
         steam_ink = layer.crop(steam)
@@ -188,7 +188,7 @@ def make_frame(name, original, index):
     if name == "plant":
         # Shift upper leaf rows like a light gust; stems taper to zero motion at
         # the pot, which remains exactly where it was in the original artwork.
-        leaf_left, leaf_right, hinge = 20, 375, 174
+        leaf_left, leaf_right, hinge = 20, 375, 184
         leaves = frame.crop((leaf_left, 0, leaf_right, hinge))
         frame.paste((0, 0, 0, 0), (leaf_left, 0, leaf_right, hinge))
         wind = 7 * (sin(phase) + .18*sin(2*phase))
@@ -295,14 +295,65 @@ def make_frame(name, original, index):
     raise ValueError(name)
 
 
-base = SOURCE.copy()
-for rectangle in REGIONS.values():
-    base.paste((0,0,0,0), rectangle)
-base.save(OUT / "composition-base.webp", lossless=True, method=6)
+def isolate_subject(name, original):
+    """Keep the animated illustration, leaving every sparkle and orbit intact."""
+    if name == "ball":
+        mask = Image.new("L", original.size)
+        ImageDraw.Draw(mask).ellipse(local(name, (212,190,469,449)), fill=255)
+        subject = original.copy()
+        subject.putalpha(ImageChops.multiply(original.getchannel("A"), mask))
+        remainder = original.copy()
+        remainder.paste((0,0,0,0), (0,0,*original.size), mask)
+        return subject, remainder
 
-rebuilt = base.copy()
+    seeds = {
+        "coffee": (625,285), "tablet": (950,370),
+        "gamepad": (200,700), "cat": (904,680),
+        "watch": (1147,652), "plant": (1030,1000),
+        "paper": (180,950),
+    }
+    x0,y0,_,_ = REGIONS[name]
+    seed = seeds[name]
+    subject, remainder = extract_component(original, (seed[0]-x0,seed[1]-y0))
+    if name == "tablet":
+        pen, remainder = extract_component(remainder, (1255-x0,345-y0))
+        subject.alpha_composite(pen)
+    if name == "coffee":
+        steam_mask = Image.new("L", original.size)
+        steam_box = local(name,(575,75,695,217))
+        ImageDraw.Draw(steam_mask).rectangle(steam_box, fill=255)
+        subject.paste(original.crop(steam_box),steam_box[:2])
+        remainder.paste((0,0,0,0),(0,0,*original.size),steam_mask)
+    return subject, remainder
+
+
+# The decorative stars and sweeping ink lines are separate, uncut assets.
+# They never travel inside another element's animation cell.
+decor = SOURCE.copy()
+subjects = {}
 for name, rectangle in REGIONS.items():
-    original = SOURCE.crop(rectangle)
+    subject, remainder = isolate_subject(name, SOURCE.crop(rectangle))
+    subjects[name] = subject
+    decor.paste(remainder, rectangle[:2])
+
+STAR_BOXES = [
+    (80,245,145,320), (470,187,523,250), (745,97,827,194),
+    (1165,173,1238,256), (477,376,558,470), (376,468,442,548),
+    (777,475,851,553), (1019,555,1064,613), (1236,630,1302,709),
+    (1019,694,1068,759), (280,729,328,787), (73,768,148,857),
+    (268,968,326,1035), (878,949,939,1021), (1117,985,1197,1082),
+]
+stars = Image.new("RGBA", SOURCE.size)
+lines = decor.copy()
+for box in STAR_BOXES:
+    stars.alpha_composite(decor.crop(box),box[:2])
+    ImageDraw.Draw(lines).rectangle(box,fill=(0,0,0,0))
+stars.save(OUT / "decor-stars.webp", lossless=True, method=6)
+lines.save(OUT / "decor-lines.webp", lossless=True, method=6)
+
+rebuilt = decor.copy()
+for name, rectangle in REGIONS.items():
+    original = subjects[name]
     width, height = original.size
     atlas = Image.new("RGBA", (width*COLUMNS, height*ROWS))
     for index in range(FRAME_COUNT):
@@ -311,8 +362,15 @@ for name, rectangle in REGIONS.items():
             assert frame.tobytes() == original.tobytes(), f"{name} does not end on its original pixels"
         atlas.alpha_composite(frame, ((index%COLUMNS)*width, (index//COLUMNS)*height))
     atlas.save(OUT / f"{name}-loop.webp", lossless=True, method=6)
-    rebuilt.paste(original, rectangle[:2])
+    rebuilt.alpha_composite(original, rectangle[:2])
     print(f"{name}: {width}x{height} × {FRAME_COUNT}, {atlas.width}x{atlas.height}")
 
-assert rebuilt.tobytes() == SOURCE.tobytes(), "Frame 0 shifted from the original"
-print("Frame 0 reconstruction matches the original composition pixel for pixel")
+def visible(image):
+    canvas = Image.new("RGB", image.size, (252,250,248))
+    canvas.paste(image, mask=image.getchannel("A"))
+    return canvas
+
+diff = ImageChops.difference(visible(rebuilt), visible(SOURCE))
+print(f"Reconstruction difference bounds: {diff.getbbox()}")
+assert diff.getbbox() is None, "Subjects and decorations did not reconstruct the original"
+print("Decoration and subject layers reconstruct the original visible composition")

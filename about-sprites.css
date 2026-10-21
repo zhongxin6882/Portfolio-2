@@ -3,12 +3,14 @@
   position: absolute;
   z-index: 4;
   left: 3%;
-  top: 46%;
+  top: 44%;
   width: 100%;
   height: auto;
   aspect-ratio: 1324 / 1188;
   max-width: none;
-  background: url("assets/about/sprites/composition-base.webp") center / 100% 100% no-repeat;
+  background:
+    url("assets/about/sprites/decor-stars.webp?v=decor-restored-20261021") center / 100% 100% no-repeat,
+    url("assets/about/sprites/decor-lines.webp?v=decor-restored-20261021") center / 100% 100% no-repeat;
   transform: translateY(-50%);
   opacity: 0;
   pointer-events: none;
@@ -56,23 +58,27 @@
   outline-offset: 2px;
 }
 
-.sprite-composition .ball { --sx:4.4100%;--sy:13.8200%;--sw:35.4985%;--sh:24.4108%; }
-.sprite-composition .coffee { --sx:41.5408%;--sy:8.8384%;--sw:14.7281%;--sh:22.3064%; }
+.sprite-composition .ball { --sx:6.0423%;--sy:15.1515%;--sw:35.4985%;--sh:24.4108%; }
+.sprite-composition .coffee { --sx:41.5408%;--sy:5.8923%;--sw:14.7281%;--sh:25.2525%; }
 .sprite-composition .tablet { --sx:58.3200%;--sy:14.3098%;--sw:43.7311%;--sh:31.5657%; }
-.sprite-composition .gamepad { --sx:7.2400%;--sy:44.6900%;--sw:26.4350%;--sh:26.0943%; }
-.sprite-composition .cat { --sx:59.6677%;--sy:44.5400%;--sw:18.8822%;--sh:18.0976%; }
-.sprite-composition .watch { --sx:79.2300%;--sy:44.7300%;--sw:21.4502%;--sh:19.7811%; }
-.sprite-composition .plant { --sx:66.9100%;--sy:61.6000%;--sw:29.4562%;--sh:26.9360%;--idle-scale:.9;--hover-scale:.94; }
-.sprite-composition .paper { --sx:6.1500%;--sy:66.3000%;--sw:24.1692%;--sh:19.3603%;--idle-scale:.9;--hover-scale:.94; }
+.sprite-composition .gamepad { --sx:4.8000%;--sy:44.6900%;--sw:26.4350%;--sh:26.0943%; }
+.sprite-composition .cat { --sx:62.8000%;--sy:44.5400%;--sw:18.8822%;--sh:18.0976%; }
+.sprite-composition .watch { --sx:79.2300%;--sy:44.7300%;--sw:21.4502%;--sh:18.9394%; }
+.sprite-composition .plant { --sx:68.8000%;--sy:60.7582%;--sw:29.4562%;--sh:27.7778%;--idle-scale:.9;--hover-scale:.94; }
+.sprite-composition .paper { --sx:4.5000%;--sy:66.3000%;--sw:24.1692%;--sh:19.3603%;--idle-scale:.9;--hover-scale:.94; }
 
-.art-panel .sprite-composition .ball { background-image: url("assets/about/sprites/ball-loop.webp?v=precision-20261021") !important; }
-.art-panel .sprite-composition .coffee { background-image: url("assets/about/sprites/coffee-loop.webp?v=precision-20261021") !important; }
-.art-panel .sprite-composition .tablet { background-image: url("assets/about/sprites/tablet-loop.webp?v=precision-20261021") !important; }
-.art-panel .sprite-composition .gamepad { background-image: url("assets/about/sprites/gamepad-loop.webp?v=precision-20261021") !important; }
-.art-panel .sprite-composition .cat { background-image: url("assets/about/sprites/cat-loop.webp?v=precision-20261021") !important; }
-.art-panel .sprite-composition .watch { background-image: url("assets/about/sprites/watch-loop.webp?v=precision-20261021") !important; }
-.art-panel .sprite-composition .plant { background-image: url("assets/about/sprites/plant-loop.webp?v=precision-20261021") !important; }
-.art-panel .sprite-composition .paper { background-image: url("assets/about/sprites/paper-loop.webp?v=precision-20261021") !important; }
+.art-panel .sprite-composition .ball { background-image: url("assets/about/sprites/ball-loop.webp?v=decor-restored-20261021") !important; }
+.art-panel .sprite-composition .coffee { background-image: url("assets/about/sprites/coffee-loop.webp?v=decor-restored-20261021") !important; }
+.art-panel .sprite-composition .tablet { background-image: url("assets/about/sprites/tablet-loop.webp?v=decor-restored-20261021") !important; }
+.art-panel .sprite-composition .gamepad { background-image: url("assets/about/sprites/gamepad-loop.webp?v=decor-restored-20261021") !important; }
+.art-panel .sprite-composition .cat { background-image: url("assets/about/sprites/cat-loop.webp?v=decor-restored-20261021") !important; }
+.art-panel .sprite-composition .watch { background-image: url("assets/about/sprites/watch-loop.webp?v=decor-restored-20261021") !important; }
+.art-panel .sprite-composition .plant { background-image: url("assets/about/sprites/plant-loop.webp?v=decor-restored-20261021") !important; }
+.art-panel .sprite-composition .paper { background-image: url("assets/about/sprites/paper-loop.webp?v=decor-restored-20261021") !important; }
+
+@media (max-width: 760px) {
+  .art-panel .art-stage .art-ideas.sprite-composition { width: 96%; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .art-panel .art-stage .art-ideas.sprite-composition .art-orbit { transition: none !important; }
