@@ -1,8 +1,10 @@
+import { gsap } from 'gsap';
+
 /**
  * playground.js — 灵感实验室：卡片墙渲染 + GSAP 入场动画 + 计数器
- * 仅由 playground.html 加载，且必须在 GSAP(CDN) 与 about.js 之后。
+ * 由 Vite 作为模块加载，GSAP 从 npm 包导入。
  *
- * ⚠️ 动画有两个分支：GSAP 可用时走时间轴，不可用（CDN 失败 / 用户开启减弱动效）时走降级分支。
+ * 动画有两个分支：正常模式走 GSAP 时间轴，用户开启减弱动效时走降级分支。
  *    **改动画效果时两个分支都要改**，否则降级路径会与主路径表现不一致。
  *
  * 依赖的 DOM 契约：.play-grid、[data-count]、.play-tagline、.play-topline
@@ -31,7 +33,7 @@ const topLine=document.querySelector('.play-topline');
   // ── 主分支（GSAP 可用）：topline → tagline → 计数器 → 卡片的串行时间轴。
   // 计数器只在首次访问时播放（localStorage 标记），回访直接显示终值。
   // 前 4 张卡片进时间轴，其余交给 IntersectionObserver（threshold .12）滚动触发。
-if(window.gsap && !prefersReducedMotion){
+if(!prefersReducedMotion){
   const intro=gsap.timeline({defaults:{ease:'power3.out'}});
   if(topLine) intro.from(topLine,{y:12,opacity:0,duration:.55});
   if(tagline) intro.from(tagline,{y:18,opacity:0,duration:.65},'-=.24');
