@@ -6,13 +6,14 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/retire-legacy-version-branches.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   retire-legacy:
-    if: github.event.head_commit.message == 'chore: retire legacy 1.2 and 1.3 branches'
+    if: github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'chore: retire legacy 1.2 and 1.3 branches'
     runs-on: ubuntu-latest
     steps:
       - name: Remove only outdated 1.2 and 1.3 refs
