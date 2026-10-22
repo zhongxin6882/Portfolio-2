@@ -1,8 +1,4 @@
-"""Build seamless 48-frame looping About sprites from the original artwork.
-
-The reference images guide placement; sprite pixels come only from the existing
-portrait-elements-hd.webp. Both ends of each loop match its original artwork.
-"""
+"""Build seamless 48-frame About sprites from the original and refined artwork."""
 
 from math import cos, pi, sin, radians
 from pathlib import Path
@@ -311,6 +307,20 @@ def isolate_subject(name, original):
         remainder.paste((0,0,0,0), (0,0,*original.size), rim_cleanup)
         return subject, remainder
 
+    if name == "gamepad":
+        old_subject, remainder = extract_component(
+            original, (200-REGIONS[name][0], 700-REGIONS[name][1]))
+        target_box = old_subject.getchannel("A").getbbox()
+        generated = Image.open(ASSETS / "gamepad-redrawn.png").convert("RGBA")
+        # Ignore isolated antialias specks well outside the generated controller.
+        solid = generated.getchannel("A").point(lambda value: 255 if value >= 64 else 0)
+        generated = generated.crop(solid.getbbox())
+        generated = generated.resize((target_box[2]-target_box[0],
+                                      target_box[3]-target_box[1]), Image.Resampling.LANCZOS)
+        subject = Image.new("RGBA", original.size)
+        subject.alpha_composite(generated, target_box[:2])
+        return subject, remainder
+
     seeds = {
         "coffee": (625,285), "tablet": (950,370),
         "gamepad": (200,700), "cat": (904,680),
@@ -362,9 +372,14 @@ for box in STAR_BOXES:
             # Give the watch-side star breathing room without clipping the canvas.
             star = decor.crop(box)
             star = star.resize((50, 60), Image.Resampling.LANCZOS)
-            stars.alpha_composite(star, (1253, 646))
+            stars.alpha_composite(star, (1271, 646))
         else:
-            stars.alpha_composite(decor.crop(box),box[:2])
+            moved_stars = {
+                (745,97,827,194): (780,97),    # Coffee companion, right.
+                (73,768,148,857): (50,706),    # Left star beside the paper.
+                (1117,985,1197,1082): (1170,983),  # Plant-side star, right.
+            }
+            stars.alpha_composite(decor.crop(box), moved_stars.get(box, box[:2]))
     x1,y1,x2,y2 = box
     # Clear the antialiased fringe too; exact crop edges left orphaned pixels.
     ImageDraw.Draw(lines).rectangle((max(0,x1-8),max(0,y1-8),
@@ -397,4 +412,4 @@ def visible(image):
 
 diff = ImageChops.difference(visible(rebuilt), visible(SOURCE))
 print(f"Reconstruction difference bounds (new basketball artwork): {diff.getbbox()}")
-print("All non-ball subject animation frames preserve their original source pixels")
+print("Existing animation timing and motion are unchanged")
