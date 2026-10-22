@@ -55,7 +55,7 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
 .contact-hero-illustration {
   display: block;
   position: absolute;
-  top: calc(110px + 5%);
+  top: calc(110px + 5% + 20px);
   left: 5%;
   width: 90%;
   height: calc(90% - 99px);
@@ -79,6 +79,7 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
   font-style: italic;
   font-weight: 700;
   letter-spacing: -.065em;
+  word-spacing: .16em;
 }
 
 .contact-navigation a {
@@ -174,27 +175,8 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
 }
 
 .contact-social-logos { gap: clamp(18px, 2.4vw, 44px); }
-.zcool-logo { display: block; width: 100px; height: auto; flex: none; }
-
-.xiaohongshu-logo-frame {
-  position: relative;
-  display: block;
-  width: 40px;
-  height: 40px;
-  flex: none;
-  overflow: hidden;
-}
-
-.xiaohongshu-logo {
-  position: absolute;
-  display: block;
-  left: -12px;
-  top: 0;
-  width: 64px;
-  height: auto;
-  max-width: none;
-  filter: grayscale(1) contrast(100);
-}
+.zcool-logo { display: block; width: 90px; height: auto; flex: none; }
+.xiaohongshu-logo { display: block; width: 36px; height: auto; flex: none; }
 
 .contact-legal {
   flex-direction: row;
