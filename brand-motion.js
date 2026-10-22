@@ -9,7 +9,11 @@ if (flip && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     ease: 'power2.out',
     overwrite: 'auto'
   });
-  const update = () => rotate(window.scrollY * 180 / 420);
+  const update = () => {
+    const available = document.scrollingElement.scrollHeight - window.innerHeight;
+    const distance = Math.max(1, Math.min(420, available));
+    rotate(window.scrollY * 180 / distance);
+  };
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('work:position', event => {
     if (window.innerWidth > 850) rotate(event.detail.position * 180);
