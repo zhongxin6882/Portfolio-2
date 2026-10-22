@@ -22,11 +22,10 @@ Vite 输出到 `dist/`，不提交生成文件。旧的普通脚本仍保持原�
 
 推送到 `main` 会触发 `.github/workflows/deploy.yml`：`npm ci` → `npm run build` → 部署 `dist/`。仓库 Settings → Pages → Build and deployment → Source 应设为 **GitHub Actions**。
 
-## 当前版本与备份
+## 版本管理（2026-10-22）
 
-- **当前正式版本：v1.1**，源代码以 `main` 为准，`1.1` 分支固定为发布快照。
-- **完整代码备份：** [backup/center-v1.1-20261022](https://github.com/zhongxin6882/Portfolio-2/tree/backup/center-v1.1-20261022)，独立于 `main` 的 Git 分支快照，包含代码与仓库内素材。
-- **整理前安全备份：** [backup/preclean-20261022-3259338](https://github.com/zhongxin6882/Portfolio-2/tree/backup/preclean-20261022-3259338)，保留整理之前的原样快照。
-- **恢复方式：** 以备份分支的提交创建恢复分支，再经审核合并或部署；不要强制覆盖正在开发的分支。
-- `versions/1.0/` 和 `1.0` 分支属于历史 1.0，暂不清理。旧的 1.3 工作目录已从当前主干移除。
-- GitHub 备份分支都在**同一仓库内**；它们能防止日常代码覆盖，但不能替代独立仓库或离线备份。
+- **当前正式版本：v1.1**；`main` 用于开发和 GitHub Pages 部署，`1.1` 保留本次确认版本的源代码快照。
+- **历史保留：** `1.0` 分支，以及主干的 `versions/1.0/` 历史资料。
+- **离线备份：** 用户已自行下载最新版本 ZIP 压缩包，建议另存在电脑或云盘中。
+- 旧 `1.2`、`1.3` 及两个过渡 `backup/` 分支不再作为正式版本保留。
+- 今后发布新版本时，先核对 `main`，再创建新快照，不要覆盖 `1.1`。
