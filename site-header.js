@@ -14,15 +14,60 @@
   // 重新展开时先移除再加回 .typing，以重放打字机动画。
   const menuButton = header.querySelector('#menuToggle');
   const menu = header.querySelector('#menu');
-  // Capture the click before older page scripts so one menu action has one result.
+  // On phones the shared nav is a full-screen overlay, initially closed.
+  // The same DOM controls Audio, language and contact details on all pages.
+  const phone = window.matchMedia('(max-width: 760px)');
+  const setPhoneMenu = open => {
+    if (!menu || !menuButton) return;
+    header.classList.toggle('mobile-menu-open', open);
+    document.body.classList.toggle('mobile-menu-open', open);
+    menu.classList.toggle('closed', !open);
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menuButton.setAttribute('aria-controls', 'menu');
+    if (open) {
+      menu.classList.remove('typing');
+      requestAnimationFrame(() => menu.classList.add('typing'));
+    }
+  };
+  const resetForViewport = () => {
+    if (!menu || !menuButton) return;
+    if (phone.matches) setPhoneMenu(false);
+    else {
+      header.classList.remove('mobile-menu-open');
+      document.body.classList.remove('mobile-menu-open');
+      menu.classList.remove('closed');
+      menuButton.setAttribute('aria-expanded', 'true');
+      menuButton.setAttribute('aria-label', 'Toggle navigation');
+    }
+  };
+  resetForViewport();
+  if (phone.addEventListener) phone.addEventListener('change', resetForViewport);
+  else phone.addListener(resetForViewport);
+  // Capture clicks before legacy scripts to avoid a double-toggle / menu flash.
   menuButton?.addEventListener('click', event => {
     event.stopImmediatePropagation();
+    if (phone.matches) {
+      const opening = !header.classList.contains('mobile-menu-open');
+      setPhoneMenu(opening);
+      if (opening) requestAnimationFrame(() => menu.querySelector('a')?.focus());
+      return;
+    }
     const opening = menu.classList.contains('closed');
     menu.classList.toggle('closed', !opening);
     menuButton.setAttribute('aria-expanded', String(opening));
     menu.classList.remove('typing');
     if (opening) requestAnimationFrame(() => menu.classList.add('typing'));
   }, true);
+  menu?.addEventListener('click', event => {
+    if (phone.matches && event.target.closest('a')) setPhoneMenu(false);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && header.classList.contains('mobile-menu-open')) {
+      setPhoneMenu(false);
+      menuButton?.focus();
+    }
+  });
 
   // ── 2) 时钟：Asia/Shanghai 时区、en-GB 24 小时制、每秒刷新。
   // ⚠️ 时区写死在此。页头静态文案已改为 “Working China beijing”，与时区一致；
