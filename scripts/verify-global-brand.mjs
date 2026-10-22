@@ -31,7 +31,9 @@ for (const page of routes) {
   const styles = [...dist.matchAll(/<link\b[^>]*rel="stylesheet"[^>]*>/g)].map(x => x[0]);
   assert(styles.at(-1)?.includes('href="' + prefix + 'brand.css?'),
     page + ': shared brand.css must load last');
-  assert(/src="\/Portfolio-2\/assets\/brand-motion-[^"]+\.js"/.test(dist), page + ': missing compiled GSAP flip script');
+  // Vite may merge brand-motion into the Playground entry chunk.
+  assert(source.includes('src="' + prefix + 'brand-motion.js"'), page + ': source GSAP flip script missing');
+  assert(/<script[^>]*src="\/Portfolio-2\/assets\/[^"]+\.js"/.test(dist), page + ': compiled module script missing');
   assert(dist.includes('src="' + prefix + 'site-header.js'), page + ': missing global header');
   for (const face of faces) {
     const count = (dist.match(new RegExp('class="brand-face brand-face-' + face + '"', 'g')) || []).length;
