@@ -17,7 +17,7 @@ const grid=document.querySelector('.play-grid');
 projects.forEach((item,index)=>{
   const card=document.createElement('article');
   card.className='play-card';
-  card.innerHTML=`<div class="play-image-wrap"><img src="${item.image}" alt="${item.title}" loading="${index<8?'eager':'lazy'}"><span class="play-card-index">${String(index+1).padStart(2,'0')}</span></div><div class="play-card-meta"><h2>${item.title}</h2><span class="play-card-arrow" aria-hidden="true">↗</span></div>`;
+  card.innerHTML=`<div class="play-image-wrap"><img src="${item.image}" alt="${item.title}" loading="${index<8?'eager':'lazy'}"><span class="play-card-index">${String(index+1).padStart(2,'0')}</span><span class="play-card-arrow">↗</span></div><h2>${item.title}</h2>`;
   grid.append(card);
 });
 
