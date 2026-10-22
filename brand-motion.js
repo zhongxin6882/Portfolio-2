@@ -11,5 +11,8 @@ if (flip && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   });
   const update = () => rotate(window.scrollY * 180 / 420);
   window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('work:position', event => {
+    if (window.innerWidth > 850) rotate(event.detail.position * 180);
+  });
   update();
 }

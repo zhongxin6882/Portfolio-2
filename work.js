@@ -70,6 +70,7 @@ function setActive(i){if(i===active)return;active=i;const p=projects[i];info.rol
 // 距离超过 2.25 的卡片直接 visibility:hidden，避免无谓绘制。
 function render(){
   setActive(wrap(Math.round(position)));
+  window.dispatchEvent(new CustomEvent('work:position', {detail: {position}}));
   const width=innerWidth,height=innerHeight;
   cards.forEach((card,i)=>{const d=distance(i,position),abs=Math.abs(d),shown=abs<2.25;
     card.style.visibility=shown?'visible':'hidden';card.style.pointerEvents=abs<.75?'auto':'none';
