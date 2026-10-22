@@ -35,9 +35,12 @@ jobs:
           ! grep -q 'src="playground.js"' dist/playground.html
           test -f dist/style.css
           test -f dist/brand.css
-          grep -Fq 'href="style.css?v=play-layout-20261022"' dist/playground.html
-          grep -Fq 'href="brand.css?v=work-brand-20261021"' dist/playground.html
+          grep -Eq 'href="style.css\?v=[a-f0-9]{12}"' dist/playground.html
+          grep -Eq 'href="brand.css\?v=[a-f0-9]{12}"' dist/playground.html
           ! grep -Eq 'href="/Portfolio-2/assets/[^"]+\.css"' dist/playground.html
+          grep -Fq '.play-grid{grid-template-columns:repeat(3,minmax(0,1fr))' dist/style.css
+          grep -Fq '.play-card-meta .play-card-arrow' dist/style.css
+          grep -q 'play-card-meta' dist/assets/playground-*.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
+import { createHash } from 'node:crypto';
 import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 
 const root = process.cwd();
 
@@ -26,7 +27,12 @@ function copyClassicAssets() {
         const source = readFileSync(resolve(root, page), 'utf8');
         const originalStyles = [...source.matchAll(/<link\b[^>]*rel="stylesheet"[^>]*>/g)]
           .map(([tag]) => tag)
-          .filter(tag => /href="(?:\.\.\/)?[^/:]+\.css(?:\?[^"]*)?"/.test(tag));
+          .filter(tag => /href="(?:\.\.\/)?[^/:]+\.css(?:\?[^"]*)?"/.test(tag))
+          .map(tag => tag.replace(/href="((?:\.\.\/)?[^/:]+\.css)(?:\?[^"]*)?"/, (_, path) => {
+            const file = resolve(dirname(resolve(root, page)), path);
+            const version = createHash('sha256').update(readFileSync(file)).digest('hex').slice(0, 12);
+            return 'href="' + path + '?v=' + version + '"';
+          }));
         if (!originalStyles.length) continue;
         const destination = resolve(output, page);
         let built = readFileSync(destination, 'utf8');
