@@ -37,12 +37,28 @@ function copyClassicAssets() {
         const destination = resolve(output, page);
         let built = readFileSync(destination, 'utf8');
         let inserted = false;
-        built = built.replace(/<link rel="stylesheet" crossorigin href="\/Portfolio-2\/assets\/[^"]+\.css">/g, () => {
+        const generatedStyleLink = /<link\b(?=[^>]*\brel="stylesheet")(?=[^>]*\bhref="\/Portfolio-2\/assets\/[^"]+\.css")[^>]*>/g;
+        built = built.replace(generatedStyleLink, () => {
           if (inserted) return '';
           inserted = true;
           return originalStyles.join('');
         });
-        if (!inserted) throw new Error(`No bundled stylesheet found in ${page}`);
+        if (!inserted) {
+          const sourceStyleLink = /<link\b(?=[^>]*\brel="stylesheet")(?=[^>]*\bhref="(?:\/Portfolio-2\/)?(?:\.\.\/)?[^/:]+\.css(?:\?[^"]*)?")[^>]*>/g;
+          const existingSourceStyles = built.match(sourceStyleLink) || [];
+          if (existingSourceStyles.length) {
+            let replaced = false;
+            built = built.replace(sourceStyleLink, () => {
+              if (replaced) return '';
+              replaced = true;
+              return originalStyles.join('');
+            });
+          } else if (built.includes('</head>')) {
+            built = built.replace('</head>', originalStyles.join('') + '</head>');
+          } else {
+            throw new Error('Cannot restore source stylesheets in ' + page);
+          }
+        }
         writeFileSync(destination, built);
       }
       writeFileSync(resolve(output, '.nojekyll'), '');
