@@ -1,6 +1,6 @@
-name: Retire old portfolio version branches
+name: Retire obsolete portfolio branches
 
-# One-time, narrowly scoped maintenance: never runs on ordinary website updates.
+# One-off maintenance. Deletes only the four exact refs explicitly approved.
 on:
   push:
     branches: [main]
@@ -12,21 +12,53 @@ permissions:
   contents: write
 
 jobs:
-  retire-legacy:
-    if: github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'chore: retire legacy 1.2 and 1.3 branches'
+  retire-obsolete:
+    if: github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'chore: remove four obsolete portfolio branches'
     runs-on: ubuntu-latest
     steps:
-      - name: Remove only outdated 1.2 and 1.3 refs
+      - name: Verify version 1.1 is safely retained
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          for branch in 1.2 1.3; do
-            if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" > /dev/null 2>&1; then
-              echo "Deleting obsolete version branch: ${branch}"
+          gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/1.0" --jq '.object.sha'
+          gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/1.1" --jq '.object.sha'
+          gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq '.object.sha'
+
+      - name: Delete exactly four superseded refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branches=(
+            'backup/center-v1.1-20261022'
+            'backup/preclean-20261022-3259338'
+            '1.2'
+            '1.3'
+          )
+          for branch in "${branches[@]}"; do
+            if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" >/dev/null 2>&1; then
+              echo "Deleting requested obsolete branch: ${branch}"
               gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch}"
             else
               echo "Already absent: ${branch}"
+            fi
+          done
+
+      - name: Verify retained branches and removed refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for branch in main 1.0 1.1; do
+            gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" >/dev/null
+          done
+          for branch in 'backup/center-v1.1-20261022' 'backup/preclean-20261022-3259338' 1.2 1.3; do
+            if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" >/dev/null 2>&1; then
+              echo "Unexpected remaining obsolete branch: ${branch}"
+              exit 1
             fi
           done
