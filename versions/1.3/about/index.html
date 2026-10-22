@@ -1,0 +1,457 @@
+<!doctype html><!--
+  about/index.html — 关于页，ABOUT 的唯一正式路由（/about/）
+  旧的 about.html 文件已删除，全站导航统一指向本目录路由。
+  本文件是**已格式化**的（441 行），可以正常编辑，与其他压缩单行页面不同。
+
+  脚本：site-header.js → page-transition.js
+  ⚠️ 已知缺口：本页有 .language-toggle 语言切换按钮，但**不加载 locale.js**，
+     因此按钮点击无反应。页面文案是用中文直接写死的（lang="zh-CN"）。
+     修复方式见 AGENTS.md 第 5 节末尾。
+  ⚠️ 本页未设 data-default-language 与 data-language-key。
+  交互插画（.about-character）的行为逻辑在 about.js 里，样式在 style.css 的 About 分区。
+-->
+<html lang="zh-CN">
+<head><style>html.has-route-transition{background:#050505}html.has-route-transition body{visibility:hidden}html.has-route-transition.route-ready body{visibility:visible}</style><script>try{if(sessionStorage.getItem("portfolio-route-transition"))document.documentElement.classList.add("has-route-transition")}catch{}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="九月十五的交互、视觉与产品设计经历。">
+<title>关于 — 九月十五</title>
+<style>
+:root{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;color:#080808;background:#f9f7f5;font-synthesis:none}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px}button,a{font:inherit;color:inherit}button{cursor:pointer}a{text-decoration:none}
+.about-page{display:grid;grid-template-columns:1fr 1fr;min-height:100svh;background:#fcfaf8}
+.art-panel{position:relative;overflow:hidden;min-height:760px;background:#f9f7f5;border-right:1px solid #ddd9d4}
+.art-trigger{position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;border:0;background:none;text-align:left;overflow:hidden;cursor:pointer}
+.art-trigger img{display:block;height:100%;width:auto;max-width:none;transform-origin:25% 65%;transition:transform .8s cubic-bezier(.16,1,.3,1),filter .5s;user-select:none;pointer-events:none}
+.art-trigger:hover img,.art-trigger:focus-visible img{transform:scale(1.018)}.art-trigger:focus-visible{outline:3px solid #ff641e;outline-offset:-6px}
+.art-panel.is-open .art-trigger img{transform:scale(1.035) translateY(1%)}
+.art-ideas{position:absolute;inset:0;pointer-events:none}.art-orbit{position:absolute;z-index:3;left:50%;top:42%;width:42px;height:42px;border:2px solid #141414;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:24px;box-shadow:4px 4px 0 #ff641e;opacity:0;pointer-events:none;transform:translate(-50%,40px) scale(.3);transition:transform .75s cubic-bezier(.2,1.3,.25,1),opacity .3s,background .2s,color .2s}.art-orbit:hover,.art-orbit:focus-visible,.art-orbit[aria-pressed="true"]{background:#ff641e;color:#fff;outline:0}
+.art-panel.is-open .art-orbit{opacity:1;pointer-events:auto}.art-panel.is-open .orbit-1{transform:translate(-230px,-170px) rotate(-20deg)}.art-panel.is-open .orbit-2{transform:translate(70px,-170px) rotate(12deg);transition-delay:.08s}.art-panel.is-open .orbit-3{transform:translate(205px,-55px) rotate(-8deg);transition-delay:.15s}.art-panel.is-open .orbit-4{transform:translate(-270px,60px) rotate(12deg);transition-delay:.2s}.art-panel.is-open .orbit-5{transform:translate(-60px,-245px) rotate(14deg);transition-delay:.26s}.art-panel.is-open .orbit-6{transform:translate(145px,80px) rotate(-10deg);transition-delay:.3s}
+.idea-preview{position:absolute;z-index:6;top:14%;left:8%;width:min(270px,47%);min-height:205px;padding:20px;background:#fff;border:1px solid #ddd;box-shadow:9px 12px 0 #0002;transform:translateY(22px) rotate(-4deg);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s,transform .4s,visibility .3s}.idea-preview.is-visible{transform:translateY(0) rotate(-3deg);opacity:1;visibility:visible;pointer-events:auto}.idea-preview>span{font-size:10px;color:#999;letter-spacing:.1em}.idea-preview h3{margin:22px 0 9px;font-size:23px}.idea-preview p{margin:0 0 35px;font-size:13px;line-height:1.5}.idea-preview button{position:absolute;bottom:15px;right:16px;border:0;background:none;font-size:11px}
+.art-caption{position:absolute;right:22px;bottom:20px;font-size:11px;letter-spacing:.06em;color:#777;pointer-events:none}.art-panel.is-open .art-caption{color:#111}
+.right-panel{position:relative;min-width:0;min-height:100svh;padding:104px clamp(25px,2.2vw,42px) 38px;border-left:1px solid #fff}
+.chrome{position:absolute;z-index:20;top:33px;left:calc(50% + 34px);right:35px;display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:18px;font-family:Arial,"PingFang SC",sans-serif;font-size:12px}
+.brand{display:flex;align-items:center;gap:5px;width:max-content;white-space:nowrap}.brand b{font-size:10px;font-weight:900;letter-spacing:-.08em}.brand small{display:none}
+.header-slot{display:flex;align-items:center;gap:16px}.header-slot>button{border:0;background:none;padding:0;color:#777;text-transform:uppercase;font-size:10px}.header-slot nav{display:flex;align-items:center;gap:22px}.header-slot nav.closed{display:none}.header-slot nav a{position:relative;white-space:nowrap;font-size:12px;font-weight:500;transition:color .2s,transform .2s}.header-slot nav a:hover{color:#ff641e;transform:translateY(-2px)}.header-slot nav a[aria-current="page"]{font-weight:800}.header-slot nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:2px;background:#ff641e}
+.audio,.location{display:none}.inquiry{justify-self:end;white-space:nowrap;font-size:10px;letter-spacing:-.03em}.inquiry a::after{content:" ↗"}.language-toggle{position:absolute;top:32px;right:0;border:0;padding:0;background:none;font-size:10px;color:#888}
+.hero-copy{margin-left:26%;max-width:560px}.hero-copy h1{margin:0;white-space:nowrap;font:900 clamp(55px,5.05vw,91px)/.95 Arial,sans-serif;letter-spacing:-.07em}.orange-square{display:block;width:17px;height:17px;margin:23px 0 21px;background:#ff641e}.hero-copy h2{margin:0;font-size:clamp(27px,2vw,36px);line-height:1.15;letter-spacing:-.045em}.hero-role{margin:7px 0 24px;font-size:clamp(16px,1.3vw,23px);letter-spacing:-.025em}.hero-summary{max-width:570px;margin:0;font-size:clamp(13px,.85vw,16px);line-height:1.58}
+.resume{margin-top:clamp(38px,5.4vh,70px);display:grid;grid-template-columns:16% 7% 25% 1fr;column-gap:2%;row-gap:0;align-items:start}.section-label{grid-column:1;font:12px/1.2 Arial,sans-serif;color:#919699;text-transform:uppercase;letter-spacing:-.025em;padding-top:2px}.experience-list{grid-column:2/-1;display:grid;gap:0}.experience-item{position:relative;display:grid;grid-template-columns:8% 30% 1fr;min-height:76px}.experience-item::before{content:"";position:absolute;left:3.5%;top:9px;bottom:0;width:1px;background:#ff641e}.experience-item:last-child::before{bottom:calc(100% - 10px)}.experience-item::after{content:"";position:absolute;top:8px;left:calc(3.5% - 4px);width:9px;height:9px;border-radius:50%;background:#ff641e}.experience-item time,.experience-item .career-role{font-size:15px;white-space:nowrap}.experience-item time{grid-column:2}.experience-item .career-role{grid-column:3}.experience-item p{margin:7px 0 0;color:#949b9d;font-size:13px;line-height:1.4}.experience-item .career-role p{max-width:355px}
+.skills-block,.contact-block{display:grid;grid-template-columns:16% 1fr;column-gap:2%;margin-top:14px}.skills-list{display:flex;flex-wrap:wrap;gap:9px;max-width:660px}.skills-list span{border:1px solid #d9dde0;border-radius:22px;white-space:nowrap;padding:8px 19px;font-size:13px;line-height:1.2}.contact-block{margin-top:28px}.contact-items{display:flex;flex-wrap:wrap;gap:15px 32px;align-items:center;font-size:14px}.contact-items a{display:flex;gap:11px;align-items:center;white-space:nowrap}.contact-items i{width:34px;height:34px;border:1px solid #d7dbde;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:16px}.contact-items a:hover{color:#ff641e}
+.page-transition{position:fixed;inset:0;z-index:1000;background:#050505;color:#f7f6f2;display:grid;place-items:center;transition:transform .82s cubic-bezier(.76,0,.24,1);pointer-events:all}.page-transition__title{font:500 clamp(44px,6vw,96px)/1 Georgia,serif;letter-spacing:-.055em;text-transform:uppercase;filter:blur(14px);opacity:0;animation:transition-title-in .42s .08s forwards}.page-transition.is-leaving{transform:translateY(-102%);pointer-events:none}@keyframes transition-title-in{to{filter:blur(0);opacity:1}}
+@media(max-width:1450px){.brand{display:none}.chrome{grid-template-columns:1fr auto}.hero-copy{margin-left:20%}.resume{grid-template-columns:17% 6% 24% 1fr}.experience-item{grid-template-columns:9% 28% 1fr}.experience-item time,.experience-item .career-role{font-size:13px}.experience-item p{font-size:12px}}
+@media(max-width:1100px){.about-page{grid-template-columns:43% 57%}.chrome{left:calc(43% + 25px)}.art-trigger img{margin-left:-7%}.hero-copy{margin-left:10%}.hero-copy h1{font-size:clamp(48px,5.5vw,70px)}.resume{grid-template-columns:1fr;gap:15px}.section-label,.experience-list{grid-column:1}.experience-item{grid-template-columns:8% 25% 1fr}.skills-block,.contact-block{grid-template-columns:1fr;gap:13px}.right-panel{padding-top:112px}}
+@media(max-width:760px){.about-page{display:block}.art-panel{height:min(92vw,570px);min-height:0;border:0;border-bottom:1px solid #ddd9d4}.art-trigger img{height:100%;margin:0}.art-orbit{transform-origin:center;scale:.72}.right-panel{min-height:0;padding:95px 24px 45px}.chrome{position:absolute;left:20px;right:20px;top:20px;grid-template-columns:1fr auto;gap:10px}.brand{display:none}.header-slot nav{gap:14px;flex-wrap:wrap}.header-slot nav a{font-size:11px}.header-slot>button{display:none}.inquiry{display:none}.language-toggle{right:0;top:35px}.hero-copy{margin-left:0}.hero-copy h1{font-size:clamp(49px,12vw,80px)}.hero-summary{font-size:14px}.resume{margin-top:45px}.experience-item{min-height:88px;grid-template-columns:9% 25% 1fr}.skills-block,.contact-block{margin-top:28px}.contact-items{font-size:13px}.art-caption{font-size:9px}}
+@media(max-width:420px){.experience-item{grid-template-columns:8% 24% 1fr}.experience-item time,.experience-item .career-role{font-size:12px}.experience-item p{font-size:11px}.skills-list span{font-size:11px;padding:7px 11px}.header-slot nav{gap:10px}.art-panel.is-open .orbit-1{transform:translate(-30vw,-22vw)}.art-panel.is-open .orbit-2{transform:translate(8vw,-26vw)}.art-panel.is-open .orbit-3{transform:translate(27vw,-7vw)}.art-panel.is-open .orbit-4{transform:translate(-36vw,11vw)}.art-panel.is-open .orbit-5{transform:translate(-10vw,-38vw)}.art-panel.is-open .orbit-6{transform:translate(19vw,20vw)}.idea-preview{top:12%;left:6%;width:55%;padding:13px;min-height:175px}.idea-preview h3{margin-top:13px;font-size:18px}.idea-preview p{font-size:11px}}
+/* Keep the site's original full-width, vertical navigation arrangement. */
+.chrome{position:absolute;inset:0 0 auto;z-index:20;width:100%;height:164px;display:grid;grid-template-columns:12.8% 24.3% 16% 1fr auto;align-items:start;gap:0;padding:21px 3% 0 10px;background:transparent;pointer-events:none;font-size:11px}
+.chrome>*{pointer-events:auto}.brand{display:flex;align-items:flex-start;gap:7px;width:max-content}.brand b{font-size:clamp(21px,1.65vw,32px);line-height:.9;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:-.075em}.brand small{display:block;font-size:8px;line-height:1.2;writing-mode:vertical-rl}
+.header-slot{display:block}.header-slot>button{display:block;font-size:11px;color:#777;text-transform:none}.header-slot nav{display:flex;flex-direction:column;align-items:flex-start;gap:0;margin-top:31px}.header-slot nav.closed{display:none}.header-slot nav a{font-size:clamp(18px,1.35vw,25px);font-weight:700;line-height:.98;letter-spacing:-.055em;white-space:nowrap}.header-slot nav a[aria-current="page"]{padding-left:1.05em}.header-slot nav a[aria-current="page"]::before{content:"↗";position:absolute;left:0;top:-.04em}.header-slot nav a[aria-current="page"]::after{display:none}
+.audio,.location{display:block;font-size:11px;color:#777;line-height:1.15}.audio strong{color:#111;font-weight:400}.inquiry{position:static;justify-self:end;font-size:11px;letter-spacing:0}.language-toggle{position:absolute;top:25px;left:calc(12.8% + 58px);right:auto;border:1px solid #aaa;border-radius:20px;padding:3px 8px;color:#111;font-size:10px}
+@media(max-width:760px){.chrome{position:relative;height:160px;grid-template-columns:20% 1fr auto;padding:15px 18px;background:#e9e9e9;border-bottom:1px solid #ddd}.brand b{font-size:20px}.brand small{font-size:6px}.header-slot nav{margin-top:18px}.header-slot nav a{font-size:17px}.audio,.location,.inquiry{display:none}.language-toggle{left:auto;right:18px;top:16px}.right-panel{padding-top:60px}}
+@media(max-width:420px){.chrome{grid-template-columns:22% 1fr auto}.header-slot nav a{font-size:16px}}
+/* Keep the portrait canvas and biography on one uninterrupted surface. */
+.about-page,.art-panel,.right-panel{background:#fcfaf8}
+.art-panel,.right-panel{border:0}
+.art-trigger{display:flex;align-items:center;justify-content:center}
+.art-trigger img{width:50%;height:auto;aspect-ratio:1;max-width:none;max-height:none;margin:0;object-fit:cover;object-position:left center;transform-origin:center;mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent),linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);mask-composite:intersect}
+.art-trigger:hover img,.art-trigger:focus-visible img{transform:scale(1.025)}
+.art-panel.is-open .art-trigger img{transform:scale(1.045)}
+@media(max-width:760px){.art-panel{border:0}.art-trigger img{width:50%;height:auto;max-height:none;margin:0}.chrome{border-bottom:0}}
+/* The two provided portraits share one stage; the reveal grows from the character. */
+.art-trigger{display:flex;align-items:center;justify-content:center}
+.portrait-stage{position:relative;display:block;flex:none;width:50%;max-width:440px;aspect-ratio:1;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.portrait-stage img{position:absolute;inset:0;display:block;width:100%;height:100%;margin:0;max-width:none;max-height:none;object-fit:contain;object-position:center;user-select:none;pointer-events:none;mask-image:linear-gradient(to right,transparent,#000 7%,#000 93%,transparent),linear-gradient(to bottom,transparent,#000 7%,#000 93%,transparent);mask-composite:intersect;transition:opacity .42s ease,transform .85s cubic-bezier(.22,1,.36,1),clip-path .9s cubic-bezier(.22,1,.36,1);will-change:transform,clip-path}
+.portrait-idle{opacity:1;transform:translateY(0) scale(1)}
+.portrait-reveal{opacity:0;clip-path:circle(0% at 50% 48%);transform:translateY(16px) scale(.95) rotate(-2deg)}
+.art-trigger:hover .portrait-stage,.art-trigger:focus-visible .portrait-stage{transform:translateY(-5px) rotate(-1deg)}
+.art-panel.is-open .portrait-idle{opacity:0;transform:translateY(9px) scale(.94) rotate(1deg)}
+.art-panel.is-open .portrait-reveal{opacity:1;clip-path:circle(78% at 50% 48%);transform:translateY(0) scale(1) rotate(0)}
+.art-panel.is-open .art-trigger:hover .portrait-stage{transform:translateY(-4px) rotate(1deg)}
+.art-ideas{width:50%;max-width:440px;aspect-ratio:1;inset:50% auto auto 50%;transform:translate(-50%,-50%)}
+.art-orbit{width:21%;height:21%;border:0;border-radius:50%;background:transparent;box-shadow:none;font-size:0;opacity:0;transform:translate(-50%,-50%) scale(.8);transition:transform .55s cubic-bezier(.2,1.4,.3,1),opacity .3s;outline:0}
+.art-panel.is-open .art-orbit{opacity:1;background:transparent;color:transparent;box-shadow:none}
+.art-panel.is-open .orbit-1{left:31%;top:20%;transform:translate(-50%,-50%) rotate(-8deg)}
+.art-panel.is-open .orbit-2{left:76%;top:23%;transform:translate(-50%,-50%) rotate(7deg)}
+.art-panel.is-open .orbit-3{left:24%;top:49%;transform:translate(-50%,-50%) rotate(-5deg)}
+.art-panel.is-open .orbit-4{left:68%;top:49%;transform:translate(-50%,-50%) rotate(5deg)}
+.art-panel.is-open .orbit-5{left:84%;top:52%;transform:translate(-50%,-50%) rotate(-7deg)}
+.art-panel.is-open .orbit-6{left:79%;top:70%;transform:translate(-50%,-50%) rotate(6deg)}
+.art-orbit:hover,.art-orbit:focus-visible,.art-orbit[aria-pressed="true"]{background:transparent;color:transparent;box-shadow:0 0 0 2px #ff641e80;outline:0}
+@media(max-width:760px){.portrait-stage,.art-ideas{width:72%}.portrait-stage img{width:100%;height:100%;margin:0}}
+@media(prefers-reduced-motion:reduce){.portrait-stage img{will-change:auto}}
+/* A larger, crisp character remains in place while independent ideas spring out above it. */
+.portrait-stage,.art-ideas{width:72%;max-width:520px;aspect-ratio:1}
+.portrait-stage img{width:100%;height:100%;object-fit:contain;transition:opacity .38s ease,transform .7s cubic-bezier(.22,1,.36,1);will-change:opacity,transform}
+.portrait-idle{opacity:1;transform:translateY(0) scale(1)}
+.portrait-character{opacity:0;transform:translateY(12%) scale(.76);mask-image:none!important}
+.art-panel.is-open .art-trigger .portrait-idle{opacity:0;transform:translateY(12px) scale(.96)}
+.art-panel.is-open .art-trigger .portrait-character{opacity:1;transform:translateY(8%) scale(.82)}
+.art-trigger:hover .portrait-stage,.art-trigger:focus-visible .portrait-stage{transform:translateY(-7px) rotate(-1.2deg)}
+.art-panel.is-open .art-trigger:hover .portrait-stage{transform:translateY(-5px) rotate(.8deg)}
+.art-hover-note{position:absolute;z-index:3;top:8%;left:47%;display:block;max-width:170px;padding:10px 12px;background:#111;color:#fff;font-size:12px;line-height:1.2;letter-spacing:-.02em;white-space:nowrap;opacity:0;transform:translateY(9px) scale(.92) rotate(-3deg);transform-origin:left bottom;transition:opacity .24s ease,transform .42s cubic-bezier(.2,1.4,.3,1);pointer-events:none}
+.art-hover-note span{padding-left:8px;color:#ff641e}
+.art-trigger:hover .art-hover-note,.art-trigger:focus-visible .art-hover-note{opacity:1;transform:translateY(0) scale(1) rotate(-2deg)}
+.art-panel.is-open .art-hover-note{opacity:0}
+.art-ideas{z-index:4;pointer-events:none}
+.art-ideas .art-orbit{position:absolute;inset:0;left:0!important;top:0!important;display:block;width:100%;height:100%;padding:0;border:0;border-radius:0;background:transparent url(../assets/about/portrait-elements.webp) center/100% 100% no-repeat!important;box-shadow:none!important;font-size:0;opacity:0;pointer-events:none;scale:1;clip-path:inset(var(--t) var(--r) var(--b) var(--l));transform:translate(var(--tx),var(--ty)) scale(.12) rotate(var(--rot));transform-origin:50% 36%;transition:opacity .2s ease,transform .75s cubic-bezier(.16,1.4,.28,1),filter .22s ease;transition-delay:0s;will-change:transform}
+.art-panel.is-open .art-ideas .art-orbit{opacity:1;pointer-events:auto;transform:translate(var(--end-x),var(--end-y)) scale(1) rotate(0);transition-delay:var(--delay)}
+.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:focus-visible{filter:drop-shadow(0 0 5px #ff641e);outline:0;transform:translate(var(--end-x),calc(var(--end-y) - 4px)) scale(1.04)}
+.art-ideas .orbit-1{--t:14%;--r:62%;--b:60%;--l:13%;--tx:23%;--ty:8%;--end-x:-8%;--end-y:-14%;--rot:-24deg;--delay:.05s}
+.art-ideas .orbit-2{--t:9%;--r:43%;--b:69%;--l:40%;--tx:0%;--ty:12%;--end-x:0%;--end-y:-25%;--rot:16deg;--delay:.12s}
+.art-ideas .orbit-3{--t:13%;--r:0%;--b:54%;--l:58%;--tx:-26%;--ty:6%;--end-x:15%;--end-y:-18%;--rot:20deg;--delay:.19s}
+.art-ideas .orbit-4{--t:45%;--r:68%;--b:29%;--l:7%;--tx:30%;--ty:-21%;--end-x:-10%;--end-y:0%;--rot:-30deg;--delay:.26s}
+.art-ideas .orbit-5{--t:46%;--r:21%;--b:36%;--l:60%;--tx:-19%;--ty:-20%;--end-x:16%;--end-y:-2%;--rot:20deg;--delay:.33s}
+.art-ideas .orbit-6{--t:45%;--r:0%;--b:33%;--l:81%;--tx:-38%;--ty:-20%;--end-x:13%;--end-y:-4%;--rot:25deg;--delay:.4s}
+.art-ideas .orbit-7{--t:64%;--r:4%;--b:8%;--l:69%;--tx:-30%;--ty:-41%;--end-x:13%;--end-y:2%;--rot:27deg;--delay:.47s}
+.art-ideas .orbit-8{--t:70%;--r:74%;--b:8%;--l:7%;--tx:35%;--ty:-44%;--end-x:-10%;--end-y:0%;--rot:-22deg;--delay:.54s}
+/* Editorial typography and quiet information rows, inspired by the reference layout. */
+.right-panel{padding:118px clamp(30px,3vw,54px) 68px}
+.hero-copy{display:grid;grid-template-columns:27% minmax(0,1fr);column-gap:4%;row-gap:7px;max-width:none;margin:0}
+.hero-copy h1{grid-column:2;margin:0 0 42px;white-space:normal;font:750 clamp(55px,5.25vw,78px)/1.05 Arial,sans-serif;letter-spacing:-.07em}
+.hero-copy::before{content:"INFO";grid-column:1;grid-row:2/span 3;font-size:11px;color:#858585;letter-spacing:.08em;padding-top:5px}
+.orange-square{display:none}
+.hero-copy h2,.hero-role,.hero-summary{grid-column:2}
+.hero-copy h2{font-size:24px;font-weight:650;letter-spacing:-.04em}
+.hero-role{margin:0;color:#686868;font-size:14px}
+.hero-summary{margin:21px 0 0;max-width:420px;font-size:14px;line-height:1.7}
+.resume,.skills-block,.contact-block{display:grid;grid-template-columns:27% minmax(0,1fr);column-gap:4%;margin-top:53px}
+.section-label{grid-column:1;padding-top:3px;font-size:11px;letter-spacing:.08em;color:#858585}
+.experience-list{grid-column:2;gap:0}
+.experience-item{grid-template-columns:30% 1fr;min-height:0;padding:17px 0;border-top:1px solid #ddd9d5;column-gap:3%}
+.experience-item::before,.experience-item::after,.experience-item>div:first-child{display:none}
+.experience-item>div:nth-child(2){grid-column:1}
+.experience-item time{grid-column:auto;font-size:13px;font-weight:600}
+.experience-item .career-role{grid-column:2;font-size:13px;white-space:normal}
+.experience-item p{margin:5px 0 0;color:#777;font-size:12px;line-height:1.5}
+.skills-block,.contact-block{margin-top:34px}
+.skills-list{gap:5px 0;max-width:480px}
+.skills-list span{padding:0;border:0;border-radius:0;font-size:12px;line-height:1.55;white-space:normal}
+.skills-list span:not(:last-child)::after{content:" / ";padding:0 8px;color:#aaa}
+.contact-items{gap:16px 24px;font-size:13px}
+.contact-items i{width:25px;height:25px;border:0;font-size:14px}
+@media(max-width:1100px){.right-panel{padding:112px 27px 50px}.hero-copy{grid-template-columns:1fr}.hero-copy h1,.hero-copy h2,.hero-role,.hero-summary,.hero-copy::before{grid-column:1}.hero-copy::before{grid-row:auto}.hero-copy h1{margin-bottom:24px}.resume,.skills-block,.contact-block{grid-template-columns:1fr;gap:15px}.section-label,.experience-list{grid-column:1}}
+@media(max-width:760px){.portrait-stage,.art-ideas{width:84%;max-width:450px}.right-panel{padding:58px 24px 48px}.hero-copy h1{font-size:58px}.resume{margin-top:45px}}
+@media(prefers-reduced-motion:reduce){.art-ideas .art-orbit,.portrait-stage img,.art-hover-note{transition:none;will-change:auto}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* Shared Work header and portrait refinements. */
+.audio button{border:0;padding:0;background:none;color:#111;display:inline-flex;align-items:center;gap:6px;font:inherit}.audio-wave{display:none;height:13px;align-items:center;gap:2px}.audio button[aria-pressed="true"] .audio-wave{display:inline-flex}.audio-wave i{width:2px;height:5px;background:currentColor;animation:audio-wave .78s ease-in-out infinite alternate}.audio-wave i:nth-child(2){animation-delay:-.18s}.audio-wave i:nth-child(3){animation-delay:-.44s}.audio-wave i:nth-child(4){animation-delay:-.3s}.audio-wave i:nth-child(5){animation-delay:-.59s}@keyframes audio-wave{to{height:13px}}
+.header-slot nav.typing a{overflow:hidden;animation:nav-type .45s steps(12,end) both}.header-slot nav.typing a:nth-child(2){animation-delay:.12s}.header-slot nav.typing a:nth-child(3){animation-delay:.24s}.header-slot nav.typing a:nth-child(4){animation-delay:.36s}@keyframes nav-type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.page-transition__title{opacity:1;filter:none;transform:none;animation:none}
+
+.chrome{grid-template-columns:12.8% 25.2% 16.7% 1fr auto;padding:21px 3.2% 0 12px;height:180px}
+.brand b{font-size:clamp(19px,1.3vw,27px)}
+.header-slot nav{margin-top:33px}.header-slot nav a{font-size:clamp(18px,1.3vw,24px);line-height:.95}
+.header-slot nav{gap:4px}.header-slot nav a{line-height:1.15}
+.inquiry{font-size:12px;color:#111}.chrome .inquiry .language-toggle{position:static;display:inline-block;margin-top:12px;padding:4px 9px;border:1px solid #aaa;background:transparent;color:#111;font-size:10px}
+.inquiry-language{display:flex;justify-content:flex-end}
+.art-panel{min-height:850px}.right-panel{padding-top:185px}
+.portrait-stage{transform:translateY(6%)}
+.portrait-stage,.art-ideas{width:82%;max-width:600px}
+.portrait-stage img{mask-image:none!important}
+.portrait-idle,.portrait-smile{mix-blend-mode:multiply}
+.portrait-idle{opacity:1}
+.portrait-smile{opacity:0;transform:translateY(0) scale(1);transition:opacity .26s ease!important}
+.art-panel:not(.is-open) .art-trigger:hover .portrait-smile,.art-panel:not(.is-open) .art-trigger:focus-visible .portrait-smile{opacity:1}
+.art-panel.is-open .art-trigger .portrait-smile{opacity:0}
+.art-panel.is-open .art-trigger .portrait-character{transform:translateY(14%) scale(.72)}
+.art-hover-note{top:4%;left:11%;max-width:none;padding:16px 20px;font:700 clamp(16px,1.6vw,24px)/1.05 Georgia,serif;letter-spacing:-.035em;white-space:normal;min-width:250px}
+.art-hover-note span{position:absolute;right:-17px;bottom:0;padding:0;width:0;height:0;font-size:0;border:9px solid transparent;border-left-color:#111}
+.art-ideas{top:52%;transform:translate(-50%,-50%) translateY(6%)}
+.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:focus-visible{filter:none!important}
+.art-ideas .orbit-1{--end-x:-3%;--end-y:-7%}.art-ideas .orbit-2{--end-x:0%;--end-y:-10%}.art-ideas .orbit-3{--end-x:4%;--end-y:-7%}
+.art-ideas .orbit-4{--end-x:-2%;--end-y:2%}.art-ideas .orbit-5{--end-x:4%;--end-y:2%}.art-ideas .orbit-6{--end-x:1%;--end-y:1%}
+.art-ideas .orbit-7{--end-x:0%;--end-y:0%}.art-ideas .orbit-8{--end-x:0%;--end-y:0%}
+.art-panel.is-open .art-ideas .orbit-1:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.045) rotate(-10deg)}
+.art-panel.is-open .art-ideas .orbit-2:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.035) rotate(7deg)}
+.art-panel.is-open .art-ideas .orbit-3:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.025) rotate(-4deg)}
+.art-panel.is-open .art-ideas .orbit-4:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.055) rotate(-12deg)}
+.art-panel.is-open .art-ideas .orbit-5:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.08) rotate(9deg)}
+.art-panel.is-open .art-ideas .orbit-6:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.04) rotate(15deg)}
+.art-panel.is-open .art-ideas .orbit-7:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.045) rotate(-8deg)}
+.art-panel.is-open .art-ideas .orbit-8:hover{transform:translate(var(--end-x),var(--end-y)) scale(1.07) rotate(6deg)}
+.art-panel.is-open .art-ideas .orbit-1:hover{animation:idea-bounce .55s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-2:hover{animation:idea-steam 1s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-3:hover{animation:idea-draw .7s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-4:hover{animation:idea-game .36s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-5:hover{animation:idea-cat .9s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-6:hover{animation:idea-tick .8s steps(2,end) infinite alternate}
+.art-panel.is-open .art-ideas .orbit-7:hover{animation:idea-grow 1s ease-in-out infinite alternate}
+.art-panel.is-open .art-ideas .orbit-8:hover{animation:idea-page .75s ease-in-out infinite alternate}
+@keyframes idea-bounce{to{transform:translate(var(--end-x),calc(var(--end-y) - 4%)) scale(1.04) rotate(12deg)}}
+@keyframes idea-steam{to{transform:translate(var(--end-x),calc(var(--end-y) - 2%)) scale(1.035) rotate(-4deg)}}
+@keyframes idea-draw{to{transform:translate(var(--end-x),var(--end-y)) scale(1.025) rotate(5deg)}}
+@keyframes idea-game{to{transform:translate(var(--end-x),var(--end-y)) scale(1.04) rotate(5deg)}}
+@keyframes idea-cat{to{transform:translate(var(--end-x),calc(var(--end-y) - 1%)) scale(1.055) rotate(-5deg)}}
+@keyframes idea-tick{to{transform:translate(var(--end-x),var(--end-y)) scale(1.035) rotate(8deg)}}
+@keyframes idea-grow{to{transform:translate(var(--end-x),calc(var(--end-y) - 2%)) scale(1.05) rotate(5deg)}}
+@keyframes idea-page{to{transform:translate(var(--end-x),var(--end-y)) scale(1.055) rotate(-8deg)}}
+@media(prefers-reduced-motion:reduce){.art-panel.is-open .art-ideas .art-orbit:hover{animation:none}}
+@media(max-width:760px){.chrome{height:185px;grid-template-columns:20% 42% minmax(0,1fr);grid-template-rows:28px 35px auto;padding:15px 14px;background:#fcfaf8}.chrome .brand{grid-column:1;grid-row:1/4}.chrome .header-slot{grid-column:2;grid-row:1/4}.chrome .audio{grid-column:3;grid-row:1}.chrome .location{grid-column:3;grid-row:2}.chrome .inquiry{grid-column:3;grid-row:3;overflow-wrap:anywhere;text-align:left}.chrome .inquiry-language{justify-content:flex-start}.audio,.location{display:block;font-size:9px}.inquiry{display:block;font-size:9px;white-space:normal}.chrome .inquiry .language-toggle{font-size:9px}.art-panel{height:min(110vw,620px);min-height:0}.portrait-stage{transform:translateY(3%)}.art-ideas{top:50%;transform:translate(-50%,-50%) translateY(3%)}.portrait-stage,.art-ideas{width:95%}.art-hover-note{left:5%;top:5%;min-width:0;padding:10px;font-size:14px}.right-panel{padding-top:72px}}
+/* Each idea is its own uncropped SVG viewport, positioned around the character. */
+.art-stage{position:absolute;z-index:2;left:50%;top:50%;width:82%;max-width:600px;aspect-ratio:1;transform:translate(-50%,-50%) translateY(6%)}
+.art-stage .portrait-stage{display:block;width:100%;height:100%;max-width:none;transform:none!important}
+.art-stage .portrait-stage img{width:100%;height:100%;object-fit:contain}
+.art-stage .portrait-smile{clip-path:ellipse(12% 12% at 54% 51%);mask-image:radial-gradient(ellipse 12% 12% at 54% 51%,#000 52%,transparent 100%)!important;mix-blend-mode:normal}
+.art-panel:not(.is-open) .portrait-smile{opacity:0}
+.art-panel:not(.is-open).is-face-hover .portrait-smile{opacity:1}
+.art-panel.is-open .portrait-smile{opacity:0}
+.art-stage .art-trigger{position:absolute;z-index:5;inset:auto;left:42%;top:41%;width:19%;height:16%;border:0;border-radius:50%;background:transparent;overflow:visible;transform:none!important;cursor:pointer}
+.art-stage .art-trigger:focus-visible{outline:2px solid #ff641e;outline-offset:5px}
+.art-panel.is-open .art-stage .art-trigger{left:42%;top:39%;width:17%;height:16%}
+.art-panel:not(.is-open).is-face-hover .art-hover-note,.art-stage .art-trigger:focus-visible~.art-hover-note{opacity:1;transform:translateY(0) scale(1) rotate(-2deg)}
+.art-panel .art-ideas{position:absolute;z-index:4;inset:0;width:100%;height:100%;max-width:none;aspect-ratio:auto;transform:none;pointer-events:none}
+.art-ideas .art-orbit{position:absolute;z-index:4;inset:auto;left:var(--x)!important;top:var(--y)!important;width:var(--w);height:auto;aspect-ratio:var(--ratio);display:block;padding:0;border:0;border-radius:0;background:none!important;box-shadow:none!important;clip-path:none;transform-origin:center;transform:translate(-50%,calc(-50% + 55px)) scale(.2) rotate(var(--rot));opacity:0;pointer-events:none;transition:transform .75s cubic-bezier(.18,1.3,.3,1),opacity .25s;will-change:transform}
+.art-ideas .art-orbit svg{display:block;width:100%;height:100%;overflow:hidden;pointer-events:none}
+.art-panel.is-open .art-stage .portrait-idle{opacity:0;transform:translateY(12px) scale(.96)}
+.art-panel.is-open .art-stage .portrait-character{opacity:1;transform:translateY(14%) scale(.72)}
+.art-panel.is-open .art-ideas .art-orbit{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1) rotate(0);transition-delay:var(--delay)}
+.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:focus-visible{filter:none!important;outline:0;transition-delay:0s}
+.art-ideas .ball{--x:26%;--y:37%;--w:19%;--ratio:390/270;--rot:-28deg;--delay:.05s}
+.art-ideas .coffee{--x:49%;--y:31%;--w:14%;--ratio:194/154;--rot:15deg;--delay:.12s}
+.art-ideas .tablet{--x:77%;--y:37%;--w:28%;--ratio:552/365;--rot:18deg;--delay:.19s}
+.art-ideas .gamepad{--x:21%;--y:69%;--w:17%;--ratio:320/310;--rot:-25deg;--delay:.26s}
+.art-ideas .cat{--x:81%;--y:65%;--w:15%;--ratio:235/196;--rot:20deg;--delay:.33s}
+.art-ideas .watch{--x:94%;--y:67%;--w:10%;--ratio:173/225;--rot:22deg;--delay:.4s}
+.art-ideas .plant{--x:82%;--y:77%;--w:19%;--ratio:345/312;--rot:20deg;--delay:.47s}
+.art-ideas .paper{--x:19%;--y:80%;--w:13%;--ratio:240/210;--rot:-20deg;--delay:.54s}
+.art-panel.is-open .art-ideas .ball:hover{animation:ball-hop .72s cubic-bezier(.25,.65,.3,1) infinite}
+@keyframes ball-hop{0%,100%{transform:translate(-50%,-50%) rotate(0)}40%{transform:translate(-50%,calc(-50% - 15px)) rotate(55deg)}70%{transform:translate(-50%,calc(-50% - 4px)) rotate(100deg)}}
+.steam{position:absolute;left:22%;bottom:81%;width:55%;height:58%;pointer-events:none}
+.steam i{position:absolute;bottom:0;width:2px;height:26%;border-left:2px solid #111;border-radius:50%;opacity:0;transform:translateY(4px);animation:none}
+.steam i:nth-child(1){left:18%}.steam i:nth-child(2){left:48%}.steam i:nth-child(3){left:78%}
+.art-panel.is-open .coffee:hover .steam i{animation:steam-rise 1.2s ease-out infinite}
+.coffee:hover .steam i:nth-child(2){animation-delay:.23s}.coffee:hover .steam i:nth-child(3){animation-delay:.46s}
+@keyframes steam-rise{0%{opacity:0;transform:translateY(5px) scaleY(.5)}30%{opacity:.9}100%{opacity:0;transform:translateY(-23px) scaleY(1.4)}}
+.art-panel.is-open .tablet:hover{animation:tablet-tilt .65s ease-in-out infinite alternate}
+@keyframes tablet-tilt{to{transform:translate(-50%,-50%) rotate(5deg) scale(1.03)}}
+.game-keys{position:absolute;top:18%;left:56%;width:28%;height:28%;pointer-events:none}
+.game-keys i{position:absolute;width:13%;height:13%;border-radius:50%;background:#111;opacity:0}
+.game-keys i:nth-child(1){left:48%;top:0}.game-keys i:nth-child(2){left:70%;top:25%}.game-keys i:nth-child(3){left:28%;top:25%}.game-keys i:nth-child(4){left:48%;top:50%}
+.art-panel.is-open .gamepad:hover .game-keys i{animation:key-press .8s steps(1,end) infinite}
+.gamepad:hover .game-keys i:nth-child(2){animation-delay:.2s}.gamepad:hover .game-keys i:nth-child(3){animation-delay:.4s}.gamepad:hover .game-keys i:nth-child(4){animation-delay:.6s}
+@keyframes key-press{0%,25%,100%{opacity:0;transform:scale(.7)}26%,60%{opacity:.85;transform:scale(1.15)}}
+.art-panel.is-open .gamepad:hover svg{animation:gamepad-nudge .32s ease-in-out infinite alternate}
+@keyframes gamepad-nudge{to{transform:translateY(-3px) rotate(2deg)}}
+.cat-heart{position:absolute;right:4%;top:-22%;font:24px Georgia,serif;color:#ff641e;opacity:0;pointer-events:none}
+.art-panel.is-open .cat:hover svg{animation:cat-nod .7s ease-in-out infinite alternate}
+.art-panel.is-open .cat:hover .cat-heart{animation:cat-love 1s ease-out infinite}
+@keyframes cat-nod{to{transform:translateY(-5px) rotate(7deg)}}
+@keyframes cat-love{0%{opacity:0;transform:translateY(10px) scale(.5)}40%{opacity:1}100%{opacity:0;transform:translateY(-20px) scale(1.1)}}
+.clock-face{position:absolute;left:26%;top:28%;width:48%;aspect-ratio:1;border:2px solid #111;border-radius:50%;background:#fff;pointer-events:none}
+.clock-face::after{content:"";position:absolute;left:calc(50% - 2px);top:calc(50% - 2px);width:4px;height:4px;border-radius:50%;background:#111}
+.clock-face i{position:absolute;left:calc(50% - 1px);bottom:50%;width:2px;background:#111;transform-origin:center bottom}
+.hour-hand{height:27%;transform:rotate(45deg)}.minute-hand{height:37%;transform:rotate(72deg)}
+.art-panel.is-open .watch:hover .hour-hand{animation:clock-spin 1.8s linear 1}
+.art-panel.is-open .watch:hover .minute-hand{animation:clock-spin 1.3s linear 1}
+@keyframes clock-spin{to{transform:rotate(432deg)}}
+.art-panel.is-open .plant:hover svg{animation:plant-grow 1.05s cubic-bezier(.18,1.3,.3,1) infinite alternate;transform-origin:center bottom}
+@keyframes plant-grow{from{transform:scaleY(.78) scaleX(.88)}to{transform:scaleY(1.06) scaleX(1.03)}}
+.art-panel.is-open .paper:hover svg{animation:paper-flutter .7s ease-in-out infinite alternate}
+@keyframes paper-flutter{to{transform:rotate(9deg) translateY(-4px)}}
+@media(max-width:760px){.art-stage{width:95%;transform:translate(-50%,-50%) translateY(3%)}.art-ideas .ball{--x:20%;--y:29%}.art-ideas .coffee{--x:49%;--y:20%}.art-ideas .tablet{--x:80%;--y:29%}.art-ideas .gamepad{--x:14%;--y:66%}.art-ideas .cat{--x:85%;--y:61%}.art-ideas .watch{--x:91%;--y:79%}.art-ideas .plant{--x:78%;--y:86%}.art-ideas .paper{--x:19%;--y:85%}}
+/* One shared square canvas keeps the portrait, sprites, and accents aligned. */
+.art-stage .art-ideas{inset:0;left:0;top:0;width:100%;height:100%;transform:none}
+.art-stage .art-ideas .art-orbit{transition:opacity .3s ease,transform .68s cubic-bezier(.2,.85,.24,1);transform:translate(-50%,calc(-50% + 36px)) scale(.55) rotate(var(--rot));transform-origin:center center}
+.art-panel.is-open .art-stage .art-ideas .art-orbit{transform:translate(-50%,-50%) scale(1) rotate(0);transition-delay:var(--delay)}
+.art-panel.is-open .art-stage .art-ideas .art-orbit:hover,.art-panel.is-open .art-stage .art-ideas .art-orbit:focus-visible{transform:translate(-50%,-50%) scale(1) rotate(0);animation:none!important;transition-delay:0s;filter:none}
+.art-stage .art-ideas .ball{--x:24%;--y:24%;--w:23%;--ratio:390/270}
+.art-stage .art-ideas .coffee{--x:49%;--y:17%;--w:17%;--ratio:194/154}
+.art-stage .art-ideas .tablet{--x:77%;--y:25%;--w:32%;--ratio:552/365}
+.art-stage .art-ideas .gamepad{--x:17%;--y:56%;--w:19%;--ratio:320/310}
+.art-stage .art-ideas .cat{--x:79%;--y:53%;--w:18%;--ratio:235/196}
+.art-stage .art-ideas .watch{--x:94%;--y:57%;--w:12%;--ratio:173/225}
+.art-stage .art-ideas .plant{--x:84%;--y:76%;--w:18%;--ratio:345/312}
+.art-stage .art-ideas .paper{--x:18%;--y:78%;--w:15%;--ratio:240/210}
+.art-stage .art-ideas .art-orbit svg{transform-origin:center;overflow:hidden}
+.art-panel.is-open .art-stage .ball:hover svg{animation:ball-dance .75s cubic-bezier(.25,.65,.3,1) infinite}
+@keyframes ball-dance{0%,100%{transform:translateY(0) rotate(0)}42%{transform:translateY(-7px) rotate(18deg)}70%{transform:translateY(-2px) rotate(10deg)}}
+.art-panel.is-open .art-stage .tablet:hover svg{animation:tablet-draw .8s ease-in-out infinite alternate}
+@keyframes tablet-draw{to{transform:rotate(2deg) scale(1.025)}}
+.art-panel.is-open .art-stage .plant:hover svg{animation:plant-breathe 1.2s ease-in-out infinite alternate}
+@keyframes plant-breathe{to{transform:scale(1.035) rotate(2deg)}}
+.art-stage .steam{bottom:77%;height:52%}
+.art-stage .cat-heart{right:2%;top:-12%}
+.art-decor{position:absolute;z-index:3;inset:0;pointer-events:none}
+.spark{position:absolute;display:block;width:var(--size);aspect-ratio:1;left:var(--x);top:var(--y);opacity:0;transform:translate(-50%,-50%) scale(.35) rotate(-16deg);transition:opacity .35s ease,transform .7s cubic-bezier(.18,1.2,.28,1);transition-delay:0s}
+.spark svg{display:block;width:100%;height:100%;overflow:hidden}
+.art-panel.is-open .spark{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0);transition-delay:var(--delay)}
+.spark-1{--x:38%;--y:17%;--size:4%;--delay:.12s}.spark-2{--x:65%;--y:8%;--size:5%;--delay:.18s}
+.spark-3{--x:34%;--y:35%;--size:4%;--delay:.25s}.spark-4{--x:66%;--y:38%;--size:5%;--delay:.31s}
+.spark-5{--x:31%;--y:47%;--size:3.8%;--delay:.37s}.spark-6{--x:73%;--y:47%;--size:3%;--delay:.42s}
+.spark-7{--x:91%;--y:73%;--size:3.5%;--delay:.48s}.spark-8{--x:31%;--y:74%;--size:3%;--delay:.54s}
+.accent-line{position:absolute;display:block;width:8%;height:2px;background:#171717;opacity:0;transform:rotate(52deg) scaleX(.2);transition:opacity .3s ease,transform .7s cubic-bezier(.2,1,.3,1)}
+.accent-line::after{content:"";position:absolute;left:25%;top:12px;width:78%;height:2px;background:#171717}
+.art-panel.is-open .accent-line{opacity:1;transform:rotate(52deg) scaleX(1)}
+.line-1{left:5%;top:35%}.line-2{right:4%;top:35%;transform:rotate(-52deg) scaleX(.2)}
+.art-panel.is-open .line-2,.art-panel.is-open .line-4{transform:rotate(-52deg) scaleX(1)}
+.line-3{left:6%;top:71%}.line-4{right:5%;top:73%;transform:rotate(-52deg) scaleX(.2)}
+@media(max-width:760px){.art-stage .art-ideas .ball{--x:23%;--y:22%;--w:22%}.art-stage .art-ideas .tablet{--x:78%;--y:24%;--w:30%}.art-stage .art-ideas .gamepad{--x:18%;--y:56%}.art-stage .art-ideas .watch{--x:92%;--y:57%}.art-stage .art-ideas .plant{--x:84%;--y:76%;--w:18%}.art-stage .art-ideas .paper{--x:20%;--y:78%}}
+@media(prefers-reduced-motion:reduce){.art-panel.is-open .art-ideas .art-orbit:hover,.art-panel.is-open .art-ideas .art-orbit:hover svg,.art-panel.is-open .art-ideas .art-orbit:hover i,.art-panel.is-open .art-ideas .art-orbit:hover .cat-heart{animation:none!important}}
+
+/* Keep the established idle portrait. Place the hover note in the open space to its right. */
+.art-stage .art-hover-note{top:39%;left:auto;right:-10%;width:min(230px,40vw);min-width:0;max-width:230px;padding:14px 16px;font:700 clamp(15px,1.25vw,18px)/1.08 Georgia,serif;letter-spacing:-.035em;transform:translateY(calc(-50% + 9px)) scale(.92) rotate(1deg);transform-origin:left center}
+.art-panel:not(.is-open).is-face-hover .art-stage .art-hover-note,.art-stage .art-trigger:focus-visible~.art-hover-note{transform:translateY(-50%) scale(1) rotate(0)}
+.art-stage .art-hover-note span{position:absolute;right:auto;left:-17px;top:50%;bottom:auto;margin-top:-9px;padding:0;width:0;height:0;font-size:0;border:9px solid transparent;border-right-color:#111;border-left-color:transparent}
+@media(max-width:760px){.art-stage .art-hover-note{right:-3%;width:44%;max-width:180px;padding:11px 12px;font-size:clamp(12px,3.4vw,16px);top:39%}}
+
+/* Match the reference angle while keeping the callout clear of the portrait. */
+.art-stage .art-hover-note{top:30%;right:6%;width:150px;max-width:150px;padding:10px;font:700 clamp(11px,.95vw,13px)/1.08 Georgia,serif;letter-spacing:-.035em;transform:translateY(calc(-50% + 9px)) scale(.92) rotate(-24deg);transform-origin:left center}
+.art-panel:not(.is-open).is-face-hover .art-stage .art-hover-note,.art-stage .art-trigger:focus-visible~.art-hover-note{transform:translateY(-50%) scale(1) rotate(-30deg)}
+.art-stage .art-hover-note span{left:-17px;top:50%;margin-top:-9px;transform:rotate(0)}
+@media(max-width:760px){.art-stage .art-hover-note{top:30%;right:6%;width:145px;max-width:145px;padding:9px;font-size:11px}}
+
+/* Reference artwork pass: align the callout to the head and use the supplied high-resolution assets. */
+.art-stage .art-hover-note{top:20%;right:6%;left:auto;width:160px;max-width:160px;padding:12px 13px;transform:translateY(calc(-50% + 9px)) scale(.94) rotate(-25deg);transform-origin:left center}
+.art-panel:not(.is-open).is-face-hover .art-stage .art-hover-note,.art-stage .art-trigger:focus-visible~.art-hover-note{transform:translateY(-50%) scale(1) rotate(-25deg)}
+.art-stage .art-hover-note span{left:-17px;top:50%;margin-top:-9px;transform:rotate(-22deg)}
+.art-stage .art-ideas .art-orbit img{display:block;width:100%;height:100%;object-fit:contain;overflow:visible;pointer-events:none;user-select:none;transform-origin:center}
+.art-stage .art-ideas .ball{--x:24%;--y:31%;--w:21%;--ratio:1068/829}
+.art-stage .art-ideas .coffee{--x:51%;--y:24%;--w:10%;--ratio:461/718}
+.art-stage .art-ideas .tablet{--x:79%;--y:34%;--w:31%;--ratio:1387/881}
+.art-stage .art-ideas .watch{--x:93%;--y:67%;--w:11%;--ratio:577/676}
+.art-stage .watch .clock-face{left:29%;top:37%;width:42%;border:0;background:transparent;z-index:2}
+.art-stage .watch .clock-face::after{width:3px;height:3px;left:calc(50% - 1.5px);top:calc(50% - 1.5px)}
+.art-stage .watch .clock-face i{width:1.5px}
+.art-stage .art-ideas .art-orbit{overflow:visible}
+.art-panel.is-open .art-stage .ball:hover img{animation:ball-spin-hop .85s cubic-bezier(.35,.05,.4,1) infinite}
+@keyframes ball-spin-hop{0%,100%{transform:translateY(0) rotate(0)}38%{transform:translateY(-9px) rotate(70deg)}72%{transform:translateY(1px) rotate(145deg)}}
+.art-panel.is-open .art-stage .tablet:hover img{animation:tablet-float .95s ease-in-out infinite alternate}
+@keyframes tablet-float{to{transform:translate(2px,-3px) rotate(1.4deg)}}
+.art-panel.is-open .art-stage .coffee:hover img{animation:coffee-steam .9s ease-in-out infinite alternate;transform-origin:50% 90%}
+@keyframes coffee-steam{to{transform:translateY(-3px) scale(1.015)}}
+.art-panel.is-open .art-stage .watch:hover img{animation:watch-tick .7s ease-in-out infinite alternate;transform-origin:50% 51%}
+@keyframes watch-tick{to{transform:rotate(3deg)}}
+@media(max-width:760px){
+ .art-stage .art-hover-note{top:20%;right:5%;width:132px;max-width:132px;padding:9px 10px;font-size:10px}
+ .art-stage .art-ideas .ball{--x:18%;--y:30%;--w:22%}
+ .art-stage .art-ideas .coffee{--x:49%;--y:19%;--w:10%}
+ .art-stage .art-ideas .tablet{--x:81%;--y:31%;--w:32%}
+ .art-stage .art-ideas .watch{--x:92%;--y:69%;--w:12%}
+}
+
+
+/* Use the Work page header geometry, type scale and selected-page arrow. */
+.chrome{position:fixed!important;inset:0 0 auto!important;z-index:20;width:100%;height:180px;display:grid;grid-template-columns:12.8% 25.2% 16.7% 1fr auto;align-items:start;gap:0;padding:21px 3.2% 0 12px;background:transparent;pointer-events:none;font-size:11px}
+.chrome>*{pointer-events:auto}
+.chrome .brand{display:flex;align-items:flex-start;gap:7px;width:max-content}
+.chrome .brand b{font-size:clamp(11px,1vw,16px);line-height:.88;writing-mode:vertical-rl;transform:rotate(180deg);letter-spacing:-.045em}
+.chrome .brand small{display:block;writing-mode:vertical-rl;font-size:8px;line-height:1.3}
+.chrome .header-slot{display:block}
+.chrome .header-slot>button{display:block;border:0;background:none;padding:0;opacity:.65;color:#111;text-transform:none;font-size:11px}
+.chrome .header-slot nav{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin-top:32px;font-size:21px;line-height:1.15;letter-spacing:-.06em;font-weight:600}
+.chrome .header-slot nav a{position:relative;display:block;width:max-content;white-space:nowrap;font-size:21px;line-height:1.15;font-weight:600;transition:transform .3s,padding-left .36s cubic-bezier(.22,1,.36,1)}
+.chrome .header-slot nav a:hover{transform:translateX(12px);color:inherit}
+.chrome .header-slot nav a[aria-current="page"]{padding-left:1.12em}
+.chrome .header-slot nav a::before{content:"→";position:absolute;left:0;top:0;opacity:0;pointer-events:none;transform-origin:center}
+.chrome .header-slot nav a[aria-current="page"]::before{animation:about-nav-arrow .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes about-nav-arrow{0%{opacity:0;transform:translate(-.45em,.18em) rotate(0) scale(.75)}60%{opacity:1;transform:translate(.08em,-.12em) rotate(-52deg) scale(1.08)}100%{opacity:1;transform:translate(0,-.06em) rotate(-45deg) scale(1)}}
+.chrome .audio,.chrome .location{display:block;font-size:11px;color:#777;line-height:1.15}
+.chrome .audio strong{color:#111;font-weight:400}
+.chrome .inquiry{position:static;justify-self:end;font-size:12px;color:#111;letter-spacing:0;white-space:nowrap}
+.chrome .inquiry a::after{content:none}
+.chrome .inquiry-language{display:flex;justify-content:flex-end}
+.chrome .inquiry .language-toggle:hover{color:#fff;background:#111}
+@media(max-width:850px){
+ .chrome{height:185px;grid-template-columns:20% 42% minmax(0,1fr);grid-template-rows:28px 35px auto;padding:15px 14px;background:#fcfaf8}
+ .chrome .brand{grid-column:1;grid-row:1/4}
+ .chrome .header-slot{grid-column:2;grid-row:1/4}
+ .chrome .audio{grid-column:3;grid-row:1;font-size:9px}
+ .chrome .location{grid-column:3;grid-row:2;font-size:9px}
+ .chrome .inquiry{grid-column:3;grid-row:3;overflow-wrap:anywhere;text-align:left;font-size:9px;white-space:normal}
+ .chrome .inquiry-language{justify-content:flex-start}
+ .chrome .header-slot nav{margin-top:18px;font-size:16px}
+ .chrome .header-slot nav a{font-size:16px}
+ .chrome .brand b{font-size:clamp(11px,1vw,16px)}
+}
+@media(prefers-reduced-motion:reduce){.chrome .header-slot nav a,.chrome .header-slot nav a::before{animation:none;transition:none}.chrome .header-slot nav a[aria-current="page"]::before{opacity:1;transform:translate(0,-.06em) rotate(-45deg)}}
+
+</style>
+<link rel="stylesheet" href="../about-sprites.css?v=three-lines-leaf-sway-20261022">
+<link rel="stylesheet" href="../brand.css?v=brand-flip-20261022">
+</head>
+<body data-default-language="zh">
+<header class="chrome">
+    <a class="brand" href="../index.html" aria-label="Work home"><span class="brand-flip" aria-hidden="true"><span class="brand-face brand-face-copyright"><img class="brand-copyright" src="../copyright.svg" alt=""></span><span class="brand-face brand-face-person"><img class="brand-person-normal" src="../normal.svg" alt=""><img class="brand-person-hover" src="../hover.svg" alt=""></span></span></a>
+    <div class="header-slot"><button id="menuToggle" type="button" aria-expanded="true">Menu</button><nav id="menu" aria-label="主导航"><a href="../index.html" data-en="WORK">作品</a><a href="./" aria-current="page" data-en="ABOUT">关于</a><a href="../playground.html" data-en="PLAYGROUND">灵感实验室</a><a href="../contact.html" data-en="CONTACT">联系</a></nav></div>
+    <div class="audio">Audio <button id="audioToggle" type="button" aria-pressed="false"><span class="audio-label">Off —</span><span class="audio-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div class="location">Working China beijing<br><span id="clock" aria-label="Beijing local time">--:--:--</span></div><div class="inquiry">For inquiries &nbsp; <a href="mailto:zhongxin6882@gmail.com">zhongxin6882@gmail.com</a><div class="inquiry-language"><button class="language-toggle" type="button" aria-label="Switch to English">EN</button></div></div>
+
+  </header>
+<main class="about-page" id="top">
+  <section class="art-panel" id="art-panel" aria-label="九月十五人物插画">
+    <div class="art-stage">
+      <span class="portrait-stage" aria-hidden="true">
+        <img class="portrait-idle" src="../assets/about/portrait-idle-transparent.png" width="1342" height="1172" alt="">
+        <img class="portrait-smile" src="../assets/about/portrait-smile.webp" width="1342" height="1172" alt="">
+        <img class="portrait-character" src="../assets/about/portrait-character.webp" width="1324" height="1188" alt="">
+        <span class="art-hover-note">EVER WONDERED<br>WHAT’S GOING ON<br>INSIDE MY HEAD?<span aria-hidden="true">↗</span></span>
+      </span>
+      <button class="art-trigger" id="art-trigger" type="button" aria-label="点击人物，展开设计灵感" aria-pressed="false"></button>
+<div class="art-ideas sprite-composition" id="art-ideas" aria-label="灵感元素">
+      <span class="ribbon ribbon-three" aria-hidden="true"></span>
+      <span class="ribbon ribbon-bend" aria-hidden="true"></span>
+      <span class="ribbon ribbon-swirl" aria-hidden="true"></span>
+      <button class="art-orbit orbit-1 ball" type="button" data-sprite="ball" data-title="交互设计" data-description="从场景和流程出发，让复杂操作变得清晰自然。" aria-label="了解交互设计"></button>
+      <button class="art-orbit orbit-2 coffee" type="button" data-sprite="coffee" data-title="AI 产品" data-description="将新技术转化为真正可用、易懂的产品体验。" aria-label="了解AI 产品"></button>
+      <button class="art-orbit orbit-3 tablet" type="button" data-sprite="tablet" data-title="视觉表达" data-description="用层级、字体与画面讲清产品的信息。" aria-label="了解视觉表达"></button>
+      <button class="art-orbit orbit-4 gamepad" type="button" data-sprite="gamepad" data-title="产品体验" data-description="让功能和使用场景自然地连接起来。" aria-label="了解产品体验"></button>
+      <button class="art-orbit orbit-5 cat" type="button" data-sprite="cat" data-title="用户洞察" data-description="理解真实问题，再定义值得解决的设计目标。" aria-label="了解用户洞察"></button>
+      <button class="art-orbit orbit-6 watch" type="button" data-sprite="watch" data-title="设计系统" data-description="建立一致的组件与规范，支持产品长期迭代。" aria-label="了解设计系统"></button>
+      <button class="art-orbit orbit-7 plant" type="button" data-sprite="plant" data-title="生活灵感" data-description="从日常兴趣中收集新的设计视角。" aria-label="了解生活灵感"></button>
+      <button class="art-orbit orbit-8 paper" type="button" data-sprite="paper" data-title="数据可视化" data-description="让复杂数据清楚、直观，也更容易探索。" aria-label="了解数据可视化"></button>
+    </div>
+    </div><aside class="idea-preview" id="idea-preview" aria-hidden="true"><span>DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></aside>
+
+  </section>
+  <div class="right-panel">
+    <section class="hero-copy" aria-labelledby="about-title"><h1 id="about-title" data-en="About me">关于我</h1><span class="orange-square" aria-hidden="true"></span><h2 data-en="September Fifteen">九月十五</h2><p class="hero-role" data-en="Interaction &amp; Visual Designer">交互与视觉设计师</p><p class="hero-summary" data-en="I design clear, useful digital experiences from user flows to final interfaces. My work spans AI products, cybersecurity platforms and mobile applications, connecting structure, interaction and visual detail.">我是一名专注于交互与视觉设计的设计师，<br>热爱通过设计解决真实问题，让复杂的产品变得简单、易用且有温度。<br>从用户需求出发，结合商业目标与技术实现，持续探索更好的数字产品体验。</p></section>
+    <section class="resume" aria-label="工作经历"><span class="section-label" data-en="EXPERIENCE">工作经历</span><div class="experience-list">
+      <article class="experience-item"><div></div><div><time>2020 — NOW</time><p data-en="Yishi Technology">怡视科技</p></div><div class="career-role"><span data-en="Interaction &amp; Visual Designer">交互与视觉设计师</span><p data-en="AI product interaction and visual design, from user flows to consistent product interfaces.">负责 AI 产品的交互与视觉设计，构建清晰一致的产品体验。</p></div></article>
+      <article class="experience-item"><div></div><div><time>2017 — 2020</time><p data-en="Qi An Xin">奇安信</p></div><div class="career-role"><span data-en="Product UI Designer">产品 UI 设计师</span><p data-en="Designed cybersecurity data products and led interface design for the product team.">参与网络安全数据产品设计，担任数据产品组长。</p></div></article>
+      <article class="experience-item"><div></div><div><time>2016 — 2017</time><p data-en="Huazhu Graphics">华筑图文</p></div><div class="career-role"><span data-en="UI Designer">UI 设计师</span><p data-en="Designed interfaces for mobile and desktop applications.">负责移动端与桌面应用的界面设计。</p></div></article>
+    </div></section>
+    <section class="skills-block" aria-label="技能"><span class="section-label" data-en="SKILLS">专业技能</span><div class="skills-list"><span>UI/UX Design</span><span>Interaction Design</span><span>Visual Design</span><span>Product Design</span><span>Design System</span><span>AI Product Design</span><span>Figma</span><span>After Effects</span><span>Blender</span></div></section>
+    <section class="contact-block" aria-label="联系方式"><span class="section-label" data-en="CONTACT">联系方式</span><div class="contact-items"><a href="mailto:zhongxin6882@gmail.com"><i aria-hidden="true">✉</i>zhongxin6882@gmail.com</a><a href="../index.html"><i aria-hidden="true">↗</i>查看作品</a></div></section>
+  </div>
+</main>
+<script>
+(() => {
+  const art = document.getElementById('art-panel');
+  const trigger = document.getElementById('art-trigger');
+  const ideas = [...document.querySelectorAll('.art-orbit')];
+  const preview = document.getElementById('idea-preview');
+  const previewTitle = document.getElementById('idea-title');
+  const previewDescription = document.getElementById('idea-description');
+  let selected = null;
+  const renderPreview = () => {
+    const current = art.classList.contains('is-open') ? selected : null;
+    ideas.forEach(idea => idea.setAttribute('aria-pressed', String(idea === selected)));
+    if (current) { previewTitle.textContent = current.dataset.title; previewDescription.textContent = current.dataset.description; }
+    preview.classList.toggle('is-visible', !!current);
+    preview.setAttribute('aria-hidden', String(!current));
+  };
+  trigger.addEventListener('click', () => {
+    const open = art.classList.toggle('is-open');
+    if (!open) selected = null;
+    ideas.forEach(idea => { idea.tabIndex = open ? 0 : -1; });
+    trigger.setAttribute('aria-pressed', String(open));
+    trigger.setAttribute('aria-label', open ? '收起设计灵感' : '点击人物，展开设计灵感');
+    renderPreview();
+  });
+  trigger.addEventListener('pointerenter', () => art.classList.add('is-face-hover'));
+  trigger.addEventListener('pointerleave', () => art.classList.remove('is-face-hover'));
+  trigger.addEventListener('focus', () => art.classList.add('is-face-hover'));
+  trigger.addEventListener('blur', () => art.classList.remove('is-face-hover'));
+  ideas.forEach(idea => {
+    idea.tabIndex = -1;
+    idea.addEventListener('click', () => { selected = idea; renderPreview(); });
+  });
+  document.getElementById('idea-close').addEventListener('click', () => { selected = null; renderPreview(); trigger.focus(); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') { selected = null; renderPreview(); } });
+})();
+</script>
+<script src="../site-header.js?v=brand-scroll-20261022"></script>
+<script src="../page-transition.js?v=about-unified-20261020"></script><script src="../locale.js?v=unified-20261022"></script>
+<script src="../about-sprites.js?v=orbit-loop-20261021"></script>
+<script type="module" src="../brand-motion.js"></script></body>
+</html>
+
