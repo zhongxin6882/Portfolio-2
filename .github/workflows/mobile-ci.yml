@@ -1,0 +1,44 @@
+name: Mobile layout build and browser checks
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'mobile-responsive.css'
+      - 'site-header.js'
+      - 'work.js'
+      - 'index.html'
+      - 'about/index.html'
+      - 'playground.html'
+      - 'contact.html'
+      - 'scripts/test-mobile.mjs'
+      - '.github/workflows/mobile-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-responsive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/verify-global-brand.mjs
+      - name: Browser test dependencies
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - name: Serve compiled site and test four routes
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/portfolio-vite-preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:4173/Portfolio-2/index.html >/dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/test-mobile.mjs
