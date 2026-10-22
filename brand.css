@@ -12,7 +12,7 @@
 .chrome .brand-face img{position:absolute;display:block;height:106px;object-fit:contain}
 .chrome .brand-copyright{width:46px}
 .chrome .brand-person-normal,.chrome .brand-person-hover{width:58px;transition:opacity .18s ease}
-.chrome .brand-person-hover{opacity:0}
+.chrome .brand-person-hover{opacity:0;filter:hue-rotate(42deg) saturate(1.15)}
 .chrome .brand:hover .brand-person-hover,.chrome .brand:focus-visible .brand-person-hover{opacity:1}
 .chrome .brand:hover .brand-person-normal,.chrome .brand:focus-visible .brand-person-normal{opacity:0}
 
