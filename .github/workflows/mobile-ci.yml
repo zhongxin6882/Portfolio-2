@@ -33,7 +33,7 @@ jobs:
       - name: Browser test dependencies
         run: |
           npm install --no-save playwright@1.56.1
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Serve compiled site and test four routes
         run: |
           npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/portfolio-vite-preview.log 2>&1 &
