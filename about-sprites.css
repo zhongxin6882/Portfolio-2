@@ -21,7 +21,7 @@
 
 /* Use the supplied transparent ribbon pixels exactly; blacken white ink for the light canvas. */
 .sprite-composition .ribbon{position:absolute;z-index:2;display:block;background-position:center;background-size:contain;background-repeat:no-repeat;mix-blend-mode:multiply;pointer-events:none}
-.sprite-composition .ribbon-three{left:88%;top:87%;width:5.75%;height:8.1%;background-image:url("assets/about/ribbon-three.png");transform:scaleX(-1)}
+.sprite-composition .ribbon-three{left:82%;top:91%;width:5.75%;height:8.1%;background-image:url("assets/about/ribbon-three.png");transform:scaleX(-1)}
 .sprite-composition .ribbon-bend{left:90.8%;top:7.7%;width:7.85%;height:5.9%;background-image:url("assets/about/ribbon-bend.png")}
 .sprite-composition .ribbon-swirl{left:6.6%;top:82.6%;width:7.4%;height:8.75%;background-image:url("assets/about/ribbon-swirl.png")}
 /* The right column supplies document height; keep the left illustration in view. */
@@ -116,11 +116,14 @@
   right: auto;
 }
 .art-stage .art-hover-note span {
-  left: -12px;
+  left: -16px;
   top: auto;
-  bottom: 9px;
+  bottom: 12px;
   margin: 0;
-  transform: rotate(-45deg);
+  border: 9px solid transparent;
+  border-right: 17px solid #111;
+  border-left: 0;
+  transform: none;
 }
 .art-panel:not(.is-open).is-face-hover .art-stage .art-hover-note,
 .art-stage .art-trigger:focus-visible ~ .art-hover-note {
@@ -139,8 +142,8 @@
 .art-panel .sprite-composition .gamepad { background-image: url("assets/about/sprites/gamepad-loop.webp?v=gamepad-redrawn-20261022") !important; }
 .art-panel .sprite-composition .cat { background-image: url("assets/about/sprites/cat-loop.webp?v=decor-restored-20261021") !important; }
 .art-panel .sprite-composition .watch { background-image: url("assets/about/sprites/watch-loop.webp?v=decor-restored-20261021") !important; }
-.art-panel .sprite-composition .plant { background-image: url("assets/about/sprites/plant-loop.webp?v=decor-restored-20261021") !important; }
-.art-panel .sprite-composition .paper { background-image: url("assets/about/sprites/paper-loop.webp?v=decor-restored-20261021") !important; }
+.art-panel .sprite-composition .plant { background-image: url("assets/about/sprites/plant-loop.webp?v=leaf-sway-20261022") !important; }
+.art-panel .sprite-composition .paper { background-image: url("assets/about/sprites/paper-loop.webp?v=three-lines-20261022") !important; }
 
 @media (max-width: 760px) {
   .art-panel { height: min(150vw, 700px); }

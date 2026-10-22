@@ -187,7 +187,7 @@ def make_frame(name, original, index):
         leaf_left, leaf_right, hinge = 20, 375, 184
         leaves = frame.crop((leaf_left, 0, leaf_right, hinge))
         frame.paste((0, 0, 0, 0), (leaf_left, 0, leaf_right, hinge))
-        wind = 7 * (sin(phase) + .18*sin(2*phase))
+        wind = 13 * (sin(phase) + .18*sin(2*phase))
         for y in range(hinge):
             weight = ((hinge-y)/hinge) ** 1.7
             offset = round(wind * weight)
@@ -271,22 +271,29 @@ def make_frame(name, original, index):
         return frame
 
     if name == "paper":
-        # Reveal/hide the actual top line printed on the paper, not a new mark.
-        ink = Image.new("L",frame.size)
-        ImageDraw.Draw(ink).polygon([(181-REGIONS[name][0],912-REGIONS[name][1]),
-                                     (243-REGIONS[name][0],929-REGIONS[name][1]),
-                                     (241-REGIONS[name][0],941-REGIONS[name][1]),
-                                     (179-REGIONS[name][0],924-REGIONS[name][1])],fill=255)
-        paper = original.load()
+        # Retract the actual first three printed strokes within their own ink
+        # bands. The fourth stroke and page illustration stay untouched.
+        strokes = [
+            (112, 171, .62, [(112,65),(171,80),(169,87),(110,72)]),
+            (107, 165, .70, [(107,79),(165,94),(163,101),(105,86)]),
+            (102, 159, .76, [(102,93),(159,108),(157,115),(100,100)]),
+        ]
+        original_pixels = original.load()
         pixels = frame.load()
-        for y in range(61,92):
-            for x in range(108,175):
-                if ink.getpixel((x,y)):
-                    pixels[x,y] = paper[x,y-16]
-        visible = Image.new("L",frame.size)
-        cutoff = round((182-REGIONS[name][0]) + 60*(1-.78*swell))
-        ImageDraw.Draw(visible).rectangle((0,0,cutoff,frame.height),fill=255)
-        frame.paste(original,(0,0),ImageChops.multiply(ink,visible))
+        for start, end, amount, polygon in strokes:
+            ink_band = Image.new("L", frame.size)
+            ImageDraw.Draw(ink_band).polygon(polygon, fill=255)
+            band_pixels = ink_band.load()
+            for y in range(min(point[1] for point in polygon),
+                           max(point[1] for point in polygon) + 1):
+                for x in range(min(point[0] for point in polygon),
+                               max(point[0] for point in polygon) + 1):
+                    if band_pixels[x,y]:
+                        pixels[x,y] = (252,252,252,original_pixels[x,y][3])
+            cutoff = round(start + (end-start) * (1-amount*swell))
+            visible = Image.new("L", frame.size)
+            ImageDraw.Draw(visible).rectangle((0,0,cutoff,frame.height),fill=255)
+            frame.paste(original,(0,0),ImageChops.multiply(ink_band,visible))
         return frame
     raise ValueError(name)
 
