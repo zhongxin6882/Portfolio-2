@@ -35,7 +35,7 @@ jobs:
           ! grep -q 'src="playground.js"' dist/playground.html
           test -f dist/style.css
           test -f dist/brand.css
-          grep -Fq 'href="style.css?v=global-nav-20261021"' dist/playground.html
+          grep -Fq 'href="style.css?v=play-layout-20261022"' dist/playground.html
           grep -Fq 'href="brand.css?v=work-brand-20261021"' dist/playground.html
           ! grep -Eq 'href="/Portfolio-2/assets/[^"]+\.css"' dist/playground.html
       - uses: actions/configure-pages@v5
