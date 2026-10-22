@@ -13,7 +13,7 @@
 .chrome .brand-face-back{transform:rotateY(180deg) translateZ(29px)}
 .chrome .brand-face-left{transform:rotateY(-90deg) translateZ(29px)}
 .chrome .brand-face img{position:absolute;display:block;height:106px;object-fit:contain}
-.chrome .brand-copyright{width:46px}
+.chrome .brand-copyright{width:46px;transition:filter .18s ease}\n.chrome .brand:hover .brand-copyright,.chrome .brand:focus-visible .brand-copyright{filter:brightness(0) saturate(100%) invert(44%) sepia(89%) saturate(2372%) hue-rotate(326deg) brightness(101%) contrast(101%)}
 .chrome .brand-person-normal,.chrome .brand-person-hover{width:58px;transition:opacity .18s ease}
 .chrome .brand-person-hover{opacity:0;filter:hue-rotate(42deg) saturate(1.15)}
 .chrome .brand:hover .brand-person-hover,.chrome .brand:focus-visible .brand-person-hover{opacity:1}
