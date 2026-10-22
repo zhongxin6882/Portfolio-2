@@ -5,6 +5,30 @@ import { dirname, resolve } from 'node:path';
 
 const root = process.cwd();
 
+// All primary pages use exactly one copyright/person markup source.
+function sharedBrand() {
+  const pages = new Set(['index.html', 'about/index.html', 'playground.html', 'contact.html']);
+  return {
+    name: 'global-brand',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html, ctx) {
+        const file = ctx.filename.replaceAll('\\', '/');
+        const name = file.slice(root.replaceAll('\\', '/').length + 1);
+        if (!pages.has(name)) return html;
+        const placeholder = '<a class="brand" data-global-brand></a>';
+        if (html.split(placeholder).length !== 2)
+          throw new Error('Expected one global brand placeholder: ' + name);
+        const prefix = name.startsWith('about/') ? '../' : '';
+        const markup = readFileSync(resolve(root, 'brand-template.html'), 'utf8')
+          .trim().replaceAll('{{ROOT}}', prefix);
+        return html.replace(placeholder, markup);
+      }
+    }
+  };
+}
+
+
 // Legacy page scripts are classic scripts. Keep their URLs while GSAP moves to a Vite module.
 function copyClassicAssets() {
   return {
@@ -68,7 +92,7 @@ function copyClassicAssets() {
 
 export default defineConfig({
   base: '/Portfolio-2/',
-  plugins: [copyClassicAssets()],
+  plugins: [sharedBrand(), copyClassicAssets()],
   build: {
     outDir: 'dist',
     emptyOutDir: true,

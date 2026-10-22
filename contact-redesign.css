@@ -8,25 +8,7 @@ body.contact-redesign {
 
 body.contact-redesign { font-family: var(--font-sans); }
 body.contact-redesign .chrome { z-index: 30; color: #080808; }
-/* Keep the shared prism mark legible even if an older brand.css is cached. */
-.contact-redesign .chrome .brand { display: block; width: 58px; height: 106px; perspective: 500px; }
-.contact-redesign .chrome .brand-flip { position: relative; display: block; width: 58px; height: 106px; transform-style: preserve-3d; }
-.contact-redesign .chrome .brand-face { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.contact-redesign .chrome .brand-face-front { transform: rotateY(0deg) translateZ(29px); }
-.contact-redesign .chrome .brand-face-right { transform: rotateY(90deg) translateZ(29px); }
-.contact-redesign .chrome .brand-face-back { transform: rotateY(180deg) translateZ(29px); }
-.contact-redesign .chrome .brand-face-left { transform: rotateY(-90deg) translateZ(29px); }
-.contact-redesign .chrome .brand-face img { position: absolute; display: block; height: 106px; object-fit: contain; }
-.contact-redesign .chrome .brand-copyright { width: 46px; transition: filter .18s ease; }
-.contact-redesign .chrome .brand:hover .brand-copyright,
-.contact-redesign .chrome .brand:focus-visible .brand-copyright { filter: brightness(0) saturate(100%) invert(44%) sepia(89%) saturate(2372%) hue-rotate(326deg) brightness(101%) contrast(101%); }
-.contact-redesign .chrome .brand-person-normal,
-.contact-redesign .chrome .brand-person-hover { width: 58px; transition: opacity .18s ease; }
-.contact-redesign .chrome .brand-person-hover { opacity: 0; filter: hue-rotate(42deg) saturate(1.15); }
-.contact-redesign .chrome .brand:hover .brand-person-hover,
-.contact-redesign .chrome .brand:focus-visible .brand-person-hover { opacity: 1; }
-.contact-redesign .chrome .brand:hover .brand-person-normal,
-.contact-redesign .chrome .brand:focus-visible .brand-person-normal { opacity: 0; }
+/* Global brand styles are defined exclusively in brand.css. */
 .contact-redesign .chrome .header-slot nav a { position: relative; }
 .contact-redesign .chrome .header-slot nav a[aria-current="page"] { padding-left: 1.12em; }
 .contact-redesign .chrome .header-slot nav a::before { content: "→"; position: absolute; left: 0; top: 0; opacity: 0; pointer-events: none; }

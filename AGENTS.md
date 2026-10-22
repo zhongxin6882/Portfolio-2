@@ -423,3 +423,19 @@ projects.forEach((p, i) => p.number = i + 1);   // 重排后重新编号
 - [ ] 未误改 `dist/` 和 `versions/1.0/` 的功能代码
 - [ ] 推送后确认 Pages `status: built` 且 commit 号一致
 - [ ] 线上抽查：强制刷新（Cmd/Ctrl + Shift + R）后中英文切换正常
+
+
+## Global shared copyright/person logo — locked deployment contract
+
+For Work, About, Playground and Contact, `brand-template.html` is the
+single source of markup for the four rotating sides. Pages contain only
+`<a class="brand" data-global-brand></a>`. Vite replaces this marker during
+development and deployment; do not paste any per-page brand HTML. Global sizes,
+styles and hover effects are in `brand.css` (loaded last), and scroll/Work/
+Playground animation is in `brand-motion.js`. No per-page `.chrome .brand`
+overrides are permitted. Do not regress to legacy JIUYUESHIWU text logos.
+
+Run `npm run build && node scripts/verify-global-brand.mjs` before release.
+GitHub Actions MUST run this test before `deploy-pages`; a failure blocks
+deployment. Editing a specific page's footer, illustration or menu must not
+change the global mark.
