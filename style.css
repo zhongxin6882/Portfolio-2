@@ -220,3 +220,9 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 body:has(.play-page) .chrome .inquiry .language-toggle,body:has(.contact-page) .chrome .inquiry .language-toggle{position:fixed;top:22px;left:calc(12.8% + 60px);right:auto;z-index:30;margin:0;padding:4px 8px;border:1px solid #aaa;border-radius:20px;background:transparent;color:#111;font:10px var(--font-mono);line-height:1}
 body:has(.play-page) .chrome .inquiry .language-toggle:hover,body:has(.contact-page) .chrome .inquiry .language-toggle:hover{color:#fff;background:#111}
 @media(max-width:850px){body:has(.play-page) .chrome .inquiry .language-toggle,body:has(.contact-page) .chrome .inquiry .language-toggle{top:44px;left:auto;right:14px}}
+
+/* 1.1 Playground: four-column image wall with a subtle image-only hover zoom. */
+.play-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.play-image-wrap img{transform:scale(1);transition:transform .45s cubic-bezier(.2,.7,.2,1);will-change:transform}
+.play-card:hover img{filter:none}
+@media(hover:hover) and (pointer:fine){.play-card:hover img{transform:scale(1.035)}}
