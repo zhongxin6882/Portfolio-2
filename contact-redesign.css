@@ -55,7 +55,8 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
 .contact-hero-illustration {
   display: block;
   position: absolute;
-  top: calc(110px + 5% + 20px);
+  top: auto;
+  bottom: 0;
   left: 5%;
   width: 90%;
   height: calc(90% - 99px);
@@ -79,7 +80,7 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
   font-style: italic;
   font-weight: 700;
   letter-spacing: -.065em;
-  word-spacing: .16em;
+  word-spacing: .58em;
 }
 
 .contact-navigation a {
@@ -176,7 +177,7 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
 
 .contact-social-logos { gap: clamp(18px, 2.4vw, 44px); }
 .zcool-logo { display: block; width: 90px; height: auto; flex: none; }
-.xiaohongshu-logo { display: block; width: 36px; height: auto; flex: none; }
+.xiaohongshu-logo { display: block; width: 72px; height: auto; flex: none; filter: grayscale(1) contrast(1000%); }
 
 .contact-legal {
   flex-direction: row;
@@ -200,7 +201,7 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
 @media (max-width: 760px) {
   .contact-screen { display: block; height: auto; min-height: 100svh; overflow: visible; }
   .contact-intro { height: 68vh; min-height: 400px; }
-  .contact-hero-illustration { top: 150px; height: calc(100% - 150px); }
+  .contact-hero-illustration { top: auto; bottom: 0; height: calc(100% - 150px); }
   .contact-navigation a { min-height: 90px; }
   .contact-bottom { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .contact-bottom-cell { min-height: 135px; padding: 18px 7%; border-bottom: 1px solid #10101020; }
