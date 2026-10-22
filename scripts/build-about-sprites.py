@@ -144,6 +144,49 @@ def draw_heart(draw, cx, cy, scale):
     draw.polygon(points, fill=(240, 83, 46, 230))
 
 
+def remove_extra_ball_seam(subject):
+    """Remove only the marked diagonal seam, retaining the ball's original ink texture."""
+    mask = Image.new("L", subject.size)
+    ImageDraw.Draw(mask).line(
+        [(193, 113), (223, 126), (262, 147), (306, 169), (364, 201)],
+        fill=255, width=19, joint="curve",
+    )
+    original = subject.load()
+    marked = mask.load()
+    cleaned = subject.copy()
+    output = cleaned.load()
+    for y in range(subject.height):
+        for x in range(subject.width):
+            if not marked[x, y]:
+                continue
+            # Keep the transverse seam at the junction and the outer rim intact.
+            if x < 225 and y <= 117 - .25 * (x - 193):
+                continue
+            if (x - 260) ** 2 + (y - 137) ** 2 >= 124 ** 2:
+                continue
+            donors = ([(45, -35), (55, -40), (35, 25), (0, -32)]
+                      if x < 275 else
+                      [(0, -28), (0, -36), (-30, -24), (0, 28)])
+            best = None
+            for dx, dy in donors:
+                sx, sy = x + dx, y + dy
+                if not (4 <= sx < subject.width - 4 and 4 <= sy < subject.height - 4):
+                    continue
+                if marked[sx, sy] or original[sx, sy][3] < 240:
+                    continue
+                dark = sum(original[sx + ox, sy + oy][0] < 80
+                           for oy in range(-3, 4) for ox in range(-3, 4))
+                if dark > 12:
+                    continue
+                best = (sx, sy)
+                break
+            if best is not None:
+                output[x, y] = original[best[0], best[1]]
+            else:
+                output[x, y] = (255, 255, 255, original[x, y][3])
+    return cleaned
+
+
 def make_frame(name, original, index):
     if index in (0, FRAME_COUNT - 1):
         return original.copy()
@@ -304,6 +347,7 @@ def isolate_subject(name, original):
         ImageDraw.Draw(mask).ellipse(local(name, (216,194,465,445)), fill=255)
         subject = original.copy()
         subject.putalpha(ImageChops.multiply(original.getchannel("A"), mask))
+        subject = remove_extra_ball_seam(subject)
         remainder = original.copy()
         rim_cleanup = Image.new("L", original.size)
         ImageDraw.Draw(rim_cleanup).ellipse(local(name, (212,190,469,449)), fill=255)
