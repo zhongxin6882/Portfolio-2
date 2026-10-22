@@ -150,6 +150,7 @@
     sourceText.set(node,node.nodeValue);
   }
   const toggle=document.querySelector('.language-toggle');
+  const bilingual=[...document.querySelectorAll('[data-en]')].map(element=>({element,zh:element.innerHTML,en:element.dataset.en}));
   // ── 语言状态解析：优先读「本页专属」记忆（body 的 data-language-key），
   // 否则读全站共享的 localStorage['jiuyueshiwu-language']，最终兜底 'en'。
   // ⚠️ 目前只有 index.html 设了 data-default-language="zh"，其余页面首屏是英文。
@@ -158,6 +159,7 @@
   let language=(pageLanguageKey&&localStorage.getItem(pageLanguageKey))||(pageLanguageKey?pageDefaultLanguage:localStorage.getItem('jiuyueshiwu-language'))||'en';
   function apply(lang){
     language=lang;
+    for(const item of bilingual) item.element.innerHTML=lang==='en'?item.en:item.zh;
     for(const [node,original] of stored){
       const current=sourceText.get(node)??original;
       const trimmed=current.trim().replace(/\s+/g,' ');
