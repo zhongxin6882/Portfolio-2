@@ -56,6 +56,7 @@
     document.documentElement.classList.add('has-route-transition');
     document.getElementById('intro-loader')?.remove();
     const overlay = makeOverlay(enteringLabel);
+    document.documentElement.classList.add('route-ready');
     requestAnimationFrame(() => setTimeout(() => overlay.classList.add('is-leaving'), 520));
     setTimeout(() => overlay.remove(), 1450);
   }
