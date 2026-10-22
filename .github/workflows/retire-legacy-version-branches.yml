@@ -1,0 +1,31 @@
+name: Retire old portfolio version branches
+
+# One-time, narrowly scoped maintenance: never runs on ordinary website updates.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/retire-legacy-version-branches.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  retire-legacy:
+    if: github.event.head_commit.message == 'chore: retire legacy 1.2 and 1.3 branches'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove only outdated 1.2 and 1.3 refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for branch in 1.2 1.3; do
+            if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" > /dev/null 2>&1; then
+              echo "Deleting obsolete version branch: ${branch}"
+              gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch}"
+            else
+              echo "Already absent: ${branch}"
+            fi
+          done
