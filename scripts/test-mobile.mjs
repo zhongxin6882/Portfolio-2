@@ -46,7 +46,7 @@ try {
         // regression test so counter checks target a settled scroll position.
         await page.addStyleTag({content:'html{scroll-behavior:auto!important}'});
         await page.locator('.work-card').nth(1).evaluate(el=>el.scrollIntoView({behavior:'instant',block:'center'}));
-        await page.waitForFunction(() => document.querySelector('#work-number')?.textContent?.trim() !== '01',{timeout:3000});
+        await page.waitForFunction(() => document.querySelector('#work-number')?.textContent?.trim() !== '01',undefined,{timeout:3000});
         const current = await page.locator('#work-number').textContent();
         assert(current!=='01','Work scroll counter did not update at '+width);
       }
