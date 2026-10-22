@@ -10,21 +10,6 @@
 (() => {
   const header = document.querySelector('.chrome');
   if (!header) return;
-  // Move both artwork strips with the page while the name remains anchored.
-  const brand = header.querySelector('.brand');
-  if (brand?.querySelector('.brand-person')) {
-    let queued = false;
-    const updateBrand = () => {
-      queued = false;
-      const travel = Math.min(window.scrollY * .28, 106);
-      brand.style.setProperty('--brand-scroll-person', `${-travel}px`);
-      brand.style.setProperty('--brand-scroll-copyright', `${travel}px`);
-    };
-    window.addEventListener('scroll', () => {
-      if (!queued) { queued = true; requestAnimationFrame(updateBrand); }
-    }, {passive:true});
-    updateBrand();
-  }
   // ── 1) 菜单开关：切换 #menu 的 .closed，同步 aria-expanded；
   // 重新展开时先移除再加回 .typing，以重放打字机动画。
   const menuButton = header.querySelector('#menuToggle');

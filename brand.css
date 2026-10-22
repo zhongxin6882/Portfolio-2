@@ -4,18 +4,20 @@
 .chrome .brand small{display:block;font-family:var(--font-sans,"DM Sans",Arial,sans-serif);font-size:8px;font-weight:400;line-height:1.3;letter-spacing:normal;writing-mode:vertical-rl;transform:none}
 @media(max-width:850px){.chrome .brand b{font-size:19px}.chrome .brand small{font-size:8px}}
 
-/* The three supplied marks share the same 106-unit artwork height. */
-.chrome .brand{height:106px;gap:5px;align-items:flex-start;isolation:isolate}
-.chrome .brand-person{position:relative;display:block;width:58px;height:106px;flex:none;overflow:hidden;transform:translateY(var(--brand-scroll-person,0px));will-change:transform}
-.chrome .brand-person img{position:absolute;inset:0;width:58px;height:106px;display:block;transition:opacity .2s ease}
+/* The three supplied SVGs all occupy the same 106px high flip frame. */
+.chrome .brand{width:58px;height:106px;display:block;perspective:500px;text-decoration:none}
+.chrome .brand-flip{position:relative;display:block;width:58px;height:106px;transform-style:preserve-3d;will-change:transform}
+.chrome .brand-face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.chrome .brand-face-person{transform:rotateY(180deg)}
+.chrome .brand-face img{position:absolute;display:block;height:106px;object-fit:contain}
+.chrome .brand-copyright{width:46px}
+.chrome .brand-person-normal,.chrome .brand-person-hover{width:58px;transition:opacity .18s ease}
 .chrome .brand-person-hover{opacity:0}
 .chrome .brand:hover .brand-person-hover,.chrome .brand:focus-visible .brand-person-hover{opacity:1}
 .chrome .brand:hover .brand-person-normal,.chrome .brand:focus-visible .brand-person-normal{opacity:0}
-.chrome .brand-copyright{display:block;width:46px;height:106px;flex:none;transform:translateY(var(--brand-scroll-copyright,0px));will-change:transform}
-.chrome .brand b{flex:none}
 
 /* About's older inline rules must not replace the Work selection indicator. */
 .chrome .header-slot nav a[aria-current="page"]::before{animation:nav-arrow-select .5s cubic-bezier(.22,1,.36,1) both}
 .chrome .inquiry .language-toggle{position:fixed;top:22px;left:calc(12.8% + 60px);right:auto;z-index:30;margin:0;padding:4px 8px;line-height:1;font:10px var(--font-mono)}
-@media(max-width:850px){.chrome .inquiry .language-toggle{top:44px;left:auto;right:14px;font-size:9px}.chrome .brand{gap:2px;transform:scale(.72);transform-origin:top left}}
+@media(max-width:850px){.chrome .inquiry .language-toggle{top:44px;left:auto;right:14px;font-size:9px}.chrome .brand{transform:scale(.72);transform-origin:top left}}
 @media(prefers-reduced-motion:reduce){.chrome .header-slot nav a[aria-current="page"]::before{animation:none;opacity:1;transform:translate(0,-.06em) rotate(-45deg)}}
