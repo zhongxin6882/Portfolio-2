@@ -17,7 +17,12 @@
 .chrome .brand:hover .brand-person-normal,.chrome .brand:focus-visible .brand-person-normal{opacity:0}
 
 /* About's older inline rules must not replace the Work selection indicator. */
+.chrome .header-slot nav a{position:relative}
+.chrome .header-slot nav a[aria-current="page"]{padding-left:1.12em}
+.chrome .header-slot nav a::before{content:"→";position:absolute;left:0;top:0;opacity:0;pointer-events:none;transform-origin:center}
 .chrome .header-slot nav a[aria-current="page"]::before{animation:nav-arrow-select .5s cubic-bezier(.22,1,.36,1) both}
-.chrome .inquiry .language-toggle{position:fixed;top:22px;left:calc(12.8% + 60px);right:auto;z-index:30;margin:0;padding:4px 8px;line-height:1;font:10px var(--font-mono)}
-@media(max-width:850px){.chrome .inquiry .language-toggle{top:44px;left:auto;right:14px;font-size:9px}.chrome .brand{transform:scale(.72);transform-origin:top left}}
+@keyframes nav-arrow-select{0%{opacity:0;transform:translate(-.45em,.18em) rotate(0) scale(.75)}60%{opacity:1;transform:translate(.08em,-.12em) rotate(-52deg) scale(1.08)}100%{opacity:1;transform:translate(0,-.06em) rotate(-45deg) scale(1)}}
+.chrome .inquiry-language{display:flex;justify-content:flex-end;margin-top:12px}
+.chrome .inquiry .language-toggle{position:static!important;top:auto!important;left:auto!important;right:auto!important;display:inline-block;margin:0!important;padding:4px 9px;border:1px solid #aaa;border-radius:20px;background:transparent;color:#111;line-height:1;font:10px var(--font-mono)}
+@media(max-width:850px){.chrome .inquiry-language{justify-content:flex-start;margin-top:7px}.chrome .inquiry .language-toggle{font-size:9px}.chrome .brand{transform:scale(.72);transform-origin:top left}.work-home .chrome .inquiry{display:block}.work-home .chrome{height:185px}}
 @media(prefers-reduced-motion:reduce){.chrome .header-slot nav a[aria-current="page"]::before{animation:none;opacity:1;transform:translate(0,-.06em) rotate(-45deg)}}

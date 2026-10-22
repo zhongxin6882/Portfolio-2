@@ -52,7 +52,6 @@
 .work-home .inquiry { color: #111; padding-right: 0; font-size: 12px; }
 .work-home .inquiry a { text-decoration: none; }
 .work-home .inquiry a:hover { text-decoration: underline; }
-.work-home .language-toggle { top: 22px; right: auto; left: calc(12.8% + 60px); }
 
 .work-shell {
   display: grid;
@@ -286,7 +285,6 @@
   .work-home .chrome { grid-template-columns: 18% 40% 1fr; padding: 14px; }
   .work-home .brand b { font-size: 19px; }
   .work-home .header-slot nav { font-size: 17px; margin-top: 19px; }
-  .work-home .language-toggle { top: 44px; left: auto; right: 14px; }
   .work-home .audio { text-align: right; padding-right: 56px; }
   .work-home .location, .work-home .inquiry { display: none; }
   .work-shell { grid-template-columns: var(--work-left) minmax(0, 1fr); }
