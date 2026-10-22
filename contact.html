@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><link rel="icon" type="image/x-icon" href="favicon.ico?v=x-gradient-20261022"><link rel="icon" type="image/png" sizes="512x512" href="favicon.png?v=x-gradient-20261022">
+<head>
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=x-gradient-20261022">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon.png?v=x-gradient-20261022">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Contact — CENTER</title>
@@ -9,23 +11,31 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=global-nav-20261021">
-  <link rel="stylesheet" href="contact-redesign.css?v=contact-fullscreen-20261022">
+  <link rel="stylesheet" href="brand.css?v=brand-hover-20261022">
+  <link rel="stylesheet" href="contact-redesign.css?v=contact-shared-header-20261022">
   <script>try{if(sessionStorage.getItem('portfolio-route-transition'))document.documentElement.classList.add('has-route-transition')}catch{}</script>
 </head>
-<body class="contact-redesign">
+<body class="contact-redesign" data-default-language="zh">
+  <header class="chrome">
+    <a class="brand" href="index.html" aria-label="Work home">
+      <span class="brand-flip" aria-hidden="true">
+        <span class="brand-face brand-face-front"><img class="brand-copyright" src="copyright.svg" alt=""></span>
+        <span class="brand-face brand-face-right"><img class="brand-person-normal" src="brand-person-normal.svg" alt=""><img class="brand-person-hover" src="brand-person-hover.svg" alt=""></span>
+        <span class="brand-face brand-face-back"><img class="brand-copyright" src="copyright.svg" alt=""></span>
+        <span class="brand-face brand-face-left"><img class="brand-person-normal" src="brand-person-normal.svg" alt=""><img class="brand-person-hover" src="brand-person-hover.svg" alt=""></span>
+      </span>
+    </a>
+    <div class="header-slot"><button id="menuToggle" aria-expanded="true">Menu</button><nav id="menu"><a href="index.html">WORK</a><a href="about/">ABOUT</a><a href="playground.html">PLAYGROUND</a><a href="contact.html" aria-current="page">CONTACT</a></nav></div>
+    <div class="audio">Audio <button id="audioToggle" type="button" aria-pressed="false"><span class="audio-label">Off —</span><span class="audio-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div>
+    <div class="location">Working China beijing<br><span id="clock" aria-label="Beijing local time">--:--:--</span></div>
+    <div class="inquiry"><a href="mailto:zhongxin6882@gmail.com">zhongxin6882@gmail.com</a><div class="inquiry-language"><button class="language-toggle" type="button" aria-label="Switch language" aria-pressed="false">中文</button></div></div>
+  </header>
   <main class="contact-screen" id="top">
-    <section class="contact-intro" aria-labelledby="contact-title">
-      <div class="contact-copy">
-        <h1 id="contact-title">CENTER<span class="contact-burst" aria-hidden="true"><i></i><i></i><i></i></span></h1>
-        <p class="contact-statement">用设计<br>连接产品与用户，<br><em>创造更好的<br>数字体验。</em></p>
-        <p class="contact-description">8年以上的 UI/UX 与 B 端产品设计经验，<br>擅长从 0 到 1 打造产品体验，关注业务目标与用户价值，<br>用设计解决实际问题。</p>
-      </div>
-      <figure class="contact-portrait">
-        <img src="assets/contact-portrait-reference.png" alt="微笑的人物插画，头戴耳机、托着脸思考" width="805" height="708">
-      </figure>
+    <section class="contact-intro" aria-label="联系页人物插画">
+      <img class="contact-hero-illustration" src="assets/contact-hero-illustration.png" alt="坐在沙发上举手构思创意的人物，身旁有猫和灯泡" width="1671" height="941">
     </section>
 
-    <nav class="contact-navigation" aria-label="主导航">
+    <nav class="contact-navigation" aria-label="页面导航">
       <a href="index.html#top"><span class="contact-nav-number">01.</span><span>Home</span><span class="contact-nav-arrow" aria-hidden="true">→</span></a>
       <a href="index.html#work-stack"><span class="contact-nav-number">02.</span><span>Work</span><span class="contact-nav-arrow" aria-hidden="true">→</span></a>
       <a href="about/"><span class="contact-nav-number">03.</span><span>About</span><span class="contact-nav-arrow" aria-hidden="true">→</span></a>
@@ -43,20 +53,23 @@
       <section class="contact-bottom-cell">
         <small><span aria-hidden="true">•</span> Subscribe</small>
         <div class="contact-bottom-content">
-          <svg class="contact-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.8 3.6 12 9.5l-2.8 4.1c2.2 4.1 5.1 7 9.2 9.2l4.1-2.8 5.9 5.2-3.2 3.4c-2 2-5.8 1.4-10.4-1.3C9.8 24.5 7.5 22.2 4.7 17.2 2 12.6 2.6 8.8z"/></svg>
+          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.91.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           <span>+86 000 0000 0000</span>
         </div>
       </section>
       <section class="contact-bottom-cell contact-social">
         <small><span aria-hidden="true">•</span> SOCIAL</small>
         <div class="contact-bottom-content contact-social-logos">
-          <span class="zcool-logo" aria-label="站酷">ZCOOL</span>
-          <span class="xiaohongshu-logo" aria-label="小红书">小红书</span>
+          <img class="zcool-logo" src="assets/zcool-official.svg" alt="站酷 ZCOOL" width="115" height="20">
+          <span class="xiaohongshu-logo-frame"><img class="xiaohongshu-logo" src="assets/xiaohongshu-official.png" alt="小红书" width="433" height="384"></span>
         </div>
       </section>
       <div class="contact-bottom-cell contact-legal"><span>Privacy Policy</span><span>2026 Made In CENTER ©</span></div>
     </footer>
   </main>
+  <script src="site-header.js?v=brand-scroll-20261022"></script>
   <script src="page-transition.js?v=route-transition-20261019"></script>
+  <script src="locale.js?v=unified-20261022"></script>
+  <script type="module" src="brand-motion.js"></script>
 </body>
 </html>
