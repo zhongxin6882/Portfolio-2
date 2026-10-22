@@ -1,8 +1,26 @@
+/**
+ * locale.js — 全站中英双语运行时替换引擎（i18n 核心）
+ * 必须在每个页面的**最后一个**脚本位置加载，以便先由其他脚本注入动态内容。
+ *
+ * 工作原理：不做构建期替换，而是用 MutationObserver 持续监听 document.body 的文本节点，
+ *          命中字典就把 nodeValue 原地换掉。因此 work.js / playground.js 动态生成的内容
+ *          也能被自动翻译，无需额外接线。
+ *
+ * ⚠️ 三条最容易踩的规则：
+ *   1. 新增词条必须写在 `const en=Object.assign(` 这一行**之前**——en 是当场从 zh 反转生成的。
+ *   2. 字典键必须与 DOM 文本逐字符相等（仅忽略首尾空白与连续空格）。
+ *   3. 被 <br> 分隔的文本是多个独立文本节点，必须分段建词条，不能整串一条。
+ *
+ * 只翻译文本节点，不翻译属性（alt / aria-label / title / placeholder 不受影响）。
+ * 详细机制见仓库根目录 AGENTS.md 第 6 节。
+ */
 (() => {
+  // ── 主字典：英文源文 → 中文译文。全站中文文案的唯一真源。
+  // 键必须与 DOM 文本逐字符一致（仅忽略首尾空白与连续空格），含 ↗ · — 等符号。
   const zh = {
     'About — September Fifteen':'关于 — 九月十五','Playground — September Fifteen':'灵感实验室 — 九月十五','Contact — September Fifteen':'联系 — 九月十五','FROMANOTHER — Project Study':'FROMANOTHER — 项目案例',
-    'SELECTED WORKS / 2026':'精选作品 / 2026','SEPTEMBER FIFTEEN / INTERACTION & VISUAL DESIGN':'九月十五 / 交互与视觉设计','copyright 2026':'版权所有 2026','home ↗':'首页 ↗','Menu':'菜单','→ WORK':'→ 作品','WORK':'作品','ABOUT':'关于','PLAYGROUND':'灵感实验室','CONTACT':'联系','Audio':'声音','Off —':'关闭 —','On —':'开启 —','Working globally':'远程工作','For inquiries':'商务合作','INDEPENDENT DESIGNER':'独立设计师','UI/UX & PRODUCT DESIGN':'UI/UX 与产品设计','AI · CYBERSECURITY · DIGITAL PRODUCTS':'人工智能 · 网络安全 · 数字产品','CONTACT / COLLABORATION':'联系 / 项目合作','DESIGN TEAMS':'设计团队','WORKING GLOBALLY · HCMC':'远程工作 · 胡志明市','ABOUT / 01':'关于 / 01','A LITTLE ABOUT ME':'关于我','SHAPING DIGITAL EXPERIENCES WITH':'塑造数字体验','CLARITY, INTENTION, CHARACTER':'清晰、有意图、有个性','& A GOOD HEART.':'以及一颗真诚的心。','DESIGNER · CREATIVE PARTNER · HUMAN':'设计师 · 创意伙伴 · 普通人','I work with digital agencies, design studios, startups and businesses around the world to turn meaningful ideas into thoughtful digital experiences.':'我与全球的数字机构、设计工作室、初创团队和企业合作，把有意义的想法转化为细致而有温度的数字体验。','YEARS OF MAKING':'从事网页设计','THINGS FOR THE WEB':'年','PROJECTS MADE':'合作完成','WITH GOOD PEOPLE':'个项目','A FEW THINGS':'关于我的','THAT MAKE ME, ME':'一些小事','Plant daddy · Arsenal since the Invincibles · Married to a beautiful knitter · Three cats call me dad · BlackBerry collector · Pool player':'植物爱好者 · 阿森纳球迷 · 与热爱编织的伴侣相伴 · 三只猫的家长 · 黑莓收藏者 · 台球爱好者','01 / RECOGNITION':'01 / 荣誉','Awards &':'奖项与','recognitions':'认可','Nominee (4)':'提名（4）','Nominee (3)':'提名（3）','Nominee (2) · Honoree (2)':'提名（2）· 获奖（2）','Nominee (4)':'提名（4）','Selected':'精选','02 / WHAT I DO':'02 / 服务内容','Good ideas,':'让好想法','made tangible':'成为现实','From the first big-picture thought to the last little detail, I help shape digital products with purpose.':'从整体构想到细节打磨，我帮助团队打造目标清晰的数字产品。','Digital art direction':'数字艺术指导','Website design':'网站设计','Application design':'应用设计','Interactive storytelling':'互动叙事','Motion & animation':'动态与动画','Design systems':'设计系统','User experience':'用户体验','03 / HOW I WORK':'03 / 工作方式','A1 — APPROACH':'A1 — 方法','Every project has its own':'每个项目都有自己的','personality, purpose and story.':'个性、目标与故事。','I don’t have a particular design style. I treat each project differently, translating its character into pixels through typography, imagery, interaction, strategy and brand elements — while keeping the main goal in focus.':'我没有固定的设计风格，而是根据每个项目的特点，通过字体、图像、交互、策略与品牌元素将其转化为数字体验，同时始终围绕核心目标展开。','04 / FROM FIRST THOUGHT TO LAUNCH':'04 / 从构想到上线','A considered process.':'细致的流程，','A better kind of':'更好的','together.':'协作方式。','Discovery':'需求梳理','Align on the brief, scope, budget and timeline.':'明确需求、范围、预算与时间安排。','One page first':'先做一个页面','Start with the homepage and establish a clear direction.':'从首页开始，确定清晰的设计方向。','Build the rest':'完成其他页面','Complete the remaining pages through thoughtful feedback and iteration.':'通过充分沟通与迭代完成其余页面。','Mobile matters':'重视移动端','Adapt and refine the experience for smaller screens.':'为小屏幕适配并优化体验。','Final review':'最终检查','Polish the details before development begins.':'开发前打磨每个细节。','Pixels to production':'从设计到上线','Stay close to development until the site looks, feels and performs as designed.':'持续跟进开发，确保网站的视觉、体验与表现符合设计预期。','Launch':'正式上线','Put it out into the world. Maybe celebrate a little.':'让作品与大家见面，也别忘了庆祝一下。','05 / GOOD COMPANY':'05 / 合作伙伴','Trusted by kind people':'感谢这些优秀伙伴','at':'的信任','good places.':'与支持。','AND MANY MORE':'以及更多伙伴','THANKS FOR MAKING IT THIS FAR':'感谢你看到这里','HAVE A GOOD ONE. SAY HI ↗':'祝你愉快，欢迎联系 ↗',
-    'PLAYGROUND / 2026':'灵感实验室 / 2026','IDEAS · TESTS · HAPPY ACCIDENTS':'想法 · 试验 · 意外惊喜','EXPERIMENTS':'实验','AND COUNTING':'持续增加中','想法、试验与未完的灵感。':'Ideas, experiments and unfinished inspirations.','为好奇心留一点空间。':'A little room for curiosity.','SCROLL TO EXPLORE':'向下滚动探索','AN OPEN SPACE FOR CURIOSITY':'为好奇心留一片空间','HAVE AN IDEA? LET’S TALK ↗':'有想法？聊一聊 ↗',
+    'SELECTED WORKS / 2026':'精选作品 / 2026','SEPTEMBER FIFTEEN / INTERACTION & VISUAL DESIGN':'九月十五 / 交互与视觉设计','copyright 2026':'版权所有 2026','home ↗':'首页 ↗','Menu':'菜单','→ WORK':'→ 作品','WORK':'作品','ABOUT':'关于','PLAYGROUND':'灵感实验室','CONTACT':'联系','Audio':'声音','Off —':'关闭 —','On —':'开启 —','Working globally':'远程工作','For inquiries':'商务合作','INDEPENDENT DESIGNER':'独立设计师','UI/UX & PRODUCT DESIGN':'UI/UX 与产品设计','AI · CYBERSECURITY · DIGITAL PRODUCTS':'人工智能 · 网络安全 · 数字产品','CONTACT / COLLABORATION':'联系 / 项目合作','DESIGN TEAMS':'设计团队','WORKING GLOBALLY · BEIJING':'远程工作 · 北京','ABOUT / 01':'关于 / 01','A LITTLE ABOUT ME':'关于我','SHAPING DIGITAL EXPERIENCES WITH':'塑造数字体验','CLARITY, INTENTION, CHARACTER':'清晰、有意图、有个性','& A GOOD HEART.':'以及一颗真诚的心。','DESIGNER · CREATIVE PARTNER · HUMAN':'设计师 · 创意伙伴 · 普通人','I work with digital agencies, design studios, startups and businesses around the world to turn meaningful ideas into thoughtful digital experiences.':'我与全球的数字机构、设计工作室、初创团队和企业合作，把有意义的想法转化为细致而有温度的数字体验。','YEARS OF MAKING':'从事网页设计','THINGS FOR THE WEB':'年','PROJECTS MADE':'合作完成','WITH GOOD PEOPLE':'个项目','A FEW THINGS':'关于我的','THAT MAKE ME, ME':'一些小事','Plant daddy · Arsenal since the Invincibles · Married to a beautiful knitter · Three cats call me dad · BlackBerry collector · Pool player':'植物爱好者 · 阿森纳球迷 · 与热爱编织的伴侣相伴 · 三只猫的家长 · 黑莓收藏者 · 台球爱好者','01 / RECOGNITION':'01 / 荣誉','Awards &':'奖项与','recognitions':'认可','Nominee (4)':'提名（4）','Nominee (3)':'提名（3）','Nominee (2) · Honoree (2)':'提名（2）· 获奖（2）','Nominee (4)':'提名（4）','Selected':'精选','02 / WHAT I DO':'02 / 服务内容','Good ideas,':'让好想法','made tangible':'成为现实','From the first big-picture thought to the last little detail, I help shape digital products with purpose.':'从整体构想到细节打磨，我帮助团队打造目标清晰的数字产品。','Digital art direction':'数字艺术指导','Website design':'网站设计','Application design':'应用设计','Interactive storytelling':'互动叙事','Motion & animation':'动态与动画','Design systems':'设计系统','User experience':'用户体验','03 / HOW I WORK':'03 / 工作方式','A1 — APPROACH':'A1 — 方法','Every project has its own':'每个项目都有自己的','personality, purpose and story.':'个性、目标与故事。','I don’t have a particular design style. I treat each project differently, translating its character into pixels through typography, imagery, interaction, strategy and brand elements — while keeping the main goal in focus.':'我没有固定的设计风格，而是根据每个项目的特点，通过字体、图像、交互、策略与品牌元素将其转化为数字体验，同时始终围绕核心目标展开。','04 / FROM FIRST THOUGHT TO LAUNCH':'04 / 从构想到上线','A considered process.':'细致的流程，','A better kind of':'更好的','together.':'协作方式。','Discovery':'需求梳理','Align on the brief, scope, budget and timeline.':'明确需求、范围、预算与时间安排。','One page first':'先做一个页面','Start with the homepage and establish a clear direction.':'从首页开始，确定清晰的设计方向。','Build the rest':'完成其他页面','Complete the remaining pages through thoughtful feedback and iteration.':'通过充分沟通与迭代完成其余页面。','Mobile matters':'重视移动端','Adapt and refine the experience for smaller screens.':'为小屏幕适配并优化体验。','Final review':'最终检查','Polish the details before development begins.':'开发前打磨每个细节。','Pixels to production':'从设计到上线','Stay close to development until the site looks, feels and performs as designed.':'持续跟进开发，确保网站的视觉、体验与表现符合设计预期。','Launch':'正式上线','Put it out into the world. Maybe celebrate a little.':'让作品与大家见面，也别忘了庆祝一下。','05 / GOOD COMPANY':'05 / 合作伙伴','Trusted by kind people':'感谢这些优秀伙伴','at':'的信任','good places.':'与支持。','AND MANY MORE':'以及更多伙伴','THANKS FOR MAKING IT THIS FAR':'感谢你看到这里','HAVE A GOOD ONE. SAY HI ↗':'祝你愉快，欢迎联系 ↗',
+    'PLAYGROUND / 2026':'灵感实验室 / 2026','IDEAS · TESTS · HAPPY ACCIDENTS':'想法 · 试验 · 意外惊喜','EXPERIMENTS':'实验','AND COUNTING':'持续增加中','SCROLL TO EXPLORE':'向下滚动探索','AN OPEN SPACE FOR CURIOSITY':'为好奇心留一片空间','HAVE AN IDEA? LET’S TALK ↗':'有想法？聊一聊 ↗',
     'CONTACT / 2026':'联系 / 2026','A GOOD PLACE TO START':'从这里开始','COME SAY HI':'来打个招呼','DROP ME A LINE':'给我发消息','CLOSE':'关闭','THE PEOPLE BEHIND THE PIXELS':'像素背后的伙伴','DEVELOPMENT & RIVE':'开发与 Rive','ILLUSTRATION':'插画','TYPE':'字体','THANKS FOR STOPPING BY':'感谢来访','BACK TO PLAYGROUND ↗':'返回灵感实验室 ↗','Back to top':'回到顶部','Project gallery':'项目画廊','Gallery navigation':'画廊导航','Scroll ↓':'向下滚动 ↓','About':'项目简介','Role':'职责','Design Direction':'设计方向','Website Design':'网站设计','Launch':'上线时间','Apr 2026':'2026年4月','Recognition':'项目荣誉','Awwwards Site of the Day':'Awwwards 每日精选','Awwwards Site of the Month':'Awwwards 月度精选','Awwwards Site of the Month Nominee':'Awwwards 月度精选提名','CSS Design Awards Website of the Day':'CSS Design Awards 每日精选','CSSDA Website of the Month':'CSSDA 月度网站奖','CSSDA Website of the Day':'CSSDA 每日网站奖','Behance Feature':'Behance 精选','Good Design Awards · Best Awards':'Good Design Awards · Best Awards','FWA of the Day':'FWA 每日精选','Visit site →':'访问网站 →','Scroll':'滚动','Next project':'下一个项目'
   };
   Object.assign(zh,{
@@ -75,9 +93,50 @@
     'A website for Won J. You, a veteran designer and professor focused on training the next generation through coaching, education, and mentorship.':'为资深设计师兼教授 Won J. You 打造的网站，其长期通过指导、教学与带教培养下一代设计人才。',
     'I’ve been following Vicki Dang and Robin Mahieux for a long time, so it was a great opportunity to redesign their studio’s site. The challenge was taking their unique, abstract branding and turning it into a smooth, seamless experience. Every part of the site, from the layout and text animation to the page transitions and hover effects, was carefully chosen to really match their personality.':'我关注 Vicki Dang 和 Robin Mahieux 已经很久了，因此能重新设计他们工作室的网站，对我而言是一次难得的机会。难点在于把他们独特而抽象的品牌语言，转化成流畅、连贯的体验。从版面布局、文字动画，到页面转场与悬停反馈，网站的每一个细节都经过反复推敲，只为真正贴合他们的气质。'
   });
-  const en=Object.assign(Object.fromEntries(Object.entries(zh).map(([english,chinese])=>[chinese,english])),{
-    '设计数字产品，坚持':'Design digital products with intention,','清晰、结构与人本体验':'clarity, structure, and a human touch','——从用户流程到最终界面。':'— from first user flow to final pixel.','设计工具':'Tools'
+  // ── 反向字典：由 zh 当场反转生成（中 → 英），再用第二个参数做显式覆盖。
+  // 显式覆盖用于「源文本来就是中文」的条目（如 about/index.html），这类无法靠反转得到。
+  // ⚠️ 所有新增的 Object.assign(zh,{...}) 块必须写在这一行**之前**，否则切回英文时不生效。
+  // about/index.html 接入 i18n 后补充的词条（源文为英文，正向翻译）
+  Object.assign(zh,{
+    'View project →':'查看项目 →',
+    'Selected work':'精选作品',
+    'View next →':'查看下一个 →',
+    '’25 showreel ▶':'’25 作品集锦 ▶',
+    'WHAT’S GOING ON':'我的脑海中',
+    'Working China beijing':'工作于中国北京',
+    'BACK TO WORK ↗':'返回作品 ↗',
+    'UI/UX Design':'UI/UX 设计',
+    'Interaction Design':'交互设计',
+    'Visual Design':'视觉设计',
+    'Product Design':'产品设计',
+    'Design System':'设计系统',
+    'AI Product Design':'AI 产品设计',
+    'DESIGN / IDEAS':'设计 / 想法',
+    '2020 — NOW':'2020 — 至今'
   });
+  const en=Object.assign(Object.fromEntries(Object.entries(zh).map(([english,chinese])=>[chinese,english])),{
+    '设计数字产品，坚持':'Design digital products with intention,','清晰、结构与人本体验':'clarity, structure, and a human touch','——从用户流程到最终界面。':'— from first user flow to final pixel.','设计工具':'Tools',
+    // about/index.html 的中文源文 → 英文（该页文案是中文写死的，反转字典覆盖不到）
+    '关闭 ×':'Close ×',
+    '点击探索灵感':'Click to explore ideas',
+    '九月十五':'September Fifteen',
+    '我是一名专注于交互与视觉设计的设计师，':'I am a designer focused on interaction and visual design.',
+    '热爱通过设计解决真实问题，让复杂的产品变得简单、易用且有温度。':'I love solving real problems through design — making complex products simple, usable and humane.',
+    '从用户需求出发，结合商业目标与技术实现，持续探索更好的数字产品体验。':'Starting from user needs and balancing business goals with technical feasibility, I keep exploring better digital product experiences.',
+    '怡视科技':'Yishi Technology',
+    '负责 AI 产品的交互与视觉设计，构建清晰一致的产品体验。':'Led interaction and visual design for AI products, building clear and consistent experiences.',
+    '奇安信':'Qi An Xin',
+    '产品 UI 设计师':'Product UI Designer',
+    '参与网络安全数据产品设计，担任数据产品组长。':'Designed cybersecurity data products and led the data product team.',
+    '华筑图文':'Huazhu Graphics',
+    '负责移动端与桌面应用的界面设计。':'Designed interfaces for mobile and desktop applications.',
+    '专业技能':'Skills',
+    '联系方式':'Contact',
+    '查看作品':'View Work',
+    '想法、试验与未完的灵感。':'Ideas, experiments and unfinished inspirations.',
+    '为好奇心留一点空间。':'A little room for curiosity.'
+  });
+  // ── <title> 专用映射：标题与普通文本节点分开处理，避免被 observer 二次改写。
   const enTitles = new Map([
     ['About — September Fifteen','About — September Fifteen'],['Playground — September Fifteen','Playground — September Fifteen'],['Contact — September Fifteen','Contact — September Fifteen'],['FROMANOTHER — Project Study','FROMANOTHER — Project Study']
   ]);
@@ -91,11 +150,16 @@
     sourceText.set(node,node.nodeValue);
   }
   const toggle=document.querySelector('.language-toggle');
+  const bilingual=[...document.querySelectorAll('[data-en]')].map(element=>({element,zh:element.innerHTML,en:element.dataset.en}));
+  // ── 语言状态解析：优先读「本页专属」记忆（body 的 data-language-key），
+  // 否则读全站共享的 localStorage['jiuyueshiwu-language']，最终兜底 'en'。
+  // ⚠️ 目前只有 index.html 设了 data-default-language="zh"，其余页面首屏是英文。
   const pageLanguageKey=document.body.dataset.languageKey;
   const pageDefaultLanguage=document.body.dataset.defaultLanguage||'en';
   let language=(pageLanguageKey&&localStorage.getItem(pageLanguageKey))||(pageLanguageKey?pageDefaultLanguage:localStorage.getItem('jiuyueshiwu-language'))||'en';
   function apply(lang){
     language=lang;
+    for(const item of bilingual) item.element.innerHTML=lang==='en'?item.en:item.zh;
     for(const [node,original] of stored){
       const current=sourceText.get(node)??original;
       const trimmed=current.trim().replace(/\s+/g,' ');
@@ -116,9 +180,14 @@
     if(pageLanguageKey) localStorage.setItem(pageLanguageKey,lang);
     else localStorage.setItem('jiuyueshiwu-language',lang);
   }
+  // ── 替换引擎：监听 subtree + characterData + childList。
+  // 每个文本节点先 trim 并压缩连续空格再查字典；命中则把原文存进 sourceText / stored 以便还原，
+  // 然后原地改写 nodeValue（保留原有的首尾空白）。动态插入的节点由 childList 分支捕获，
+  // 所以 work.js / playground.js 生成的卡片无需额外接线即可被翻译。
   const textObserver=new MutationObserver(records=>{for(const record of records){const nodes=record.type==='characterData'?[record.target]:[...record.addedNodes].filter(node=>node.nodeType===Node.TEXT_NODE);for(const node of nodes){const raw=node.nodeValue||'';const value=raw.trim().replace(/\s+/g,' ');if(zh[value]!==undefined||en[value]!==undefined){if(!sourceText.has(node)){sourceText.set(node,raw);stored.push([node,raw]);}else if(record.type==='characterData')sourceText.set(node,raw);const translated=language==='zh'?zh[value]:en[value];if(translated){const start=raw.match(/^\s*/)?.[0]||'';const end=raw.match(/\s*$/)?.[0]||'';node.nodeValue=start+translated+end;}}}}});
   // About is static; avoid a body-wide observer during its initial render.
   if(!document.querySelector('.about-page')) textObserver.observe(document.body,{subtree:true,characterData:true,childList:true});
+  // ── 语言切换按钮 .language-toggle：点击后中英翻转，更新按钮文字与 aria-pressed，并持久化。
   if(toggle) toggle.addEventListener('click',()=>apply(language==='en'?'zh':'en'));
   apply(language);
 })();

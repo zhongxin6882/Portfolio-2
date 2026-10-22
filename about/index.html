@@ -16,6 +16,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="九月十五的交互、视觉与产品设计经历。">
 <title>关于 — 九月十五</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;color:#080808;background:#f9f7f5;font-synthesis:none}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px}button,a{font:inherit;color:inherit}button{cursor:pointer}a{text-decoration:none}
@@ -338,10 +339,10 @@
 .chrome .brand small{display:block;writing-mode:vertical-rl;font-size:8px;line-height:1.3}
 .chrome .header-slot{display:block}
 .chrome .header-slot>button{display:block;border:0;background:none;padding:0;opacity:.65;color:#111;text-transform:none;font-size:11px}
-.chrome .header-slot nav{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin-top:32px;font-size:21px;line-height:1.15;letter-spacing:-.06em;font-weight:600}
+.chrome .header-slot nav{display:flex;flex-direction:column;align-items:flex-start;gap:4px;margin-top:32px;font-family:"DM Sans","PingFang SC","苹方-简","Microsoft YaHei","Noto Sans SC",Arial,sans-serif;font-size:21px;line-height:1.15;letter-spacing:-.06em;font-weight:600}
 .chrome .header-slot nav a{position:relative;display:block;width:max-content;white-space:nowrap;font-size:21px;line-height:1.15;font-weight:600;transition:transform .3s,padding-left .36s cubic-bezier(.22,1,.36,1)}
 .chrome .header-slot nav a:hover{transform:translateX(12px);color:inherit}
-.chrome .header-slot nav a[aria-current="page"]{padding-left:1.12em}
+.chrome .header-slot nav a[aria-current="page"]{padding-left:1.12em;font-weight:700}
 .chrome .header-slot nav a::before{content:"→";position:absolute;left:0;top:0;opacity:0;pointer-events:none;transform-origin:center}
 .chrome .header-slot nav a[aria-current="page"]::before{animation:about-nav-arrow .5s cubic-bezier(.22,1,.36,1) both}
 @keyframes about-nav-arrow{0%{opacity:0;transform:translate(-.45em,.18em) rotate(0) scale(.75)}60%{opacity:1;transform:translate(.08em,-.12em) rotate(-52deg) scale(1.08)}100%{opacity:1;transform:translate(0,-.06em) rotate(-45deg) scale(1)}}
