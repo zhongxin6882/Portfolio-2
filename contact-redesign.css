@@ -1,0 +1,290 @@
+/* Contact — full-viewport editorial layout from the supplied reference. */
+html,
+body.contact-redesign {
+  min-height: 100%;
+  background: #c4c4c4;
+  color: #080808;
+}
+
+body.contact-redesign {
+  font-family: var(--font-sans);
+}
+
+.contact-screen {
+  display: grid;
+  grid-template-columns: minmax(0, 71%) minmax(0, 29%);
+  grid-template-rows: minmax(0, 1fr) minmax(134px, 17.5svh);
+  width: 100%;
+  height: 100svh;
+  min-height: 690px;
+  border-top: 1px solid #151515;
+  overflow: hidden;
+}
+
+.contact-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 58%) minmax(0, 42%);
+  align-items: center;
+  min-width: 0;
+  padding: 4.5vh 4.7vw 4vh 6.2vw;
+  border-right: 1px solid #10101020;
+}
+
+.contact-copy {
+  align-self: center;
+  min-width: 0;
+  transform: translateY(1.5vh);
+}
+
+.contact-copy h1 {
+  position: relative;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 0 .12em -.06em;
+  font-size: clamp(68px, 7.1vw, 132px);
+  font-weight: 800;
+  line-height: .9;
+  letter-spacing: -.075em;
+}
+
+.contact-burst {
+  position: absolute;
+  top: -.18em;
+  right: -.42em;
+  width: .46em;
+  height: .55em;
+}
+
+.contact-burst i {
+  position: absolute;
+  display: block;
+  width: .09em;
+  height: .25em;
+  border-radius: 1em;
+  background: #f0532e;
+  transform-origin: center bottom;
+}
+
+.contact-burst i:nth-child(1) { left: 0; top: .02em; transform: rotate(14deg); }
+.contact-burst i:nth-child(2) { left: .19em; top: .12em; transform: rotate(56deg); }
+.contact-burst i:nth-child(3) { left: .28em; top: .33em; transform: rotate(83deg); }
+
+.contact-statement {
+  margin: 0 0 .48em;
+  font-size: clamp(30px, 3.15vw, 59px);
+  font-weight: 700;
+  line-height: 1.17;
+  letter-spacing: -.055em;
+}
+
+.contact-statement em {
+  color: #f0532e;
+  font-style: normal;
+}
+
+.contact-description {
+  margin: 0;
+  color: #444;
+  font-size: clamp(14px, 1.15vw, 21px);
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: -.03em;
+}
+
+.contact-portrait {
+  justify-self: center;
+  width: min(22.8vw, 415px);
+  height: min(66.5vh, 580px);
+  min-width: 285px;
+  min-height: 420px;
+  margin: 0;
+  padding: 13px;
+  border: 6px solid #080808;
+  border-radius: 16px;
+  background: #ecebe8;
+  box-shadow: inset 0 0 0 3px #080808;
+  overflow: hidden;
+}
+
+.contact-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #080808;
+  border-radius: 7px;
+  object-fit: cover;
+  object-position: 46% center;
+  filter: grayscale(1) contrast(1.08);
+}
+
+.contact-navigation {
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  min-height: 0;
+}
+
+.contact-navigation a {
+  display: grid;
+  grid-template-columns: 58px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 0 10% 0 7%;
+  border-bottom: 1px solid #10101020;
+  color: #0b0b0b;
+  text-decoration: none;
+  font-size: clamp(24px, 1.8vw, 34px);
+  font-weight: 400;
+  letter-spacing: -.05em;
+  transition: background-color .22s ease, color .22s ease;
+}
+
+.contact-navigation a:hover,
+.contact-navigation a:focus-visible {
+  background: #080808;
+  color: #fff;
+}
+
+.contact-navigation a:focus-visible {
+  outline: 3px solid #f0532e;
+  outline-offset: -3px;
+}
+
+.contact-nav-number {
+  color: #777;
+  font-size: clamp(12px, .9vw, 16px);
+  letter-spacing: -.03em;
+}
+
+.contact-navigation a:hover .contact-nav-number,
+.contact-navigation a:focus-visible .contact-nav-number {
+  color: #fff;
+}
+
+.contact-nav-arrow {
+  font-size: 1.15em;
+  line-height: 1;
+  font-weight: 300;
+  transition: transform .22s ease;
+}
+
+.contact-navigation a:hover .contact-nav-arrow,
+.contact-navigation a:focus-visible .contact-nav-arrow {
+  transform: translateX(5px);
+}
+
+.contact-bottom {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 26.3% 23.2% 21.5% 29%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #10101045;
+  background: transparent;
+  color: #0a0a0a;
+  font-size: inherit;
+}
+
+.contact-bottom-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 19px 7.2% 29px;
+  border-right: 1px solid #10101020;
+}
+
+.contact-bottom-cell > small {
+  color: #737373;
+  font-size: clamp(11px, .85vw, 15px);
+  white-space: nowrap;
+}
+
+.contact-bottom-cell > small span {
+  padding-right: .45em;
+}
+
+.contact-bottom-content {
+  display: flex;
+  align-items: center;
+  gap: 19px;
+  min-width: 0;
+  white-space: nowrap;
+  font-size: clamp(14px, 1.12vw, 20px);
+  letter-spacing: -.035em;
+}
+
+.contact-icon {
+  width: 27px;
+  height: 27px;
+  flex: none;
+}
+
+.contact-social-logos {
+  gap: clamp(18px, 2.4vw, 44px);
+}
+
+.zcool-logo {
+  font-weight: 800;
+  font-size: clamp(18px, 1.5vw, 28px);
+  letter-spacing: -.11em;
+  line-height: 1;
+}
+
+.xiaohongshu-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px 5px;
+  border-radius: 999px;
+  background: #080808;
+  color: #fff;
+  font-size: clamp(11px, .85vw, 16px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.06em;
+}
+
+.contact-legal {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 9%;
+  border-right: 0;
+  font-size: clamp(12px, 1vw, 18px);
+  white-space: nowrap;
+  letter-spacing: -.04em;
+}
+
+@media (max-width: 1100px) {
+  .contact-screen { grid-template-columns: minmax(0, 68%) minmax(0, 32%); }
+  .contact-intro { padding-left: 4vw; padding-right: 3vw; }
+  .contact-copy h1 { font-size: clamp(62px, 7vw, 90px); }
+  .contact-statement { font-size: clamp(29px, 3.2vw, 39px); }
+  .contact-description br { display: none; }
+  .contact-description { max-width: 370px; }
+  .contact-portrait { width: 24vw; min-width: 225px; min-height: 340px; height: 55vh; }
+  .contact-bottom-content { gap: 10px; font-size: 14px; }
+  .contact-icon { width: 22px; height: 22px; }
+  .contact-legal { flex-wrap: wrap; align-content: center; }
+}
+
+@media (max-width: 760px) {
+  .contact-screen {
+    display: block;
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+  }
+  .contact-intro { grid-template-columns: 1fr; gap: 28px; padding: 58px 6vw; }
+  .contact-copy { transform: none; }
+  .contact-copy h1 { font-size: clamp(64px, 15vw, 104px); }
+  .contact-statement { font-size: clamp(32px, 7vw, 52px); }
+  .contact-portrait { width: min(68vw, 390px); height: min(92vw, 490px); min-width: 0; min-height: 0; }
+  .contact-navigation a { min-height: 90px; }
+  .contact-bottom { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .contact-bottom-cell { min-height: 135px; padding: 18px 7%; border-bottom: 1px solid #10101020; }
+  .contact-legal { white-space: normal; }
+}

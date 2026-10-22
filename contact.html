@@ -1,9 +1,62 @@
-<!doctype html><!--
-  contact.html — 联系页（由参照站的联系弹窗改写为独立页面）
-  结构：.contact-topline 顶栏 / .contact-stage 主区（.contact-card + .contact-credits 署名）/ .contact-footer
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact — CENTER</title>
+  <meta name="description" content="用设计连接产品与用户，创造更好的数字体验。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=global-nav-20261021">
+  <link rel="stylesheet" href="contact-redesign.css?v=contact-fullscreen-20261022">
+  <script>try{if(sessionStorage.getItem('portfolio-route-transition'))document.documentElement.classList.add('has-route-transition')}catch{}</script>
+</head>
+<body class="contact-redesign">
+  <main class="contact-screen" id="top">
+    <section class="contact-intro" aria-labelledby="contact-title">
+      <div class="contact-copy">
+        <h1 id="contact-title">CENTER<span class="contact-burst" aria-hidden="true"><i></i><i></i><i></i></span></h1>
+        <p class="contact-statement">用设计<br>连接产品与用户，<br><em>创造更好的<br>数字体验。</em></p>
+        <p class="contact-description">8年以上的 UI/UX 与 B 端产品设计经验，<br>擅长从 0 到 1 打造产品体验，关注业务目标与用户价值，<br>用设计解决实际问题。</p>
+      </div>
+      <figure class="contact-portrait">
+        <img src="assets/contact-portrait-reference.png" alt="微笑的人物插画，头戴耳机、托着脸思考" width="805" height="708">
+      </figure>
+    </section>
 
-  脚本：about.js（仅用其开场动画收尾逻辑）→ site-header.js → page-transition.js → locale.js
-  ⚠️ 本页未设 data-default-language，首屏默认英文，中文靠 locale.js 字典替换。
-  ⚠️ .contact-credits 是对协作方的署名区，改动前请先确认授权情况。
-  ⚠️ 本文件是压缩单行格式（整个文件仅 1 行），请用精确字符串替换，不要重排。
---><html lang="en"><head><style>html.has-route-transition{background:#050505}html.has-route-transition body{visibility:hidden}html.has-route-transition.route-ready body{visibility:visible}</style><script>try{if(sessionStorage.getItem("portfolio-route-transition"))document.documentElement.classList.add("has-route-transition")}catch{}</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact — September Fifteen</title><meta name="description" content="Say hello and find the right place to connect."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css?v=global-nav-20261021"><link rel="stylesheet" href="brand.css?v=brand-cube-20261022"><link rel="preload" as="image" href="pusher-poses.svg?v=2"></head><body data-default-language="zh"><div id="intro-loader" aria-hidden="true"><div class="intro-name"><span>JIUYUE</span><span>SHIWU</span></div><div class="intro-curtain"><div class="intro-pusher"><span class="intro-pusher-pose pose-step-1"></span><span class="intro-pusher-pose pose-step-2"></span><span class="intro-pusher-pose pose-step-3"></span><span class="intro-pusher-pose pose-step-4"></span><span class="intro-pusher-pose pose-step-5"></span><span class="intro-pusher-pose pose-step-6"></span></div></div></div><div class="cursor" aria-hidden="true"></div><header class="chrome"><a class="brand" href="#top" aria-label="Back to top"><span class="brand-flip" aria-hidden="true"><span class="brand-face brand-face-front"><img class="brand-copyright" src="copyright.svg" alt=""></span><span class="brand-face brand-face-right"><img class="brand-person-normal" src="normal.svg" alt=""><img class="brand-person-hover" src="hover.svg" alt=""></span><span class="brand-face brand-face-back"><img class="brand-copyright" src="copyright.svg" alt=""></span><span class="brand-face brand-face-left"><img class="brand-person-normal" src="normal.svg" alt=""><img class="brand-person-hover" src="hover.svg" alt=""></span></span></a><div class="header-slot"><button id="menuToggle" aria-expanded="false">Menu</button><nav id="menu"><a href="index.html#top">WORK</a><a href="about/">ABOUT</a><a href="playground.html">PLAYGROUND</a><a href="contact.html" aria-current="page">CONTACT</a></nav></div><div class="audio">Audio <button id="audioToggle" type="button" aria-pressed="false"><span class="audio-label">Off —</span><span class="audio-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button></div><div class="location">Working China beijing<br><span id="clock" aria-label="Beijing local time">--:--:--</span></div><div class="inquiry">For inquiries &nbsp; <a href="mailto:zhongxin6882@gmail.com">zhongxin6882@gmail.com</a><div class="inquiry-language"><button class="language-toggle" type="button" aria-label="Switch language" aria-pressed="false">中文</button></div></div></header><main id="top" class="contact-page"><div class="contact-topline"><span>CONTACT / 2026</span><span>WORKING GLOBALLY · BEIJING</span></div><div class="contact-stage"><section class="contact-card"><span class="contact-kicker">A GOOD PLACE TO START</span><h1>COME SAY HI<span>✳</span></h1><div class="contact-links"><div><small>DROP ME A LINE</small><a href="mailto:zhongxin6882@gmail.com">zhongxin6882@gmail.com ↗</a></div></div><a class="contact-close" href="index.html">CLOSE <span>×</span></a></section><aside class="contact-credits"><span>THE PEOPLE BEHIND THE PIXELS</span><div><small>DEVELOPMENT &amp; RIVE</small><b>Chien Pham ↗</b></div><div><small>ILLUSTRATION</small><b>Yup Nguyen ↗</b></div><div><small>TYPE</small><b>BT Glyphius · BT Grotesk</b></div></aside></div><footer class="contact-footer"><span>THANKS FOR STOPPING BY</span><a href="playground.html">BACK TO PLAYGROUND ↗</a></footer></main><script src="about.js"></script><script src="site-header.js?v=brand-scroll-20261022"></script><script src="page-transition.js?v=route-transition-20261019"></script><script src="locale.js?v=unified-20261022"></script><script type="module" src="brand-motion.js"></script></body></html>
+    <nav class="contact-navigation" aria-label="主导航">
+      <a href="index.html#top"><span class="contact-nav-number">01.</span><span>Home</span><span class="contact-nav-arrow" aria-hidden="true">→</span></a>
+      <a href="index.html#work-stack"><span class="contact-nav-number">02.</span><span>Work</span><span class="contact-nav-arrow" aria-hidden="true">→</span></a>
+      <a href="about/"><span class="contact-nav-number">03.</span><span>About</span><span class="contact-nav-arrow" aria-hidden="true">→</span></a>
+      <a href="contact.html" aria-current="page"><span class="contact-nav-number">04.</span><span>Contact</span><span class="contact-nav-arrow" aria-hidden="true">→</span></a>
+    </nav>
+
+    <footer class="contact-bottom">
+      <section class="contact-bottom-cell">
+        <small><span aria-hidden="true">•</span> Contact</small>
+        <div class="contact-bottom-content">
+          <svg class="contact-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="27" height="20" rx="2"/><path d="m4 8 12 10L28 8"/></svg>
+          <span>hello@example.com</span>
+        </div>
+      </section>
+      <section class="contact-bottom-cell">
+        <small><span aria-hidden="true">•</span> Subscribe</small>
+        <div class="contact-bottom-content">
+          <svg class="contact-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.8 3.6 12 9.5l-2.8 4.1c2.2 4.1 5.1 7 9.2 9.2l4.1-2.8 5.9 5.2-3.2 3.4c-2 2-5.8 1.4-10.4-1.3C9.8 24.5 7.5 22.2 4.7 17.2 2 12.6 2.6 8.8z"/></svg>
+          <span>+86 000 0000 0000</span>
+        </div>
+      </section>
+      <section class="contact-bottom-cell contact-social">
+        <small><span aria-hidden="true">•</span> SOCIAL</small>
+        <div class="contact-bottom-content contact-social-logos">
+          <span class="zcool-logo" aria-label="站酷">ZCOOL</span>
+          <span class="xiaohongshu-logo" aria-label="小红书">小红书</span>
+        </div>
+      </section>
+      <div class="contact-bottom-cell contact-legal"><span>Privacy Policy</span><span>2026 Made In CENTER ©</span></div>
+    </footer>
+  </main>
+  <script src="page-transition.js?v=route-transition-20261019"></script>
+</body>
+</html>
