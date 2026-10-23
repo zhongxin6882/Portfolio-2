@@ -151,6 +151,33 @@ try {
     console.log('PASS desktop',route);
     checks++;
   }
+  // Verify the actual stagger reveal, not just the reduced-motion fallback.
+  // The desktop right-hand grid scrolls independently, leaving the left rail fixed.
+  const motionPage=await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'no-preference'});
+  await motionPage.goto(new URL('playground.html',origin).href,{waitUntil:'domcontentloaded'});
+  await motionPage.addStyleTag({content:'#intro-loader,.page-transition{display:none!important}'});
+  await motionPage.locator('.play-card').last().waitFor({state:'attached'});
+  const initialSideY=(await motionPage.locator('.play-side').boundingBox()).y;
+  await motionPage.locator('.play-card').last().evaluate(el=>el.scrollIntoView({behavior:'instant',block:'center'}));
+  await motionPage.waitForFunction(() => {
+    const last=document.querySelector('.play-card:last-child');
+    return last && parseFloat(getComputedStyle(last).opacity)>=.99;
+  },null,{timeout:7000});
+  const scrolled=await motionPage.evaluate(() => ({
+    gridScroll:document.querySelector('.play-grid').scrollTop,
+    windowScroll:window.scrollY,
+    lastOpacity:getComputedStyle(document.querySelector('.play-card:last-child')).opacity
+  }));
+  const finalSideY=(await motionPage.locator('.play-side').boundingBox()).y;
+  assert(scrolled.gridScroll>0,'Desktop Playground right stream did not scroll');
+  assert(Math.abs(scrolled.windowScroll)<2,'Desktop Playground unexpectedly scrolled the full page');
+  assert(Math.abs(finalSideY-initialSideY)<2,'Desktop Playground left rail moved');
+  await motionPage.locator('.play-grid').evaluate(el=>el.scrollTo({top:0,behavior:'instant'}));
+  assert.equal(await motionPage.locator('.play-card').last().evaluate(el=>getComputedStyle(el).opacity),'1','Staggered card disappeared after scrolling back');
+  console.log('PASS desktop Playground ScrollTrigger.batch stagger');
+  checks++;
+  await motionPage.close();
+
   console.log('ALL PASS:',checks,'responsive route checks');
 }finally{
   await browser.close();
