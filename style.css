@@ -191,9 +191,9 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 .chrome .inquiry .language-toggle:hover{color:#fff;background:#111}
 .inquiry-language{display:flex;justify-content:flex-end}
 .audio button{display:inline-flex;align-items:center;gap:6px}
-.audio-wave{display:none;align-items:center;justify-content:center;flex:none;width:28px;height:14px;overflow:visible}
+.audio-wave{display:none;align-items:center;justify-content:center;flex:none;width:14px;height:10.5px;overflow:visible}
 .audio button[aria-pressed="true"] .audio-wave{display:inline-flex}
-.audio-wave svg{display:block;width:28px;height:14px;overflow:visible}
+.audio-wave svg{display:block;width:14px;height:10.5px;overflow:visible}
 .audio-wave svg path{vector-effect:non-scaling-stroke}
 .header-slot nav.typing a{overflow:hidden;white-space:nowrap;animation:nav-type .45s steps(12,end) both}
 .header-slot nav{gap:4px;line-height:1.15}
