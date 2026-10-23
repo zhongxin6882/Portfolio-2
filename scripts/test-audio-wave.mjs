@@ -48,6 +48,12 @@ try {
       assert.equal(waveSize.viewBox,'0 0 14 10.5');
       assert.equal(waveSize.width,14);
       assert.equal(waveSize.height,10.5);
+      const fineTuning = await wave.locator('svg').evaluate(el => ({
+        offsetY: new DOMMatrixReadOnly(getComputedStyle(el).transform).m42,
+        strokeWidth: el.querySelector('path')?.getAttribute('stroke-width')
+      }));
+      assert.equal(fineTuning.offsetY,2,'Wave must be 2px lower without moving surrounding text');
+      assert.equal(fineTuning.strokeWidth,'1.24','Wave line must be 20% thinner');
 
       const before=await wave.locator('path').getAttribute('d');
       await page.waitForTimeout(280);
