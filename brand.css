@@ -20,6 +20,10 @@
 .chrome .brand:hover .brand-person-hover,.chrome .brand:focus-visible .brand-person-hover{opacity:1}
 .chrome .brand:hover .brand-person-normal,.chrome .brand:focus-visible .brand-person-normal{opacity:0}
 
+/* Audio wave alignment is shared across Work, About, Playground and Contact.
+   About has independent inline styles, so this must live in the global sheet. */
+.chrome #audioToggle .audio-wave svg{transform:translateY(2px)}
+
 /* About's older inline rules must not replace the Work selection indicator. */
 .chrome .header-slot nav a{position:relative}
 .chrome .header-slot nav a[aria-current="page"]{padding-left:1.12em}

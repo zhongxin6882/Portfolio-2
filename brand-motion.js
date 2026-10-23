@@ -54,7 +54,7 @@ if (audioToggle && audioWave) {
   const path = document.createElementNS(ns, 'path');
   path.setAttribute('fill', 'none');
   path.setAttribute('stroke', 'currentColor');
-  path.setAttribute('stroke-width', '1.55');
+  path.setAttribute('stroke-width', '1.24');
   path.setAttribute('stroke-linecap', 'round');
   path.setAttribute('stroke-linejoin', 'round');
   svg.append(path);
