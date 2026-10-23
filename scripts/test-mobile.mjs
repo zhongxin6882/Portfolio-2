@@ -47,6 +47,20 @@ try {
       assert.equal(opened.expanded,'true');
       assert.equal(opened.menu,'flex');
       assert(opened.bodyLocked&&opened.links===4&&opened.audio!=='none'&&opened.contact!=='none',route+' '+width+': overlay missing sections');
+      await page.locator('#audioToggle').click();
+      const mobileAudio = await page.evaluate(() => {
+        const button=document.querySelector('#audioToggle');
+        return {
+          pressed:button.getAttribute('aria-pressed'),
+          label:button.querySelector('.audio-label').textContent,
+          visibleBars:[...button.querySelectorAll('.audio-wave i')].filter(bar => getComputedStyle(bar).display!=='none').length
+        };
+      });
+      assert.equal(mobileAudio.pressed,'true',route+' '+width+': audio did not turn on');
+      assert.equal(mobileAudio.label,'On',route+' '+width+': audio label did not update');
+      assert.equal(mobileAudio.visibleBars,1,route+' '+width+': phone audio should show one line');
+      await page.locator('#audioToggle').click();
+      assert.equal(await page.locator('#audioToggle').getAttribute('aria-pressed'),'false',route+' '+width+': audio did not turn off');
       await page.locator('#menuToggle').click();
       assert.equal(await page.locator('#menuToggle').getAttribute('aria-expanded'),'false');
       if(route==='index.html'){
@@ -93,6 +107,12 @@ try {
     await desktop.addStyleTag({content:'#intro-loader,.page-transition{display:none!important}'});
     assert(await desktop.locator('#menu a').first().isVisible(),'Desktop navigation must remain visible: '+route);
     assert.equal(await desktop.locator('.brand-flip').evaluate(el=>getComputedStyle(el).display),'block','Desktop rotating brand hidden: '+route);
+    if(route==='index.html'){
+      await desktop.locator('#audioToggle').click();
+      const bars=await desktop.locator('.audio-wave i').evaluateAll(elements=>elements.filter(el=>getComputedStyle(el).display!=='none').length);
+      assert.equal(bars,5,'Desktop audio indicator should retain five bars');
+      await desktop.locator('#audioToggle').click();
+    }
     if(route==='index.html'){
       assert.equal(await desktop.locator('.work-mobile-caption').first().evaluate(el=>getComputedStyle(el).display),'none','Desktop mobile caption must remain hidden');
     }
