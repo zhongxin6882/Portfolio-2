@@ -33,7 +33,7 @@ const cards=[...document.querySelectorAll('.play-card')];
 const tagline=document.querySelector('.play-tagline');
 const topLine=document.querySelector('.play-topline');
 
-  // ── 主分支（GSAP 可用）：topline → tagline → 计数器 → 卡片的串行时间轴。
+  // ── 主分支：左侧文案与计数器入场；右侧卡片由 ScrollTrigger 批量触发。
   // 计数器只在首次访问时播放（localStorage 标记），回访直接显示终值。
   // 所有卡片随所在滚动容器进入视区时按批次错峰淡入（每张只出现一次）。
 if(!prefersReducedMotion){
@@ -87,7 +87,7 @@ if(!prefersReducedMotion){
     tagline.addEventListener('pointerenter',()=>gsap.to(tagline,{backgroundPosition:'100% 50%',duration:.7,ease:'power2.out'}));
     tagline.addEventListener('pointerleave',()=>gsap.to(tagline,{backgroundPosition:'0% 50%',duration:.7,ease:'power2.out'}));
   }
-  // ── 降级分支（无 GSAP 或开启减弱动效）：直接用 CSS 类完成呈现，计数器写终值。
+  // ── 减弱动效分支：所有卡片直接呈现，计数器写终值。
   // 这里加的 .is-visible / .type-in 需要 style.css 里有对应的静态样式兜底。
 }else{
   if(count) count.textContent=target;
