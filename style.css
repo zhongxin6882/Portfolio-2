@@ -191,11 +191,10 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 .chrome .inquiry .language-toggle:hover{color:#fff;background:#111}
 .inquiry-language{display:flex;justify-content:flex-end}
 .audio button{display:inline-flex;align-items:center;gap:6px}
-.audio-wave{display:none;height:13px;align-items:center;gap:2px}
+.audio-wave{display:none;align-items:center;justify-content:center;flex:none;width:28px;height:14px;overflow:visible}
 .audio button[aria-pressed="true"] .audio-wave{display:inline-flex}
-.audio-wave i{width:2px;height:5px;background:currentColor;animation:audio-wave .78s ease-in-out infinite alternate}
-.audio-wave i:nth-child(2){animation-delay:-.18s}.audio-wave i:nth-child(3){animation-delay:-.44s}.audio-wave i:nth-child(4){animation-delay:-.3s}.audio-wave i:nth-child(5){animation-delay:-.59s}
-@keyframes audio-wave{to{height:13px}}
+.audio-wave svg{display:block;width:28px;height:14px;overflow:visible}
+.audio-wave svg path{vector-effect:non-scaling-stroke}
 .header-slot nav.typing a{overflow:hidden;white-space:nowrap;animation:nav-type .45s steps(12,end) both}
 .header-slot nav{gap:4px;line-height:1.15}
 .header-slot nav a{line-height:1.15}
@@ -203,7 +202,7 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 @keyframes nav-type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 .page-transition__title{opacity:1;filter:none;transform:none;animation:none}
 @media(max-width:800px){.chrome .inquiry .language-toggle{font-size:9px;margin-top:7px}}
-@media(prefers-reduced-motion:reduce){.audio-wave i,.header-slot nav.typing a{animation:none}}
+@media(prefers-reduced-motion:reduce){.header-slot nav.typing a{animation:none}}
 @media(max-width:850px){
   .chrome{height:185px;grid-template-columns:20% 42% minmax(0,1fr);grid-template-rows:28px 35px auto;padding:15px 14px;background:#e9e9e9}
   .chrome .brand{grid-column:1;grid-row:1/4}
