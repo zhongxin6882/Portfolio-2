@@ -1,3 +1,5 @@
+import { gsap } from 'gsap';
+
 /**
  * work.js — 首页作品画廊：数据源 + 循环卡片堆叠交互引擎
  * 仅由 index.html 加载，且必须在 site-header.js / page-transition.js / locale.js 之前。
@@ -53,11 +55,13 @@ const stack=document.getElementById('work-stack'),list=document.getElementById('
 const cards=[],items=[];let active=-1,focused=-1;
 // count 是真实项目数；但 index.html 里的分母 <small>/19</small> 是硬编码的，增删项目要两处同步。
 const count=projects.length,looping=()=>innerWidth>850;
+const clamp=gsap.utils.clamp;
 const wrap=n=>((n%count)+count)%count;
 // 环形最短距离（带符号）：决定卡片往哪个方向偏移，并处理 19 → 01 的回绕。
 // Keep the shortest distance through the circular stack, including 19 → 01.
 const distance=(i,p)=>wrap(i-p+count/2)-count/2;
 let position=0,targetPosition=0,framePending=false,snapTimer;
+let previousPosition=0,motionVelocity=0,motionBend=0;
 // ── 构建卡片堆叠：每个项目一个 <article class="work-card">，内含按钮与封面图。
 // 图片先加载本地 assets/work/，onerror 时回退远程；前 3 张 eager，其余 lazy。
 projects.forEach((project,i)=>{const article=document.createElement('article');article.className='work-card';const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`Preview ${project.name}`);const img=new Image();img.src=project.image;img.onerror=()=>{if(img.src!==project.remote)img.src=project.remote};img.alt=project.name+' project cover';img.loading=i<3?'eager':'lazy';button.append(img);button.addEventListener('click',()=>openFocus(i));const caption=document.createElement('div');caption.className='work-mobile-caption';caption.innerHTML=`<span class="mobile-type">${project.type}</span><h2>${project.name}</h2><p>${project.description}</p><span class="work-mobile-palette" aria-hidden="true">${palettes[i%palettes.length].map(color=>`<i style="background:${color}"></i>`).join('')}</span>`;article.append(button,caption);stack.append(article);cards.push(article)});
@@ -69,23 +73,38 @@ function setActive(i){if(i===active)return;active=i;const p=projects[i];info.rol
 // (--stack-x / -y / -rotation / -yaw / -scale) 以及 z-index、opacity、visibility。
 // 距离超过 2.25 的卡片直接 visibility:hidden，避免无谓绘制。
 function render(){
+  const frameVelocity=position-previousPosition;
+  previousPosition=position;
+  motionVelocity+=(frameVelocity-motionVelocity)*.34;
+  motionBend+=(clamp(-1,1,motionVelocity*9)-motionBend)*.24;
   setActive(wrap(Math.round(position)));
   window.dispatchEvent(new CustomEvent('work:position', {detail: {position}}));
   const width=innerWidth,height=innerHeight;
+  const stackWidth=stack.clientWidth;
+  const cardWidth=Math.min(stackWidth*.58,400);
+  const cardHeight=cardWidth/1.25;
+  // The reference stack intentionally has asymmetric breathing room: the
+  // first card above keeps about 70% visible, while the first below keeps
+  // about 45% visible. Further cards continue the same rhythm.
+  const upperStep=cardHeight*.30;
+  const lowerStep=cardHeight*.55;
   cards.forEach((card,i)=>{const d=distance(i,position),abs=Math.abs(d),shown=abs<2.25;
     card.style.visibility=shown?'visible':'hidden';card.style.pointerEvents=abs<.75?'auto':'none';
-    card.style.zIndex=String(30-Math.round(abs*6));card.style.opacity=shown?String(Math.max(0,1-Math.max(0,abs-1.65)*1.5)):'0';
-    card.style.setProperty('--stack-x',`${-d*Math.min(width*.045,88)}px`);
-    card.style.setProperty('--stack-y',`${d*height*.23}px`);
-    card.style.setProperty('--stack-rotation',`${d*15}deg`);
-    card.style.setProperty('--stack-yaw',`${-d*9}deg`);
-    card.style.setProperty('--stack-scale',String(1-Math.min(abs,2)*.035));
+    card.style.zIndex=String(100-Math.round(abs*12)+(d>0?0:1));
+    card.style.opacity=shown?String(Math.max(0,1-Math.max(0,abs-1.65)*1.5)):'0';
+    card.style.setProperty('--stack-x',`${-d*Math.min(width*.045,88)+motionBend*abs*18}px`);
+    card.style.setProperty('--stack-y',`${d<0?d*upperStep:d*lowerStep}px`);
+    card.style.setProperty('--stack-rotation',`${d*15+motionBend*abs*5}deg`);
+    card.style.setProperty('--stack-yaw',`${-d*9-motionBend*abs*7}deg`);
+    card.style.setProperty('--stack-skew',`${motionBend*abs*3.5}deg`);
+    card.style.setProperty('--stack-bend',String(Math.min(1,Math.abs(motionBend)*abs)));
+    card.style.setProperty('--stack-scale',String(1-Math.min(abs,2)*.035+Math.abs(motionBend)*.012));
   });
   items.forEach((item,i)=>{const d=distance(i,position),abs=Math.abs(d);item.style.visibility=abs<3.2?'visible':'hidden';item.style.pointerEvents=abs<2.8?'auto':'none';item.style.setProperty('--index-y',`${d*Math.min(height*.19,185)}px`);item.style.opacity=abs<.5?'1':String(Math.max(.16,.35-abs*.08))});
 }
 // ── 动画循环：rAF 节流 + 指数缓动（每帧逼近目标 16%）+ 停止输入 180ms 后吸附到整数。
 function scheduleFrame(){if(framePending)return;framePending=true;requestAnimationFrame(tick)}
-function tick(){position+=(targetPosition-position)*.16;if(Math.abs(targetPosition-position)<.001)position=targetPosition;render();if(position!==targetPosition)requestAnimationFrame(tick);else framePending=false}
+function tick(){position+=(targetPosition-position)*.16;if(Math.abs(targetPosition-position)<.001)position=targetPosition;render();if(position!==targetPosition||Math.abs(motionBend)>.002)requestAnimationFrame(tick);else framePending=false}
 function queueSnap(){clearTimeout(snapTimer);snapTimer=setTimeout(()=>{targetPosition=Math.round(targetPosition);scheduleFrame()},180)}
 // ── 输入层：滚轮。deltaMode 归一化（1=行,2=页），单次增量限制在 ±2 个项目。
 // focused >= 0（浮层打开）时全部短路，防止背景跟着转。

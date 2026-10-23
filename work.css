@@ -447,10 +447,13 @@
     aspect-ratio: 1.25;
     margin: 0; padding: 0;
     transform: translate(-50%,-50%) translate3d(var(--stack-x,0px),var(--stack-y,0px),0)
-      rotate(var(--stack-rotation,0deg)) rotateY(var(--stack-yaw,0deg)) scale(var(--stack-scale,1));
+      rotate(var(--stack-rotation,0deg)) rotateY(var(--stack-yaw,0deg)) skewX(var(--stack-skew,0deg)) scale(var(--stack-scale,1));
     transform-style: preserve-3d;
+    transform-origin: 50% 50%;
+    backface-visibility: hidden;
     transition: none;
     will-change: transform;
+    filter: saturate(calc(1 + var(--stack-bend, 0) * .05));
   }
   .work-card button, .work-card.is-visible button,
   .work-card button:hover, .work-card button:focus-visible {
