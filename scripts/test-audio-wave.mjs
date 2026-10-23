@@ -39,6 +39,15 @@ try {
       assert.equal(await sound.getAttribute('aria-pressed'),'true');
       assert.notEqual(await wave.evaluate(e=>getComputedStyle(e).display),'none');
       assert.equal(await wave.locator('svg path').count(),1,'Audio On requires one continuous line');
+      // Reference adjustment: reduce 28px to 14px (50% width), 14px to 10.5px (75% height).
+      const waveSize = await wave.locator('svg').evaluate(el => ({
+        width: el.getBoundingClientRect().width,
+        height: el.getBoundingClientRect().height,
+        viewBox: el.getAttribute('viewBox')
+      }));
+      assert.equal(waveSize.viewBox,'0 0 14 10.5');
+      assert.equal(waveSize.width,14);
+      assert.equal(waveSize.height,10.5);
 
       const before=await wave.locator('path').getAttribute('d');
       await page.waitForTimeout(280);
