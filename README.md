@@ -73,7 +73,7 @@ Portfolio-2/
 ├── mobile-responsive.css      # 移动端响应式适配
 ├── contact-redesign.css       # Contact 专用样式
 ├── brand-template.html        # 四大页面共用的版权/人物标识结构
-├── brand.css / brand-motion.js# 公共标识样式与翻转动画
+├── brand.css / brand-motion.js # 公共标识样式与翻转动画
 ├── site-header.js             # 菜单、时钟、音频
 ├── page-transition.js        # 页面转场
 ├── locale.js                  # 中英文替换
