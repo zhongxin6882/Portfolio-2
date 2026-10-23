@@ -158,8 +158,8 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
 }
 
 .contact-social-logos { gap: clamp(18px, 2.4vw, 44px); }
-.zcool-logo { display: block; width: 90px; height: auto; flex: none; }
-.xiaohongshu-logo { display: block; width: 72px; height: auto; flex: none; }
+.zcool-logo { display: block; width: 85.5px; height: auto; flex: none; }
+.xiaohongshu-logo { display: block; width: 61.2px; height: auto; flex: none; }
 
 .contact-legal {
   flex-direction: row;
