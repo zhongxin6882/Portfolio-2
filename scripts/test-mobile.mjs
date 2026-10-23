@@ -47,20 +47,26 @@ try {
       assert.equal(opened.expanded,'true');
       assert.equal(opened.menu,'flex');
       assert(opened.bodyLocked&&opened.links===4&&opened.audio!=='none'&&opened.contact!=='none',route+' '+width+': overlay missing sections');
+      await page.locator('#audioToggle .audio-wave svg path').waitFor({state:'attached',timeout:15000});
       await page.locator('#audioToggle').click();
       const mobileAudio = await page.evaluate(() => {
         const button=document.querySelector('#audioToggle');
+        const wave=button.querySelector('.audio-wave');
         return {
           pressed:button.getAttribute('aria-pressed'),
           label:button.querySelector('.audio-label').textContent,
-          visibleBars:[...button.querySelectorAll('.audio-wave i')].filter(bar => getComputedStyle(bar).display!=='none').length
+          visible:getComputedStyle(wave).display!=='none',
+          oldBars:wave.querySelectorAll('i').length,
+          paths:wave.querySelectorAll('svg path').length,
+          shape:wave.querySelector('svg path')?.getAttribute('d')
         };
       });
       assert.equal(mobileAudio.pressed,'true',route+' '+width+': audio did not turn on');
       assert.equal(mobileAudio.label,'On',route+' '+width+': audio label did not update');
-      assert.equal(mobileAudio.visibleBars,1,route+' '+width+': phone audio should show one line');
+      assert(mobileAudio.visible&&mobileAudio.oldBars===0&&mobileAudio.paths===1&&mobileAudio.shape?.startsWith('M'),route+' '+width+': phone audio should show one SVG line');
       await page.locator('#audioToggle').click();
       assert.equal(await page.locator('#audioToggle').getAttribute('aria-pressed'),'false',route+' '+width+': audio did not turn off');
+      assert.equal(await page.locator('#audioToggle .audio-wave').evaluate(el=>getComputedStyle(el).display),'none',route+' '+width+': audio line remained visible after turning off');
       await page.locator('#menuToggle').click();
       assert.equal(await page.locator('#menuToggle').getAttribute('aria-expanded'),'false');
       if(route==='index.html'){
@@ -108,9 +114,14 @@ try {
     assert(await desktop.locator('#menu a').first().isVisible(),'Desktop navigation must remain visible: '+route);
     assert.equal(await desktop.locator('.brand-flip').evaluate(el=>getComputedStyle(el).display),'block','Desktop rotating brand hidden: '+route);
     if(route==='index.html'){
+      await desktop.locator('#audioToggle .audio-wave svg path').waitFor({state:'attached',timeout:15000});
       await desktop.locator('#audioToggle').click();
-      const bars=await desktop.locator('.audio-wave i').evaluateAll(elements=>elements.filter(el=>getComputedStyle(el).display!=='none').length);
-      assert.equal(bars,5,'Desktop audio indicator should retain five bars');
+      const indicator=await desktop.locator('#audioToggle .audio-wave').evaluate(el=>({
+        visible:getComputedStyle(el).display!=='none',
+        oldBars:el.querySelectorAll('i').length,
+        paths:el.querySelectorAll('svg path').length
+      }));
+      assert(indicator.visible&&indicator.oldBars===0&&indicator.paths===1,'Desktop audio indicator should show one SVG line');
       await desktop.locator('#audioToggle').click();
     }
     if(route==='index.html'){

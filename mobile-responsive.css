@@ -91,9 +91,6 @@
   .chrome.mobile-menu-open .audio button{
     display:inline-flex!important;color:#111!important;min-height:28px
   }
-  /* In the phone menu, one vertical line replaces the five-bar audio wave. */
-  .chrome .audio-wave i:first-child{height:13px;animation:none}
-  .chrome .audio-wave i:not(:first-child){display:none!important}
   .chrome.mobile-menu-open .inquiry{top:auto!important;bottom:30px!important}
   .chrome.mobile-menu-open .inquiry a{color:#111!important;text-decoration:underline;text-underline-offset:2px}
   .chrome.mobile-menu-open .inquiry-language{
