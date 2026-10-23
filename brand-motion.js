@@ -45,9 +45,9 @@ const audioWave = audioToggle?.querySelector('.audio-wave');
 if (audioToggle && audioWave) {
   const ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg');
-  svg.setAttribute('viewBox', '0 0 28 14');
-  svg.setAttribute('width', '28');
-  svg.setAttribute('height', '14');
+  svg.setAttribute('viewBox', '0 0 14 10.5');
+  svg.setAttribute('width', '14');
+  svg.setAttribute('height', '10.5');
   svg.setAttribute('focusable', 'false');
   svg.setAttribute('aria-hidden', 'true');
 
@@ -63,11 +63,12 @@ if (audioToggle && audioWave) {
 
   const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
   const state = { phase: 0 };
-  const width = 28, centerY = 7, amplitude = 3.8;
+  // Half the previous 28px width; 75% of the previous 14px vertical extent.
+  const width = 14, centerY = 5.25, amplitude = 2.85;
   function drawWave() {
     const coordinates = [];
     for (let i = 0; i <= 28; i++) {
-      const x = i;
+      const x = i * 0.5;
       const progress = x / width;
       // A soft envelope brings both ends of the short line back to mid-height.
       const envelope = Math.pow(Math.sin(progress * Math.PI), 0.35);
