@@ -478,3 +478,21 @@
 @media (prefers-reduced-motion: reduce) and (min-width: 851px) {
   .work-card { transition: none; }
 }
+
+/* Work desktop only: imported Demo 21 paper geometry, mobile is untouched. */
+@media (min-width:851px){
+  body.work-paper-ready #work-stack .work-card{visibility:hidden!important;pointer-events:none!important}
+  body.work-paper-ready .work-info,body.work-paper-ready .work-index{z-index:6}
+  .work-paper-stage{position:fixed;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+  .work-paper-canvas{display:block;width:100%;height:100%}
+  .work-paper-masks{position:fixed;inset:0;z-index:8;pointer-events:none;overflow:hidden}
+  .work-paper-mask{position:absolute;inset:0;pointer-events:none}
+  .work-paper-mask[hidden]{display:none}
+  .work-paper-number-white{position:fixed;display:block;color:#fff;pointer-events:none}
+  .work-paper-hotspot{position:fixed;z-index:9;border:0;padding:0;background:transparent;cursor:none}
+  .work-paper-cursor{position:fixed;top:0;left:0;z-index:10;width:96px;height:96px;border-radius:50%;
+    background:#191919;color:white;display:grid;place-items:center;font:600 14px var(--font-sans);
+    pointer-events:none;opacity:0;visibility:hidden}
+  .work-paper-cursor.show{opacity:1;visibility:visible}
+}
+@media(max-width:850px){.work-paper-stage,.work-paper-masks,.work-paper-hotspot,.work-paper-cursor{display:none!important}}
