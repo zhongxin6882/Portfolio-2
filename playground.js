@@ -1,10 +1,13 @@
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
- * playground.js — 灵感实验室：卡片墙渲染 + GSAP 入场动画 + 计数器
+ * playground.js — 灵感实验室：卡片墙渲染 + GSAP ScrollTrigger 交错入场 + 计数器
  * 由 Vite 作为模块加载，GSAP 从 npm 包导入。
  *
- * 动画有两个分支：正常模式走 GSAP 时间轴，用户开启减弱动效时走降级分支。
+ * 动画有两个分支：正常模式走 GSAP 时间轴 + ScrollTrigger.batch，减弱动效走降级分支。
  *    **改动画效果时两个分支都要改**，否则降级路径会与主路径表现不一致。
  *
  * 依赖的 DOM 契约：.play-grid、[data-count]、.play-tagline、.play-topline
@@ -32,7 +35,7 @@ const topLine=document.querySelector('.play-topline');
 
   // ── 主分支（GSAP 可用）：topline → tagline → 计数器 → 卡片的串行时间轴。
   // 计数器只在首次访问时播放（localStorage 标记），回访直接显示终值。
-  // 前 4 张卡片进时间轴，其余交给 IntersectionObserver（threshold .12）滚动触发。
+  // 所有卡片随所在滚动容器进入视区时按批次错峰淡入（每张只出现一次）。
 if(!prefersReducedMotion){
   const intro=gsap.timeline({defaults:{ease:'power3.out'}});
   if(topLine) intro.from(topLine,{y:12,opacity:0,duration:.55});
@@ -46,15 +49,39 @@ if(!prefersReducedMotion){
     }else count.textContent=target;
   }
   if(cards.length){
-    gsap.set(cards,{opacity:0,y:18,scale:.985});
-    const reveal=card=>gsap.to(card,{opacity:1,y:0,scale:1,duration:.72,ease:'back.out(1.45)',overwrite:true});
-    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
-      if(entry.isIntersecting){reveal(entry.target);observer.unobserve(entry.target)}
-    }),{threshold:.12});
-    cards.forEach((card,index)=>{
-      if(index<4){intro.to(card,{opacity:1,y:0,scale:1,duration:.72,ease:'back.out(1.45)'},index===0?'-=.35':'-=.54')}
-      else observer.observe(card);
-    });
+    // Preserve the original four-column layout and image-only hover zoom.
+    // Desktop scrolls inside .play-grid; phones scroll the document instead.
+    gsap.set(cards,{autoAlpha:0,y:18});
+    const revealed=new WeakSet();
+    const media=gsap.matchMedia();
+
+    const initBatches=scroller=>{
+      // Previously revealed cards stay visible when the viewport crosses 760px.
+      const pending=cards.filter(card=>!revealed.has(card));
+      const triggers=ScrollTrigger.batch(pending,{
+        scroller,
+        start:'top 92%',
+        interval:.12,
+        batchMax:4,
+        once:true,
+        onEnter:batch=>{
+          batch.forEach(card=>revealed.add(card));
+          gsap.to(batch,{
+            autoAlpha:1,
+            y:0,
+            duration:.95,
+            stagger:.18,
+            ease:'sine.out',
+            overwrite:true
+          });
+        }
+      });
+      return ()=>triggers.forEach(trigger=>trigger.kill());
+    };
+
+    media.add('(min-width: 761px)',()=>initBatches(grid));
+    media.add('(max-width: 760px)',()=>initBatches(window));
+    window.addEventListener('pagehide',()=>media.revert(),{once:true});
   }
   if(tagline){
     tagline.addEventListener('pointerenter',()=>gsap.to(tagline,{backgroundPosition:'100% 50%',duration:.7,ease:'power2.out'}));
