@@ -19,11 +19,11 @@ const hit=document.createElement('button'),cursor=document.createElement('div');
 hit.className='work-paper-hotspot';hit.type='button';hit.setAttribute('aria-label','Open selected project');
 cursor.className='work-paper-cursor';cursor.textContent='CLICK ↗';
 document.body.append(hit,cursor);
-const ease=t=>t*t*(3-2*t),width=()=>Math.min(W*.246,390);
+const ease=t=>t*t*(3-2*t),width=()=>Math.min(W*.246,390)*.90; // Every desktop photo is 10% smaller.
 function pose(d){
 const a=Math.abs(d),t=ease(clamp(a,0,1)),far=Math.min(Math.max(0,a-1),3.1),top=d<0;
 const lower=top?0:clamp(4-a,0,3)*t,dx=top?Math.min(W*.122,188):Math.min(W*.174,260);
-const x=d===0?0:top?dx*t+far*15*cfg.spacing:-dx*t+lower*16*cfg.spacing;
+const x=(d===0?0:top?dx*t+far*15*cfg.spacing:-dx*t+lower*16*cfg.spacing)-(d>0?width()*.10*t:0); // Lower deck shifts left by 10% of a photo width.
 const y=top?-H*cfg.top*t-far*15*cfg.spacing:H*cfg.bottom*t-lower*20*cfg.spacing;
 const z=cfg.depth*(30-102*t-27*(top?far:lower))+(a<.72?hover.lift*42*(1-a/.72):0);
 const leaf=Math.sin(Math.PI*clamp(a,0,1));
@@ -78,7 +78,7 @@ const vb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vb);gl.bufferData(gl.AR
 const ib=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,ib);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(ids),gl.STATIC_DRAW);
 for(const [key,offset] of [['ap',0],['au',8]]){const a=gl.getAttribLocation(prog,key);gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,16,offset)}
 gl.disable(gl.DEPTH_TEST);gl.disable(gl.CULL_FACE);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false); // Our mesh UV already points downward from the source image's top; do not flip uploaded pixels.
 uni={};for(const k of ['uv','uo','us','uc','ur','uf','ub','uw','ut','uk','ul','uh','ud','alpha','tex'])uni[k]=gl.getUniformLocation(prog,k);
 gl.uniform1i(uni.tex,0);count=ids.length;return true;
 }
@@ -174,6 +174,8 @@ function activate(){
 if(!ready||!mq.matches||!images[0]?.tex)return;
 W=innerWidth;H=innerHeight;const dpr=Math.min(devicePixelRatio||1,1.8);
 canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);fit();
+// Preserve the previously fitted deck exposure, then lift the upper deck by 15% of photo height.
+cfg.top+=(width()*.775*.15)/H;
 active=true;document.body.classList.add('work-paper-ready');schedule();
 }
 if(ready){
