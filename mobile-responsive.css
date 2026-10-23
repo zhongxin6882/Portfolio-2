@@ -101,15 +101,15 @@
     min-height:26px;color:#111!important
   }
 
-  /* WORK: one project per viewport, number upper left, artwork centered,
-     then its own title and description below. No desktop stack rewriting. */
+  /* WORK: circular phone stack, with the neighboring covers peeking in. */
+  html:has(.work-home),body.work-home{height:100%;overflow:hidden!important}
   .work-home{--work-header-height:var(--mobile-header)!important}
   .work-home .work-shell{
-    display:block!important;min-height:0!important;padding-top:var(--mobile-header)!important;
-    overflow:visible!important
+    display:block!important;height:100svh!important;min-height:0!important;
+    padding-top:var(--mobile-header)!important;overflow:hidden!important
   }
   .work-home .work-info{
-    position:fixed!important;top:89px!important;left:18px!important;
+    position:fixed!important;top:clamp(120px,18svh,190px)!important;left:7%!important;
     z-index:10;width:auto!important;height:auto!important;min-height:0!important;
     margin:0!important;padding:0!important;background:transparent!important;
     border:0!important;pointer-events:none
@@ -119,35 +119,41 @@
   .work-home .work-counter>span{display:none!important}
   .work-home .work-counter>div{display:flex!important;align-items:flex-start;gap:12px}
   .work-home .work-counter strong{
-    font:400 clamp(64px,19vw,88px)/.86 var(--font-sans)!important;
+    font:400 clamp(76px,22vw,112px)/.86 var(--font-sans)!important;
     letter-spacing:-.095em!important
   }
   .work-home .work-counter small{
     display:block!important;padding:0!important;font:12px/1 var(--font-mono)!important
   }
-  .work-home .work-stack{display:block!important;padding:0!important;overflow:visible!important}
+  .work-home .work-stack{
+    position:relative!important;display:block!important;height:100%!important;
+    padding:0!important;overflow:hidden!important;isolation:isolate;touch-action:none
+  }
   .work-home .work-card{
-    position:relative;display:flex!important;flex-direction:column!important;
-    align-items:center!important;justify-content:center!important;
-    width:100%;height:calc(100svh - var(--mobile-header));min-height:590px;
-    margin:0!important;padding:0 16px 110px!important
+    position:absolute!important;inset:0!important;display:block!important;
+    width:100%!important;height:100%!important;min-height:0!important;
+    margin:0!important;padding:0!important
   }
   .work-home .work-card button{
-    flex:none;width:min(62vw,345px)!important;max-width:345px!important;
-    aspect-ratio:1.25!important;height:auto!important;opacity:1;
-    transform:none!important;filter:none!important;box-shadow:none!important
+    position:absolute!important;left:50%!important;top:49%!important;
+    width:min(50vw,345px)!important;max-width:345px!important;
+    aspect-ratio:1.5!important;height:auto!important;opacity:1;
+    transform:translate(-50%,-50%) translate3d(var(--phone-x,0px),var(--phone-y,0px),0)
+      rotate(var(--phone-rotation,0deg)) rotateY(var(--phone-yaw,0deg))
+      skewY(var(--phone-skew,0deg)) scale(var(--phone-scale,1))!important;
+    transform-style:preserve-3d;backface-visibility:hidden;
+    filter:none!important;box-shadow:none!important
   }
   .work-home .work-card button img{object-fit:cover}
-  .work-home .work-card button:hover,.work-home .work-card button:focus-visible{
-    transform:scale(1.015)!important
-  }
+  .work-home .work-card button:focus-visible{outline:2px solid #111;outline-offset:5px}
   .work-home .work-mobile-caption{
-    position:absolute;bottom:clamp(54px,9vh,100px);left:8%;right:8%;
-    display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center
+    position:absolute;bottom:clamp(32px,6svh,70px);left:8%;right:8%;
+    display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;
+    opacity:var(--mobile-caption-opacity,0);pointer-events:none
   }
-  .work-mobile-caption .mobile-type{font:10px/1.2 var(--font-sans);color:#777}
-  .work-mobile-caption h2{margin:0;font:500 clamp(20px,5.5vw,28px)/1.05 Georgia,serif;letter-spacing:-.045em}
-  .work-mobile-caption p{max-width:310px;margin:9px 0 0;font:11px/1.3 var(--font-sans)}
+  .work-mobile-caption .mobile-type{font:12px/1.2 var(--font-sans);color:#777}
+  .work-mobile-caption h2{margin:0;font:500 clamp(22px,6vw,34px)/1.05 Georgia,serif;letter-spacing:-.045em}
+  .work-mobile-caption p{max-width:310px;margin:9px 0 0;font:13px/1.3 var(--font-sans)}
   .work-mobile-palette{display:flex;gap:2px;margin-top:19px}
   .work-mobile-palette i{display:block;width:12px;height:12px}
   .work-home .work-index{display:none!important}
@@ -212,8 +218,7 @@
   .contact-redesign .contact-navigation{padding-top:24px}
 }
 @media (max-width:420px){
-  .work-home .work-card{min-height:540px}
-  .work-home .work-mobile-caption{bottom:46px}
+  .work-home .work-card{min-height:0}
   .playground-body .play-side{gap:42px}
   .playground-body .play-grid{margin-top:62px}
   .contact-redesign .contact-social,.contact-redesign .contact-legal{grid-column:1/-1}

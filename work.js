@@ -11,8 +11,8 @@ import { gsap } from 'gsap';
  *   #work-visit          “View project” 按钮，setActive() 时重绑 onclick
  *   #work-focus / #work-detail   两级浮层，HTML 里初始带 hidden 属性
  *
- * 布局分工：桌面端（innerWidth > 850）由本脚本接管滚轮/触摸做环形堆叠；
- *           移动端交还原生滚动，仅用 updateMobile() 同步高亮。
+ * 布局分工：桌面端与手机端（<=760）使用同一环形堆叠；
+ *           761–850px 平板保持原生滚动，由 updateMobile() 同步高亮。
  * 详细架构说明见仓库根目录 AGENTS.md 第 7 节。
  */
 if ('scrollRestoration' in history) history.scrollRestoration='manual';
@@ -54,7 +54,7 @@ const palettes=[['#090f25','#f5f1db','#075ad8'],['#14151e','#d9d7ed','#8a72e9'],
 const stack=document.getElementById('work-stack'),list=document.getElementById('work-index-items'),info={role:document.getElementById('work-role'),date:document.getElementById('work-date'),awards:document.getElementById('work-awards'),number:document.getElementById('work-number')};
 const cards=[],items=[];let active=-1,focused=-1;
 // count 是真实项目数；但 index.html 里的分母 <small>/19</small> 是硬编码的，增删项目要两处同步。
-const count=projects.length,looping=()=>innerWidth>850;
+const count=projects.length,phoneLooping=()=>innerWidth<=760,looping=()=>innerWidth>850||phoneLooping();
 const clamp=gsap.utils.clamp;
 const wrap=n=>((n%count)+count)%count;
 // 环形最短距离（带符号）：决定卡片往哪个方向偏移，并处理 19 → 01 的回绕。
@@ -86,9 +86,25 @@ function render(){
   // The reference stack intentionally has asymmetric breathing room: the
   // first card above keeps about 70% visible, while the first below keeps
   // about 45% visible. Further cards continue the same rhythm.
-  const upperStep=cardHeight*.30;
-  const lowerStep=cardHeight*.55;
+  const upperStep=cardHeight*.70;
+  const lowerStep=cardHeight*.45;
   cards.forEach((card,i)=>{const d=distance(i,position),abs=Math.abs(d),shown=abs<2.25;
+    if(phoneLooping()){
+      const visible=abs<1.55;
+      card.style.visibility=visible?'visible':'hidden';
+      card.style.pointerEvents=abs<.45?'auto':'none';
+      card.style.zIndex=String(100-Math.round(abs*20)+(d>0?0:1));
+      card.style.opacity=visible?String(Math.max(0,1-Math.max(0,abs-1.05)*2)):'0';
+      card.style.setProperty('--phone-x',`${d<0?-d*width*.34:-d*width*.37}px`);
+      card.style.setProperty('--phone-y',`${d<0?d*height*.41:d*height*.45}px`);
+      card.style.setProperty('--phone-rotation',`${abs*8+motionBend*abs*3}deg`);
+      card.style.setProperty('--phone-yaw',`${-abs*9-motionBend*abs*5}deg`);
+      card.style.setProperty('--phone-skew',`${motionBend*abs*3}deg`);
+      card.style.setProperty('--phone-scale',String(1-Math.min(abs,1)*.02));
+      card.style.setProperty('--mobile-caption-opacity',String(Math.max(0,1-abs*2.3)));
+      if(visible)card.querySelector('img').loading='eager';
+      return;
+    }
     card.style.visibility=shown?'visible':'hidden';card.style.pointerEvents=abs<.75?'auto':'none';
     card.style.zIndex=String(100-Math.round(abs*12)+(d>0?0:1));
     card.style.opacity=shown?String(Math.max(0,1-Math.max(0,abs-1.65)*1.5)):'0';
@@ -108,12 +124,13 @@ function tick(){position+=(targetPosition-position)*.16;if(Math.abs(targetPositi
 function queueSnap(){clearTimeout(snapTimer);snapTimer=setTimeout(()=>{targetPosition=Math.round(targetPosition);scheduleFrame()},180)}
 // ── 输入层：滚轮。deltaMode 归一化（1=行,2=页），单次增量限制在 ±2 个项目。
 // focused >= 0（浮层打开）时全部短路，防止背景跟着转。
-addEventListener('wheel',e=>{if(!looping()||focused>=0)return;e.preventDefault();const dy=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1);targetPosition+=Math.max(-2,Math.min(2,dy/520));scheduleFrame();queueSnap()},{passive:false});
+addEventListener('wheel',e=>{if(!looping()||focused>=0||phoneLooping()&&!e.target.closest('.work-stack'))return;e.preventDefault();const dy=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1);targetPosition+=Math.max(-2,Math.min(2,dy/520));scheduleFrame();queueSnap()},{passive:false});
 // ── 输入层：触摸。以半屏高度为一个项目的位移基准。
-let touchStartY=0,touchStartPosition=0;
-addEventListener('touchstart',e=>{if(!looping()||focused>=0)return;touchStartY=e.touches[0].clientY;touchStartPosition=targetPosition},{passive:true});
-addEventListener('touchmove',e=>{if(!looping()||focused>=0)return;e.preventDefault();targetPosition=touchStartPosition+(touchStartY-e.touches[0].clientY)/(innerHeight*.55);scheduleFrame()},{passive:false});
-addEventListener('touchend',()=>{if(looping()&&focused<0)queueSnap()},{passive:true});
+let touchStartY=0,touchStartPosition=0,touchTracking=false;
+addEventListener('touchstart',e=>{touchTracking=looping()&&focused<0&&(!phoneLooping()||!!e.target.closest('.work-stack'));if(!touchTracking)return;touchStartY=e.touches[0].clientY;touchStartPosition=targetPosition},{passive:true});
+addEventListener('touchmove',e=>{if(!touchTracking||focused>=0)return;e.preventDefault();targetPosition=touchStartPosition+(touchStartY-e.touches[0].clientY)/(innerHeight*.55);scheduleFrame()},{passive:false});
+addEventListener('touchend',()=>{if(touchTracking&&focused<0)queueSnap();touchTracking=false},{passive:true});
+addEventListener('touchcancel',()=>{touchTracking=false},{passive:true});
 addEventListener('keydown',e=>{if(!looping()||focused>=0)return;const move=({ArrowDown:1,PageDown:1,ArrowUp:-1,PageUp:-1})[e.key];if(move){e.preventDefault();targetPosition=Math.round(targetPosition)+move;scheduleFrame()}},{passive:false});
 // ── 移动端路径：不接管滚动，只根据卡片几何中心找出最接近视口中心的那个并高亮。
 function updateMobile(){if(looping())return;let closest=0,best=Infinity;cards.forEach((card,i)=>{const r=card.getBoundingClientRect(),d=Math.abs(r.top+r.height/2-innerHeight/2);if(d<best){best=d;closest=i}if(r.bottom>0&&r.top<innerHeight*1.5)card.classList.add('is-visible')});setActive(closest)}
