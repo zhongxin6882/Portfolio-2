@@ -53,7 +53,7 @@ try {
         strokeWidth: el.querySelector('path')?.getAttribute('stroke-width')
       }));
       assert.equal(fineTuning.offsetY,2,'Wave must be 2px lower without moving surrounding text');
-      assert.equal(fineTuning.strokeWidth,'1.24','Wave line must be 20% thinner');
+      assert.equal(fineTuning.strokeWidth,'1','Wave line should be 1px thick');
 
       const before=await wave.locator('path').getAttribute('d');
       await page.waitForTimeout(280);
