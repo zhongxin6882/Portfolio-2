@@ -66,7 +66,7 @@ try {
   });
   await calm.goto(new URL('contact.html', origin).href, {waitUntil: 'domcontentloaded'});
   await calm.addStyleTag({content:'#intro-loader,.page-transition{display:none!important}'});
-  await calm.locator('#audioToggle .audio-wave svg path').waitFor();
+  await calm.locator('#audioToggle .audio-wave svg path').waitFor({state:'attached',timeout:15000});
   await calm.locator('#menuToggle').click();
   await calm.locator('#audioToggle').click();
   const staticBefore=await calm.locator('#audioToggle .audio-wave path').getAttribute('d');
