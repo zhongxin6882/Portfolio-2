@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 
-const browser = await chromium.launch({headless:true});
+const browser = await chromium.launch({
+  headless:true,
+  ...(process.env.CHROMIUM_EXECUTABLE_PATH ? {executablePath:process.env.CHROMIUM_EXECUTABLE_PATH} : {})
+});
 const origin = process.env.MOBILE_TEST_URL || 'http://127.0.0.1:4173/Portfolio-2/';
 const routes = ['index.html', 'about/', 'playground.html', 'contact.html'];
 let checks = 0;
@@ -18,12 +21,19 @@ try {
         menu:getComputedStyle(document.querySelector('#menu')).display,
         mark:!!document.querySelector('.chrome .brand-flip'),
         css:[...document.styleSheets].some(x => x.href?.includes('mobile-responsive.css')),
-        overflow:document.documentElement.scrollWidth-window.innerWidth
+        overflow:document.documentElement.scrollWidth-window.innerWidth,
+        brandText:getComputedStyle(document.querySelector('.chrome .brand'),'::after').content,
+        brandFace:getComputedStyle(document.querySelector('.chrome .brand-flip')).display,
+        brandPosition:getComputedStyle(document.querySelector('.chrome .brand')).position,
+        menuBorder:getComputedStyle(document.querySelector('#menuToggle')).borderTopWidth,
+        menuShadow:getComputedStyle(document.querySelector('#menuToggle')).boxShadow
       }));
       assert.equal(closed.expanded,'false',route+' '+width+': menu should start closed');
       assert.equal(closed.menu,'none',route+' '+width+': nav should not flash');
       assert(closed.mark && closed.css,route+' '+width+': shared brand/css missing');
       assert(closed.overflow<=2,route+' '+width+': horizontal overflow '+closed.overflow+'px');
+      assert(closed.brandText.includes('CENTER©') && closed.brandFace==='none' && closed.brandPosition==='fixed',route+' '+width+': phone wordmark should stay horizontal and static');
+      assert(closed.menuBorder==='0px' && closed.menuShadow==='none',route+' '+width+': phone menu still has a frame');
 
       await page.locator('#menuToggle').click();
       const opened = await page.evaluate(() => ({
@@ -63,21 +73,41 @@ try {
         const resume=await page.locator('.resume').boundingBox();
         assert(art.y<resume.y,'About artwork must precede resume');
       }
+      if(route==='contact.html'){
+        const intro=await page.locator('.contact-intro').boundingBox();
+        assert(intro.y+intro.height<430,'Contact illustration has excessive top clearance at '+width);
+        const logos=await page.evaluate(() => ({
+          zcool:document.querySelector('.zcool-logo').getBoundingClientRect().width,
+          xiaohongshu:document.querySelector('.xiaohongshu-logo').getBoundingClientRect().width
+        }));
+        assert(Math.abs(logos.zcool-85.5)<1 && Math.abs(logos.xiaohongshu-61.2)<1,'Contact logo scaling is incorrect at '+width);
+      }
       console.log('PASS',width,route);
       checks++;
       await page.close();
     }
   }
   const desktop = await browser.newPage({viewport:{width:1440,height:900},reducedMotion:'reduce'});
-  await desktop.goto(new URL('index.html',origin).href,{waitUntil:'domcontentloaded'});
-  await desktop.addStyleTag({content:'#intro-loader,.page-transition{display:none!important}'});
-  assert(await desktop.locator('#menu a').first().isVisible(),'Desktop navigation must remain visible');
-  assert.equal(await desktop.locator('.work-mobile-caption').first().evaluate(el=>getComputedStyle(el).display),'none','Desktop mobile caption must remain hidden');
-  await desktop.goto(new URL('playground.html',origin).href,{waitUntil:'domcontentloaded'});
-  const cols=await desktop.locator('.play-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
-  assert.equal(cols,4,'Desktop Playground must retain four columns');
-  checks+=2;
-  console.log('PASS desktop Work + Playground');
+  for(const route of routes){
+    await desktop.goto(new URL(route,origin).href,{waitUntil:'domcontentloaded'});
+    await desktop.addStyleTag({content:'#intro-loader,.page-transition{display:none!important}'});
+    assert(await desktop.locator('#menu a').first().isVisible(),'Desktop navigation must remain visible: '+route);
+    assert.equal(await desktop.locator('.brand-flip').evaluate(el=>getComputedStyle(el).display),'block','Desktop rotating brand hidden: '+route);
+    if(route==='index.html'){
+      assert.equal(await desktop.locator('.work-mobile-caption').first().evaluate(el=>getComputedStyle(el).display),'none','Desktop mobile caption must remain hidden');
+    }
+    if(route==='playground.html'){
+      const cols=await desktop.locator('.play-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
+      assert.equal(cols,4,'Desktop Playground must retain four columns');
+    }
+    if(route==='contact.html'){
+      const intro=await desktop.locator('.contact-intro').boundingBox();
+      const navigation=await desktop.locator('.contact-navigation').boundingBox();
+      assert(navigation.x>=intro.x+intro.width-2,'Desktop Contact columns changed');
+    }
+    console.log('PASS desktop',route);
+    checks++;
+  }
   console.log('ALL PASS:',checks,'responsive route checks');
 }finally{
   await browser.close();
