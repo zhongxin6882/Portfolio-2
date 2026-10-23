@@ -27,7 +27,7 @@
 .work-home {
   --work-header-height: clamp(160px, 18.3vh, 190px);
   --work-left: 31%;
-  background: #e9e9e9;
+  background: #ededed;
   color: #111;
   font-family: var(--font-sans);
   overflow-x: hidden;
@@ -38,7 +38,7 @@
   height: var(--work-header-height);
   grid-template-columns: 12.8% 25.2% 16.7% 1fr auto;
   padding: 21px 3.2% 0 12px;
-  background: #e9e9e9;
+  background: #ededed;
   border-bottom: 1px solid #181818;
 }
 .work-home .brand b { font-size: clamp(19px, 1.3vw, 27px); }

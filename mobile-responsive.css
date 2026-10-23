@@ -19,7 +19,7 @@
   .chrome::before{content:none}
   .chrome.mobile-menu-open::before{
     content:"";position:fixed;inset:0;z-index:0;
-    background:#e9e9e9;pointer-events:auto
+    background:#ededed;pointer-events:auto
   }
   /* Keep a compact, stationary wordmark in the phone header. */
   .chrome .brand{
@@ -156,10 +156,13 @@
   /* ABOUT: existing character and 24-frame sprite interactions above the resume. */
   .about-page{display:block!important;min-width:0}
   .about-page .art-panel{
-    height:min(68svh,640px)!important;min-height:460px!important;
+    height:calc(min(94vw,540px) + 100px)!important;min-height:0!important;
     border:0!important;overflow:hidden
   }
-  .about-page .art-stage{width:min(94%,540px)!important;top:51%}
+  .about-page .art-stage{
+    width:min(94%,540px)!important;top:80px;
+    transform:translateX(-50%) translateY(3%)!important
+  }
   .about-page .right-panel{
     min-height:0!important;padding:38px 18px 56px!important;
     border:0!important;overflow-wrap:anywhere
@@ -204,7 +207,7 @@
 
   /* CONTACT: let the illustration follow the fixed header without a tall empty lead-in. */
   .contact-redesign .contact-screen{border-top:0!important;padding-top:var(--mobile-header)}
-  .contact-redesign .contact-intro{height:clamp(260px,70vw,340px);min-height:0}
+  .contact-redesign .contact-intro{height:clamp(220px,55vw,280px);min-height:0}
   .contact-redesign .contact-hero-illustration{height:100%}
   .contact-redesign .contact-navigation{padding-top:24px}
 }

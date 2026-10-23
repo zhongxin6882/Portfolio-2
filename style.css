@@ -228,6 +228,8 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 .playground-body .play-layout{flex:1;min-height:0}
 .playground-body .play-side{position:relative;top:auto;height:100%;min-height:0}
 .playground-body .play-grid{min-height:0;overflow-y:auto;overscroll-behavior:contain;align-content:start;padding:8px 0 24px;scrollbar-width:thin}
+/* Keep the four main page canvases on the same neutral surface. */
+.playground-body,.playground-body .play-page{background:#ededed}
 @media(max-width:620px){
   .playground-body .play-layout{grid-template-rows:auto minmax(0,1fr)}
   .playground-body .play-side{height:auto;min-height:0}

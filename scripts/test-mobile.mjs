@@ -34,6 +34,11 @@ try {
       assert(closed.overflow<=2,route+' '+width+': horizontal overflow '+closed.overflow+'px');
       assert(closed.brandText.includes('CENTER©') && closed.brandFace==='none' && closed.brandPosition==='fixed',route+' '+width+': phone wordmark should stay horizontal and static');
       assert(closed.menuBorder==='0px' && closed.menuShadow==='none',route+' '+width+': phone menu still has a frame');
+      const surface=await page.evaluate(() => {
+        const target=document.querySelector('.about-page .art-panel,.contact-redesign,.work-home,.playground-body .play-page');
+        return target && getComputedStyle(target).backgroundColor;
+      });
+      assert.equal(surface,'rgb(237, 237, 237)',route+' '+width+': page background differs from #EDEDED');
 
       await page.locator('#menuToggle').click();
       const opened = await page.evaluate(() => ({
@@ -90,12 +95,14 @@ try {
       }
       if(route==='about/'){
         const art=await page.locator('.art-panel').boundingBox();
+        const stage=await page.locator('.art-stage').boundingBox();
         const resume=await page.locator('.resume').boundingBox();
         assert(art.y<resume.y,'About artwork must precede resume');
+        assert(stage.y>=65&&stage.y<=110,'About artwork has excessive top clearance at '+width);
       }
       if(route==='contact.html'){
         const intro=await page.locator('.contact-intro').boundingBox();
-        assert(intro.y+intro.height<430,'Contact illustration has excessive top clearance at '+width);
+        assert(intro.y+intro.height<=340,'Contact illustration has excessive top clearance at '+width);
         const logos=await page.evaluate(() => ({
           zcool:document.querySelector('.zcool-logo').getBoundingClientRect().width,
           xiaohongshu:document.querySelector('.xiaohongshu-logo').getBoundingClientRect().width
@@ -111,6 +118,11 @@ try {
   for(const route of routes){
     await desktop.goto(new URL(route,origin).href,{waitUntil:'domcontentloaded'});
     await desktop.addStyleTag({content:'#intro-loader,.page-transition{display:none!important}'});
+    const desktopSurface=await desktop.evaluate(() => {
+      const target=document.querySelector('.about-page .art-panel,.contact-redesign,.work-home,.playground-body .play-page');
+      return target && getComputedStyle(target).backgroundColor;
+    });
+    assert.equal(desktopSurface,'rgb(237, 237, 237)','Desktop background differs from #EDEDED: '+route);
     assert(await desktop.locator('#menu a').first().isVisible(),'Desktop navigation must remain visible: '+route);
     assert.equal(await desktop.locator('.brand-flip').evaluate(el=>getComputedStyle(el).display),'block','Desktop rotating brand hidden: '+route);
     if(route==='index.html'){
