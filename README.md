@@ -114,7 +114,7 @@ npm run preview
 
 | 需求 | 优先修改 |
 | --- | --- |
-| Work 卡片滚动与项目数据 | `work.js`、`work.css` |
+| Work 卡片滚动与项目数据 | `work.js`、`work.css`；桌面纸张网格渲染在 `work-desktop-paper21.js` |
 | About 交互与雪碧图 | `about/index.html`、`about-sprites.js`、`about-sprites.css` |
 | Playground 卡片墙 | `playground.js`、相关 `style.css` 规则 |
 | Contact 图文排版 | `contact.html`、`contact-redesign.css` |
@@ -132,9 +132,12 @@ npm run preview
 ```bash
 npm run build
 node scripts/verify-global-brand.mjs
+node scripts/verify-work-release.mjs
 ```
 
 第二条在成功构建后运行，检查四个主要页面的标识结构、资源引用、公共样式位置及动画入口。
+
+第三条检查五个入口的图标链接与真实尺寸、19 张 Work 图片以及 Demo 21 是否进入构建产物。`scripts/test-work-release.mjs` 在预览服务器上用 Playwright 检查桌面 70%/45% 卡片露出、首尾循环、Hover/点击、无 WebGL 降级和手机布局；相关 PR 与 `main` 发布前均会运行。它是自动回归检查，不代替人工视觉验收。
 
 仓库还包含移动端浏览器测试 `scripts/test-mobile.mjs`，并由 `.github/workflows/mobile-ci.yml` 在**匹配指定路径的 PR** 上运行。该流程安装 Playwright/Chromium，检查多个手机宽度；它并非每次推送 `main` 都自动执行。需要在本地复现时，请先阅读相应 workflow 中的依赖安装、预览服务器与测试命令。
 
@@ -146,10 +149,10 @@ node scripts/verify-global-brand.mjs
 
 1. 更新 `main` 触发 `.github/workflows/deploy.yml`。
 2. Actions 执行 `npm ci` 和 `npm run build`。
-3. 检查 Playground 构建约束及四页共享标识。
-4. 成功后上传 `dist/`，调用 `actions/deploy-pages` 发布到 GitHub Pages。
+3. 检查 Playground 构建约束、四页共享标识、Work 交互和五页图标；任一检查失败则不发布。
+4. 成功后上传 `dist/`，调用 `actions/deploy-pages` 发布到 GitHub Pages，再核查线上五个路由、当前 Work 构建包及 ICO/PNG 是否真正可用。
 
-发布失败时不会因为提交存在就代表线上已更新。应在 [Actions 页面](https://github.com/zhongxin6882/Portfolio-2/actions) 核实与目标提交 SHA 对应的工作流状态，并打开实际网站验证。
+发布失败时不会因为提交存在就代表线上已更新。应在 [Actions 页面](https://github.com/zhongxin6882/Portfolio-2/actions) 核实与目标提交 SHA 对应的工作流状态，并打开实际网站验证；即使部署成功，也不要把自动检查称为线上视觉验收。
 
 源码中的传统脚本由 `vite.config.js` 的复制逻辑带入输出；新模块交由 Vite 处理。样式缓存查询参数在构建时按文件内容生成短哈希，修改样式后以**构建产物**为准排查缓存问题。
 
