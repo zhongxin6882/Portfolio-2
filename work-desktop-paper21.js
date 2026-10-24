@@ -174,8 +174,8 @@ function activate(){
 if(!ready||!mq.matches||!images[0]?.tex)return;
 W=innerWidth;H=innerHeight;const dpr=Math.min(devicePixelRatio||1,1.8);
 canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);fit();
-// Preserve the previously fitted deck exposure, then lift the upper deck by 15% of photo height.
-cfg.top+=(width()*.775*.15)/H;
+// fit() already places the upper and lower cards at 70%/45% viewport exposure.
+// Moving the upper deck again after fitting reduced its visible area to ~55%.
 active=true;document.body.classList.add('work-paper-ready');schedule();
 }
 if(ready){

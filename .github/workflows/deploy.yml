@@ -47,9 +47,27 @@ jobs:
           ! grep -Fq 'AN OPEN SPACE FOR CURIOSITY' dist/playground.html
       - name: Verify global brand on every route
         run: node scripts/verify-global-brand.mjs
+      - name: Verify Work and favicon release assets
+        run: node scripts/verify-work-release.mjs
+      - name: Install Work browser test dependencies
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+      - name: Verify desktop paper deck and mobile fallback in browser
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/portfolio-work-preview.log 2>&1 &
+          server=$!
+          trap 'kill "$server"' EXIT
+          for i in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:4173/Portfolio-2/index.html >/dev/null; then break; fi
+            sleep 1
+          done
+          node scripts/test-work-release.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify the new release is served by GitHub Pages
+        run: node scripts/verify-live-release.mjs

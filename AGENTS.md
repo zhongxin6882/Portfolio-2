@@ -53,6 +53,7 @@
 - `vite.config.js`：多页面入口、全局品牌注入、经典脚本复制与 CSS 顺序/缓存哈希处理。
 - `scripts/verify-global-brand.mjs`：主要页面品牌契约检查。
 - `scripts/test-mobile.mjs`：移动端浏览器断点检查。
+- `scripts/verify-work-release.mjs` 与 `scripts/test-work-release.mjs`：Work/图标构建契约和桌面、手机浏览器回归；相关 PR 与主线部署前运行。
 
 **修改新页面时**：同步核对 Vite 多入口配置、所需共享资源、导航链接、语言词典与 `page-transition.js` 的路由白名单。`fromanother.html` 属于单独的历史案例页，不能假设它已使用四页共享品牌模板。
 
@@ -171,7 +172,7 @@ CI 在部署前执行相同的全局品牌验证。如检查失败，**停止发
 | --- | --- | --- |
 | 文案/翻译 | `npm run build` | 中英双向切换及布局折行 |
 | 全局版权 | 构建 + `verify-global-brand.mjs` | 四个页面滚动、Hover、手机尺寸 |
-| Work | 构建 | 桌面滚轮/触控板、首尾循环、预览/详情、移动端原生滚动 |
+| Work | 构建 + Work/图标资源检查 + Playwright 桌面/手机回归 | 桌面滚轮/触控板的真实手感、层叠视觉、预览/详情及移动端原生滚动 |
 | Playground | 构建 +现有 Playground CI 断言 | 图片流仅右侧滚动、计数及不出现已删页脚 |
 | About | 构建 | 点击、Hover、雪碧图、触摸与元素裁切 |
 | Contact | 构建 | 社交图标清晰度、标题间距、插画贴底、菜单不变 |
@@ -184,12 +185,13 @@ CI 在部署前执行相同的全局品牌验证。如检查失败，**停止发
 npm ci
 npm run build
 node scripts/verify-global-brand.mjs
+node scripts/verify-work-release.mjs
 node --check site-header.js
 node --check work.js
 node --check locale.js
 ```
 
-`scripts/test-mobile.mjs` 依赖 Playwright 和正在服务的构建站点：仓库已有 `.github/workflows/mobile-ci.yml` 指明安装和执行方式。此浏览器检查目前通过**指定文件发生变化的 PR** 触发；`main` 的 Pages 发布流程不等同于全套移动端截图回归。
+`scripts/test-mobile.mjs` 依赖 Playwright 和正在服务的构建站点：仓库已有 `.github/workflows/mobile-ci.yml` 指明安装和执行方式。此浏览器检查目前通过**指定文件发生变化的 PR** 触发；`main` 的 Pages 发布流程不等同于全套移动端截图回归。`scripts/test-work-release.mjs` 同样需要 Playwright/预览服务器，但会在相关 PR 和每次主线部署前运行。
 
 ### 视觉验收最低要求
 
