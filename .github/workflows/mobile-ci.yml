@@ -10,6 +10,7 @@ on:
       - 'index.html'
       - 'about/index.html'
       - 'playground.html'
+      - 'playground.js'
       - 'contact.html'
       - 'scripts/test-mobile.mjs'
       - '.github/workflows/mobile-ci.yml'
