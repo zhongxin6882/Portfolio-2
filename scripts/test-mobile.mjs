@@ -158,6 +158,10 @@ try {
   await motionPage.goto(new URL('playground.html',origin).href,{waitUntil:'domcontentloaded'});
   await motionPage.addStyleTag({content:'#intro-loader,.page-transition{display:none!important}'});
   await motionPage.locator('.play-card').last().waitFor({state:'attached'});
+  await motionPage.evaluate(async () => {
+    await document.fonts.ready;
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
   const initialSideY=(await motionPage.locator('.play-side').boundingBox()).y;
   await motionPage.locator('.play-card').last().evaluate(el=>el.scrollIntoView({behavior:'instant',block:'center'}));
   await motionPage.waitForFunction(() => {
@@ -172,7 +176,7 @@ try {
   const finalSideY=(await motionPage.locator('.play-side').boundingBox()).y;
   assert(scrolled.gridScroll>0,'Desktop Playground right stream did not scroll');
   assert(Math.abs(scrolled.windowScroll)<2,'Desktop Playground unexpectedly scrolled the full page');
-  assert(Math.abs(finalSideY-initialSideY)<2,'Desktop Playground left rail moved');
+  assert(Math.abs(finalSideY-initialSideY)<2,`Desktop Playground left rail moved: ${initialSideY} -> ${finalSideY}`);
   await motionPage.locator('.play-grid').evaluate(el=>el.scrollTo({top:0,behavior:'instant'}));
   const returnedOpacity=await motionPage.locator('.play-card').last().evaluate(el=>parseFloat(getComputedStyle(el).opacity));
   assert(returnedOpacity>=.99,'Staggered card disappeared after scrolling back');
