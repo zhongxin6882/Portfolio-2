@@ -1,4 +1,4 @@
-name: Remove merged legacy version branches
+name: Prune verified merged branches
 
 on:
   push:
@@ -14,20 +14,21 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify retained versions and merged pull requests
+      - name: Verify retained refs and merged pull requests
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
           repo="${GITHUB_REPOSITORY}"
-          test "$(gh api "repos/${repo}/git/ref/heads/1.0" --jq '.object.sha')" = '661314ccf2837821130f02d46c665c0a6272728e'
+          test "$(gh api "repos/${repo}/git/ref/heads/1.0" --jq '.object.sha')" = '38742ea20a6c8aaff846023b7c7061a4490eb110'
           test "$(gh api "repos/${repo}/git/ref/heads/rollback/pre-1.0-20261023" --jq '.object.sha')" = '5184d8e3161307e475284dbbffc266320226225b'
-          for number in 3 4 5 6; do
+          for number in 7 8 9 10 11 12 13 14 15; do
             test "$(gh api "repos/${repo}/pulls/${number}" --jq '.merged')" = 'true'
           done
+          test "$(gh api "repos/${repo}/pulls/14" --jq '.base.ref')" = '1.0'
 
-      - name: Delete only verified superseded branches
+      - name: Delete only exact verified branch heads
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -35,12 +36,22 @@ jobs:
           set -euo pipefail
           repo="${GITHUB_REPOSITORY}"
           branches=(
-            '1.1|5184d8e3161307e475284dbbffc266320226225b'
-            '1.1-镜像|f8441f55c97c98769416b4f35d8b609d11cc9ae1'
-            'codex/mobile-header-contact-20261023|b3c07a2d27dcac1fc21bab019743b91d7260ff7d'
-            'feature/mobile-responsive-20261022|aaff12ce7cdadccd800a374715d18483228bcd80'
-            'codex/consolidate-v1.0-20261023|30f2b0d26c763f7f009c58717fc9eb06cd977e1a'
+            'codex/align-mobile-audio-tests-20261023|8e8205ea4d7bf22d6f3530030d51f9c94f23dddb'
+            'codex/mobile-audio-single-line-20261023|fa72499fa825804be98d0dbb4a27ea6b5ffc0256'
+            'codex/mobile-spacing-background-20261023|5a29d370089b8a31111404bd187077e774db68e6'
+            'codex/work-release-guard-20261024|6b5e049e8f72d5b5ce0fba0804780ddab792913d'
+            'feat/playground-scrolltrigger-stagger-20261023|48082b35024ab53cd1268773f603a35a354758dd'
+            'fix/audio-wave-compact-20261023|11139aba801e6138828da45928cadb53e9e4e33a'
+            'fix/audio-wave-offset-stroke-20261023|6dc02478b7c486c2ebb590a2b4ff5e04ba99ccc9'
+            'fix/audio-wave-stroke-1px-20261023|b39b25286f8cd39abca914716d9cfbc038439bce'
+            'fix/gsap-audio-wave-20261023|f4db9ec0cd27eeee5b49749d5ae830a59975acd1'
           )
+          for item in "${branches[@]}"; do
+            branch="${item%%|*}"
+            expected="${item#*|}"
+            actual="$(gh api "repos/${repo}/git/ref/heads/${branch}" --jq '.object.sha')"
+            test "${actual}" = "${expected}"
+          done
           for item in "${branches[@]}"; do
             branch="${item%%|*}"
             expected="${item#*|}"
@@ -49,13 +60,8 @@ jobs:
             gh api --method DELETE "repos/${repo}/git/refs/heads/${branch}"
             echo "Deleted verified merged branch: ${branch}"
           done
-          cleanup_head="$(gh api "repos/${repo}/pulls/6" --jq '.head.sha')"
-          actual="$(gh api "repos/${repo}/git/ref/heads/codex/cleanup-v1-branches-20261023" --jq '.object.sha')"
-          test "${actual}" = "${cleanup_head}"
-          gh api --method DELETE "repos/${repo}/git/refs/heads/codex/cleanup-v1-branches-20261023"
-          echo 'Deleted cleanup PR branch'
 
-      - name: Verify final branch set
+      - name: Verify retained branch set
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
