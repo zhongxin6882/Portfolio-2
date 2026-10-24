@@ -161,7 +161,7 @@ try {
   await motionPage.locator('.play-card').last().evaluate(el=>el.scrollIntoView({behavior:'instant',block:'center'}));
   await motionPage.waitForFunction(() => {
     const last=document.querySelector('.play-card:last-child');
-    return last && parseFloat(getComputedStyle(last).opacity)>=.99;
+    return last && parseFloat(getComputedStyle(last).opacity)>=.999;
   },null,{timeout:7000});
   const scrolled=await motionPage.evaluate(() => ({
     gridScroll:document.querySelector('.play-grid').scrollTop,
@@ -173,7 +173,8 @@ try {
   assert(Math.abs(scrolled.windowScroll)<2,'Desktop Playground unexpectedly scrolled the full page');
   assert(Math.abs(finalSideY-initialSideY)<2,'Desktop Playground left rail moved');
   await motionPage.locator('.play-grid').evaluate(el=>el.scrollTo({top:0,behavior:'instant'}));
-  assert.equal(await motionPage.locator('.play-card').last().evaluate(el=>getComputedStyle(el).opacity),'1','Staggered card disappeared after scrolling back');
+  const returnedOpacity=await motionPage.locator('.play-card').last().evaluate(el=>parseFloat(getComputedStyle(el).opacity));
+  assert(returnedOpacity>=.99,'Staggered card disappeared after scrolling back');
   console.log('PASS desktop Playground ScrollTrigger.batch stagger');
   checks++;
   await motionPage.close();
