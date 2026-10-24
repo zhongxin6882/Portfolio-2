@@ -77,11 +77,12 @@ try {
       if(route==='index.html'){
         assert(await page.locator('.work-card').count()===19,'Work lost cards');
         assert(await page.locator('.work-mobile-caption').first().isVisible(),'Work mobile caption hidden');
-        // Global scroll-behavior:smooth is intentional; disable it only for the
-        // regression test so counter checks target a settled scroll position.
-        await page.addStyleTag({content:'html{scroll-behavior:auto!important}'});
-        await page.locator('.work-card').nth(1).evaluate(el=>el.scrollIntoView({behavior:'instant',block:'center'}));
-        await page.waitForFunction(() => document.querySelector('#work-number')?.textContent?.trim() !== '01',undefined,{timeout:3000});
+        // Phones now use a circular gesture-driven stack. scrollIntoView() does
+        // nothing because the cards are absolute inside a fixed-height stage.
+        const stack=await page.locator('#work-stack').boundingBox();
+        await page.mouse.move(stack.x+stack.width/2,stack.y+stack.height/2);
+        await page.mouse.wheel(0,520);
+        await page.waitForFunction(() => document.querySelector('#work-number')?.textContent?.trim() === '02',undefined,{timeout:5000});
         const current = await page.locator('#work-number').textContent();
         assert(current!=='01','Work scroll counter did not update at '+width);
       }
