@@ -490,9 +490,12 @@
   .work-paper-mask[hidden]{display:none}
   .work-paper-number-white{position:fixed;display:block;color:#fff;pointer-events:none}
   .work-paper-hotspot{position:fixed;z-index:9;border:0;padding:0;background:transparent;cursor:none}
+  .work-paper-hotspot-neighbor{position:fixed;z-index:7;border:0;padding:0;background:transparent;cursor:none}
+  .work-paper-hotspot-neighbor[hidden],.work-paper-hotspot[hidden]{display:none}
+  .work-paper-hotspot-neighbor:focus-visible,.work-paper-hotspot:focus-visible{outline:2px solid #fff;outline-offset:-3px}
   .work-paper-cursor{position:fixed;top:0;left:0;z-index:10;width:96px;height:96px;border-radius:50%;
     background:#191919;color:white;display:grid;place-items:center;font:600 14px var(--font-sans);
     pointer-events:none;opacity:0;visibility:hidden}
   .work-paper-cursor.show{opacity:1;visibility:visible}
 }
-@media(max-width:850px){.work-paper-stage,.work-paper-masks,.work-paper-hotspot,.work-paper-cursor{display:none!important}}
+@media(max-width:850px){.work-paper-stage,.work-paper-masks,.work-paper-hotspot,.work-paper-hotspot-neighbor,.work-paper-cursor{display:none!important}}

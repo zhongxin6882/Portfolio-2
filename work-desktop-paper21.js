@@ -19,6 +19,8 @@ const hit=document.createElement('button'),cursor=document.createElement('div');
 hit.className='work-paper-hotspot';hit.type='button';hit.setAttribute('aria-label','Open selected project');
 cursor.className='work-paper-cursor';cursor.textContent='CLICK ↗';
 document.body.append(hit,cursor);
+const flipHits=[-1,1].map(direction=>{const button=document.createElement('button');button.className='work-paper-hotspot-neighbor';button.type='button';button.hidden=true;document.body.append(button);return {button,direction}});
+hit.hidden=true;
 const ease=t=>t*t*(3-2*t),width=()=>Math.min(W*.246,390)*.90; // Every desktop photo is 10% smaller.
 function pose(d){
 const a=Math.abs(d),t=ease(clamp(a,0,1)),far=Math.min(Math.max(0,a-1),3.1),top=d<0;
@@ -107,10 +109,22 @@ Object.assign(z.n.style,{left:rect.left+'px',top:rect.top+'px',width:rect.width+
 }for(;j<layers.length;j++)layers[j].e.hidden=true;
 }
 
+function hitBox(d){
+const p=pose(d),b=deform(d),points=[[-.5,-.5],[.5,-.5],[.5,.5],[-.5,.5]].map(([x,y])=>point(x,y,p,b));
+const left=Math.min(...points.map(v=>v.x)),right=Math.max(...points.map(v=>v.x)),top=Math.min(...points.map(v=>v.y)),bottom=Math.max(...points.map(v=>v.y));
+const width=Math.max(1,right-left),height=Math.max(1,bottom-top);
+return {left,top,width,height,clipPath:'polygon('+points.map(v=>`${(v.x-left)/width*100}% ${(v.y-top)/height*100}%`).join(',')+')'};
+}
 function updateHit(){
-const p=pose(0),a=point(-.5,-.5,p,deform(0)),b=point(.5,.5,p,deform(0));
-Object.assign(hit.style,{left:Math.min(a.x,b.x)+'px',top:Math.min(a.y,b.y)+'px',
-width:Math.abs(b.x-a.x)+'px',height:Math.abs(b.y-a.y)+'px'});
+const center=wrap(Math.round(pos)),centerBox=hitBox(delta(center,pos));
+Object.assign(hit.style,{left:centerBox.left+'px',top:centerBox.top+'px',width:centerBox.width+'px',height:centerBox.height+'px',clipPath:centerBox.clipPath});hit.hidden=false;
+for(const {button,direction} of flipHits){
+const index=wrap(center+direction),d=delta(index,pos),box=hitBox(d);
+button.hidden=!images[index].tex||Math.abs(d)>1.55;
+button.dataset.index=String(index);
+button.setAttribute('aria-label',`Switch to ${articles[index].querySelector('img')?.alt||'adjacent project'}`);
+Object.assign(button.style,{left:box.left+'px',top:box.top+'px',width:box.width+'px',height:box.height+'px',clipPath:box.clipPath});
+}
 }
 // Canvas 2D mesh fallback uses the same Demo 21 paperPoint/pile geometry
 // and stable shuffled paint order. Only used when WebGL is unavailable.
@@ -189,11 +203,17 @@ velocity+=( ((p-lastPos)/dt*1000)-velocity)*.3;lastPos=p;lastT=now;pos=p;
 const candidate=clamp(-velocity*1.65,-16,16);
 if(!reduce.matches&&Math.abs(candidate)>Math.abs(skew.value)){skew.value=candidate;gsap.to(skew,{value:0,duration:.85,ease:'power3.out',overwrite:true,onUpdate:schedule})}
 schedule()});
-hit.addEventListener('pointerenter',e=>{if(e.pointerType==='touch')return;cursor.classList.add('show');gsap.to(hover,{lift:1,duration:.5,onUpdate:schedule})});
+hit.addEventListener('pointerenter',e=>{if(e.pointerType==='touch')return;cursor.textContent='CLICK ↗';cursor.classList.add('show');gsap.to(hover,{lift:1,duration:.5,onUpdate:schedule})});
 hit.addEventListener('pointermove',e=>{gsap.set(cursor,{x:e.clientX-48,y:e.clientY-48});
 const r=hit.getBoundingClientRect();gsap.to(hover,{x:clamp((e.clientX-r.left)/r.width*2-1,-1,1),y:clamp((e.clientY-r.top)/r.height*2-1,-1,1),duration:.32,onUpdate:schedule})});
 hit.addEventListener('pointerleave',()=>{cursor.classList.remove('show');gsap.to(hover,{lift:0,x:0,y:0,duration:.6,onUpdate:schedule})});
 hit.addEventListener('click',()=>document.getElementById('work-visit')?.click());
-window.addEventListener('resize',()=>{document.body.classList.remove('work-paper-ready');active=false;if(mq.matches)activate();schedule()});
+for(const {button,direction} of flipHits){
+button.addEventListener('pointerenter',e=>{if(e.pointerType==='touch')return;cursor.textContent=direction<0?'FLIP ↑':'FLIP ↓';cursor.classList.add('show')});
+button.addEventListener('pointermove',e=>gsap.set(cursor,{x:e.clientX-48,y:e.clientY-48}));
+button.addEventListener('pointerleave',()=>cursor.classList.remove('show'));
+button.addEventListener('click',()=>window.dispatchEvent(new CustomEvent('work:quick-switch',{detail:{index:Number(button.dataset.index)}})));
+}
+window.addEventListener('resize',()=>{document.body.classList.remove('work-paper-ready');active=false;hit.hidden=true;flipHits.forEach(({button})=>button.hidden=true);if(mq.matches)activate();schedule()});
 window.__portfolioWorkPaper21={state:()=>({position:pos,topVisible:exposure(-1),bottomVisible:exposure(1),center:deform(0),loaded:images.filter(i=>i.tex).length,engine:gl?'WebGL':cpu?'Canvas2D Mesh':'original'})};
 }
