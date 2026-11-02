@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="CENTER DESIGN — a scroll-driven portrait made of thousands of particles.">
+  <title>PARTICLE / CENTER DESIGN — Interactive Experiment</title>
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; --ink: #090909; --paper: #fffaf4; --sand: #bb8f70; --warm: #f3d7bd; }
+    * { box-sizing: border-box; }
+    html { background: var(--ink); scroll-behavior: auto; }
+    body { margin: 0; background: var(--ink); color: var(--paper); font-family: 'DM Sans', Arial, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+    a { color: inherit; }
+    .experience { height: 330svh; position: relative; isolation: isolate; }
+    .scene { position: sticky; top: 0; height: 100svh; min-height: 480px; overflow: hidden; background: #090909; }
+    .scene::after { content: ''; pointer-events: none; position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse at 65% 38%, transparent 24%, rgba(0,0,0,.26) 82%); }
+    #portrait { position: absolute; inset: 0; display: block; width: 100%; height: 100%; z-index: 0; }
+    .topline { position: absolute; top: 23px; left: 30px; right: 30px; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; z-index: 5; font: 500 10px/1.35 'DM Mono', monospace; letter-spacing: .07em; text-transform: uppercase; }
+    .topline a { text-decoration: none; transition: opacity .2s; }
+    .topline a:hover { opacity: .5; }
+    .top-center { position: absolute; left: 50%; transform: translateX(-50%); }
+    .top-right { color: #d7c5b6; }
+    .hero { position: absolute; z-index: 3; left: 0; top: 43%; width: max-content; max-width: 100%; transform: translate3d(0,-32%,0); pointer-events: none; will-change: transform, opacity; }
+    .hero-line { width: max-content; max-width: 100%; display: block; font-size: clamp(90px, 15vw, 272px); font-weight: 900; letter-spacing: -.088em; line-height: .84; white-space: nowrap; }
+    .hero-line span { display: inline-block; padding: .035em .115em .11em .02em; background: var(--sand); color: #f6d9bf; }
+    .hero-line.second { margin: .01em 0 0 .29em; color: #fff; letter-spacing: -.075em; }
+    .sticker { position: absolute; top: .1em; right: .06em; transform: rotate(-12deg); width: clamp(15px, 2.4vw, 34px); height: clamp(15px, 2.4vw, 34px); border-radius: 50%; background: conic-gradient(#f6d14a 0 60deg,#f0543b 60deg 120deg,#57bc8b 120deg 180deg,#3d9bd8 180deg 260deg,#a87fc6 260deg 310deg,#f6d14a 310deg); border: 3px solid rgba(0,0,0,.2); }
+    .intro { position: absolute; z-index: 3; width: min(500px, 76vw); left: 50%; top: 50%; transform: translate3d(80vw,-50%,0); text-align: center; opacity: 0; pointer-events: none; will-change: transform, opacity; }
+    .intro p { margin: 0; font-size: clamp(19px, 2.25vw, 32px); font-weight: 500; line-height: 1.18; letter-spacing: -.045em; }
+    .intro .chinese { margin-top: 22px; font-size: 12px; line-height: 1.8; font-weight: 400; letter-spacing: .08em; color: #a8a29d; }
+    .ambient-label { position: absolute; z-index: 3; bottom: 31px; left: 30px; font: 500 10px/1.5 'DM Mono', monospace; color: #bbb2aa; letter-spacing: .09em; }
+    .progress { position: absolute; z-index: 3; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; font: 500 10px/1 'DM Mono', monospace; color: #cfc9c3; }
+    .progress-track { width: 90px; height: 1px; background: #56514c; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: #e8d2c0; transform-origin: left; }
+    .pill { position: absolute; z-index: 3; right: 24px; bottom: 22px; border: 1px solid #d4cbc3; border-radius: 999px; background: #f2ede8; color: #222; padding: 12px 18px; font: 600 11px/1 'DM Mono', monospace; letter-spacing: .03em; }
+    .pill .dots { color: #d06443; letter-spacing: 1px; margin-right: 8px; }
+    .endnote { position: relative; min-height: 65svh; padding: 12vh 6vw 8vh; display: flex; flex-direction: column; justify-content: space-between; border-top: 1px solid #24201f; background: #11100f; }
+    .endnote .eyebrow { font: 500 11px 'DM Mono', monospace; color: #b8a698; letter-spacing: .12em; }
+    .endnote h2 { font-size: clamp(56px, 12vw, 170px); line-height: .83; font-weight: 900; letter-spacing: -.08em; margin: 60px 0 20px; }
+    .endnote p { max-width: 420px; margin: 0 0 40px; color: #c6bfb8; font-size: 15px; line-height: 1.6; }
+    .endnote a { width: fit-content; border-bottom: 1px solid currentColor; text-decoration: none; padding-bottom: 7px; font: 500 12px 'DM Mono', monospace; }
+    .endnote a:hover { color: var(--warm); }
+    @media (max-width: 700px) {
+      .experience { height: 275svh; }
+      .scene { min-height: 0; }
+      .topline { left: 18px; right: 18px; top: 20px; font-size: 9px; }
+      .top-center { display: none; }
+      .hero { top: 47%; }
+      .hero-line { font-size: clamp(69px, 18vw, 125px); }
+      .hero-line.second { margin-left: .12em; }
+      .intro { width: 84vw; }
+      .intro p { font-size: clamp(22px, 6vw, 30px); }
+      .ambient-label { left: 18px; bottom: 22px; max-width: 130px; font-size: 9px; }
+      .progress { bottom: 26px; left: 54%; }
+      .progress-track { width: 35px; }
+      .pill { right: 14px; bottom: 15px; padding: 10px 12px; font-size: 9px; }
+      .endnote { min-height: 56svh; padding: 60px 24px 42px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      .experience { height: 110svh; }
+      .hero { transform: translateY(-32%) !important; opacity: 1 !important; }
+      .intro { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="experience" id="experiment" aria-label="CENTER DESIGN — 粒子人物滚动交互实验">
+      <div class="scene">
+        <canvas id="portrait" aria-hidden="true"></canvas>
+        <div class="topline">
+          <a href="../index.html" aria-label="返回 CENTER 作品集">CENTER / BACK ↗</a>
+          <span class="top-center">INTERACTIVE STUDY — 001</span>
+          <span class="top-right">SCROLL / TRANSFORM</span>
+        </div>
+        <h1 class="hero" id="hero"><span class="hero-line"><span>CENTER</span><i class="sticker" aria-hidden="true"></i></span><span class="hero-line second">DESIGN</span></h1>
+        <div class="intro" id="intro"><p>Made of thousands of moments.<br>Never the same twice.<br>Always becoming.</p><p class="chinese">由万千微光组成。<br>滚动，让形象消散；回溯，让记忆重聚。</p></div>
+        <div class="ambient-label">A PORTRAIT IN PARTICLES<br>SCROLL TO EXPLORE ↓</div>
+        <div class="progress" aria-hidden="true"><span>00</span><span class="progress-track"><span class="progress-fill" id="progressFill"></span></span><span>01</span></div>
+        <div class="pill" aria-hidden="true"><span class="dots">▮▮▮</span> SCROLL TO DISSOLVE</div>
+      </div>
+    </section>
+    <section class="endnote"><span class="eyebrow">CENTER DESIGN — DIGITAL EXPERIMENT 001</span><div><h2>STILL<br>IN MOTION.</h2><p>不是一段预先播放的视频，而是一幅随滚动实时重组的粒子肖像。向上滚动，所有光点都会回到原位。</p><a href="../index.html">← BACK TO PORTFOLIO</a></div></section>
+  </main>
+  <script>
+  (() => {
+    'use strict';
+    const canvas = document.getElementById('portrait');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) return;
+    const stage = document.getElementById('experiment');
+    const hero = document.getElementById('hero');
+    const intro = document.getElementById('intro');
+    const progressFill = document.getElementById('progressFill');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mobile = matchMedia('(max-width: 700px)').matches;
+    const TAU = Math.PI * 2;
+    const clamp = v => Math.max(0, Math.min(1, v));
+    const smooth = v => { v = clamp(v); return v*v*(3-2*v); };
+    let W = 0, H = 0, DPR = 1, points = [], dust = [], progress = 0, lastProgress = -1, raf = 0, running = true;
+    let seed = 0xC3E7E2;
+    function rand() { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return (seed >>> 0) / 4294967296; }
+    function portraitMask() {
+      const m = document.createElement('canvas'); m.width = 540; m.height = 760;
+      const c = m.getContext('2d');
+      const shoulder = new Path2D();
+      shoulder.moveTo(0,760); shoulder.lineTo(0,668);
+      shoulder.bezierCurveTo(5,596,70,563,162,546);
+      shoulder.bezierCurveTo(194,540,216,517,222,493);
+      shoulder.lineTo(222,453); shoulder.lineTo(329,453); shoulder.lineTo(329,496);
+      shoulder.bezierCurveTo(339,528,367,539,416,552);
+      shoulder.bezierCurveTo(490,571,537,612,540,681);
+      shoulder.lineTo(540,760); shoulder.closePath();
+      let g = c.createLinearGradient(80,530,450,750);
+      g.addColorStop(0,'#777'); g.addColorStop(.35,'#292929'); g.addColorStop(.67,'#454545'); g.addColorStop(1,'#161616');
+      c.fillStyle=g; c.fill(shoulder);
+      // Neck: slight side lighting and shadow at the collar.
+      const neck = new Path2D(); neck.moveTo(217,447); neck.lineTo(336,447); neck.lineTo(335,533);
+      neck.bezierCurveTo(328,575,223,569,215,533); neck.closePath();
+      g=c.createLinearGradient(216,490,336,520);g.addColorStop(0,'#777');g.addColorStop(.45,'#393939');g.addColorStop(1,'#1b1b1b');c.fillStyle=g;c.fill(neck);
+      // Head and ears, with the high contrast silhouette from the video reference.
+      c.fillStyle='#555';c.beginPath();c.ellipse(147,352,20,50,-.12,0,TAU);c.fill();
+      c.beginPath();c.ellipse(392,350,19,49,.13,0,TAU);c.fill();
+      const head = new Path2D();
+      head.moveTo(271,61); head.bezierCurveTo(155,55,135,147,142,296);
+      head.bezierCurveTo(144,390,177,476,232,508);
+      head.bezierCurveTo(253,523,299,524,325,505);
+      head.bezierCurveTo(375,471,404,389,403,290);
+      head.bezierCurveTo(407,147,368,59,271,61); head.closePath();
+      g=c.createRadialGradient(202,220,24,271,278,267);
+      g.addColorStop(0,'#787878');g.addColorStop(.30,'#484848');g.addColorStop(.64,'#222');g.addColorStop(.90,'#6a6a6a');g.addColorStop(1,'#111');
+      c.fillStyle=g;c.fill(head);
+      // Light rim of face, chin and brow: gives dots volume without an external photo.
+      c.save();c.clip(head);
+      g=c.createLinearGradient(140,0,412,0);g.addColorStop(0,'rgba(255,255,255,.38)');g.addColorStop(.13,'rgba(255,255,255,0)');g.addColorStop(.82,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(255,255,255,.20)');c.fillStyle=g;c.fillRect(130,50,285,500);
+      c.fillStyle='rgba(0,0,0,.78)';c.beginPath();c.ellipse(214,323,35,13,-.09,0,TAU);c.fill();c.beginPath();c.ellipse(331,322,33,13,.1,0,TAU);c.fill();
+      c.strokeStyle='rgba(245,245,245,.16)';c.lineWidth=9;c.lineCap='round';c.beginPath();c.moveTo(277,315);c.bezierCurveTo(272,363,260,391,281,399);c.stroke();
+      c.fillStyle='rgba(0,0,0,.72)';c.beginPath();c.ellipse(274,434,52,15,0,0,TAU);c.fill();
+      c.strokeStyle='rgba(250,250,250,.20)';c.lineWidth=6;c.beginPath();c.moveTo(230,460);c.quadraticCurveTo(273,478,318,457);c.stroke();
+      c.restore();
+      return c.getImageData(0,0,540,760).data;
+    }
+    function makeParticles() {
+      seed = 0xC3E7E2;
+      const mask = portraitMask();
+      const count = reduced ? 6200 : mobile ? 6800 : 15800;
+      points = [];
+      for (let attempts=0;points.length<count && attempts<count*22;attempts++) {
+        const u=rand(), v=rand(); const x=Math.min(539,Math.floor(u*540)),y=Math.min(759,Math.floor(v*760));
+        const i=(y*540+x)*4, light=mask[i], a=mask[i+3];
+        if (a<100 || rand()>(.19+light/250)) continue;
+        points.push({u,v,dx:(rand()-.5)*2.6,dy:(rand()-.5)*2.0,depth:rand(),size:rand(),light,phase:rand()*TAU,alpha:.4+rand()*.6});
+      }
+      dust = Array.from({length: mobile ? 350 : 780},()=>({u:rand(),v:rand(),size:rand(),alpha:rand()*.23,phase:rand()*TAU}));
+    }
+    function resize() {
+      W=window.innerWidth;H=window.innerHeight;DPR=Math.min(window.devicePixelRatio||1,1.7);
+      canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);
+      canvas.style.width=W+'px';canvas.style.height=H+'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+      makeParticles();lastProgress=-1;update();
+    }
+    function update() {
+      const length=Math.max(1,stage.offsetHeight-H);
+      progress=reduced?0:clamp(-stage.getBoundingClientRect().top/length);
+      const travel=smooth(clamp((progress-.06)/.72));
+      const enter=smooth(clamp((progress-.33)/.47));
+      hero.style.transform=`translate3d(${-travel*115}vw,-32%,0)`;
+      hero.style.opacity=String(1-smooth(clamp((progress-.12)/.53)));
+      intro.style.transform=`translate3d(calc(-50% + ${(1-enter)*90}vw),-50%,0)`;
+      intro.style.opacity=String(smooth(clamp((progress-.37)/.28))*(1-smooth(clamp((progress-.94)/.06))));
+      progressFill.style.width=Math.round(progress*100)+'%';
+      if (!raf) raf=requestAnimationFrame(render);
+    }
+    function render(now=0) {
+      raf=0;
+      if (!running) return;
+      const t=now*.0004,scatter=reduced?0:smooth(clamp((progress-.06)/.79));
+      ctx.fillStyle='#090909';ctx.fillRect(0,0,W,H);
+      // Portrait is large, right-aligned and deliberately bleeds below the viewport.
+      const portraitW=mobile ? Math.min(W*1.16,560) : Math.min(W*.61,870);
+      const portraitH=portraitW*(760/540);
+      const left=mobile ? W*.29 : W*.465;
+      const top=mobile ? H*.17 : H*.06;
+      const jitter=reduced?0:1;
+      for (let i=0;i<points.length;i++) {
+        const p=points[i];
+        const x0=left+p.u*portraitW,y0=top+p.v*portraitH;
+        const dx=p.dx*W*.52,dy=p.dy*H*.56;
+        const spread=scatter*scatter;
+        const x=x0+dx*spread+Math.sin(t*1.7+p.phase)*jitter*(.4+scatter*4);
+        const y=y0+dy*spread+Math.cos(t*1.3+p.phase)*jitter*(.5+scatter*4);
+        if(x<0||x>W||y<0||y>H) continue;
+        const brightness=.44+p.light/420;
+        const fade=1-.92*smooth(clamp((scatter-.16)/.84));
+        const alpha=Math.min(1,p.alpha*brightness*fade);
+        const s=(p.size>.93?1.65:p.size>.55?1.05:.67)*(mobile?.9:1)*(1+scatter*.4);
+        ctx.fillStyle=`rgba(${p.light>82?241:207},${p.light>82?238:208},${p.light>82?234:211},${alpha})`;
+        ctx.fillRect(x,y,s,s);
+      }
+      for (const p of dust) {
+        const alpha=p.alpha*(.2+scatter*.9);
+        ctx.fillStyle=`rgba(226,216,208,${alpha})`;
+        ctx.fillRect(p.u*W,p.v*H,p.size>.8?1.1:.6,p.size>.8?1.1:.6);
+      }
+      if (!reduced && !document.hidden && progress<.99) raf=requestAnimationFrame(render);
+    }
+    document.addEventListener('visibilitychange',()=>{running=!document.hidden;if(running)update();});
+    addEventListener('scroll',update,{passive:true});
+    addEventListener('resize',resize,{passive:true});
+    resize();
+  })();
+  </script>
+</body>
+</html>
