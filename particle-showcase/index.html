@@ -77,16 +77,16 @@
         <div class="topline">
           <a href="../index.html" aria-label="返回 CENTER 作品集">CENTER / BACK ↗</a>
           <span class="top-center">INTERACTIVE STUDY — 001</span>
-          <span class="top-right">SCROLL / TRANSFORM</span>
+          <span class="top-right">MOVE / SCROLL / TRANSFORM</span>
         </div>
         <h1 class="hero" id="hero"><span class="hero-line"><span>CENTER</span><i class="sticker" aria-hidden="true"></i></span><span class="hero-line second">DESIGN</span></h1>
         <div class="intro" id="intro"><p>Made of thousands of moments.<br>Never the same twice.<br>Always becoming.</p><p class="chinese">由万千微光组成。<br>滚动，让形象消散；回溯，让记忆重聚。</p></div>
-        <div class="ambient-label">A PORTRAIT IN PARTICLES<br>SCROLL TO EXPLORE ↓</div>
+        <div class="ambient-label">A BOY IN PARTICLES<br>MOVE CURSOR · SCROLL ↓</div>
         <div class="progress" aria-hidden="true"><span>00</span><span class="progress-track"><span class="progress-fill" id="progressFill"></span></span><span>01</span></div>
-        <div class="pill" aria-hidden="true"><span class="dots">▮▮▮</span> SCROLL TO DISSOLVE</div>
+        <div class="pill" aria-hidden="true"><span class="dots">▮▮▮</span> MOVE TO INTERACT</div>
       </div>
     </section>
-    <section class="endnote"><span class="eyebrow">CENTER DESIGN — DIGITAL EXPERIMENT 001</span><div><h2>STILL<br>IN MOTION.</h2><p>不是一段预先播放的视频，而是一幅随滚动实时重组的粒子肖像。向上滚动，所有光点都会回到原位。</p><a href="../index.html">← BACK TO PORTFOLIO</a></div></section>
+    <section class="endnote"><span class="eyebrow">CENTER DESIGN — DIGITAL EXPERIMENT 001</span><div><h2>STILL<br>IN MOTION.</h2><p>不是一段预先播放的视频。移动鼠标，粒子随方向流动并回弹；向下滚动，人物散开；向上滚动，所有光点重新聚合。</p><a href="../index.html">← BACK TO PORTFOLIO</a></div></section>
   </main>
   <script>
   (() => {
@@ -100,63 +100,57 @@
     const progressFill = document.getElementById('progressFill');
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mobile = matchMedia('(max-width: 700px)').matches;
-    const TAU = Math.PI * 2;
+        const TAU = Math.PI * 2;
     const clamp = v => Math.max(0, Math.min(1, v));
     const smooth = v => { v = clamp(v); return v*v*(3-2*v); };
-    let W = 0, H = 0, DPR = 1, points = [], dust = [], progress = 0, lastProgress = -1, raf = 0, running = true;
+    let W = 0, H = 0, DPR = 1, points = [], dust = [], progress = 0, raf = 0, running = true;
+    // Motion is driven by pointer velocity, not by a static mouse position.
+    const pointer = { x: -1000, y: -1000, lastX: 0, lastY: 0, lastTime: 0, targetVX: 0, targetVY: 0, vx: 0, vy: 0, tiltX: 0, tiltY: 0, active: false };
+    let sceneVisible = true;
+    const PORTRAIT_COLS = 180, PORTRAIT_ROWS = 186;
     let seed = 0xC3E7E2;
     function rand() { seed ^= seed << 13; seed ^= seed >>> 17; seed ^= seed << 5; return (seed >>> 0) / 4294967296; }
+    // Compact 2-bit-per-pixel mask extracted from the supplied reference illustration.
+    // Class 0 = outside, 1 = dark manga ink, 2 = middle tones, 3 = white clothing/skin.
+    // The grey poster typography and decorative background are intentionally excluded.
+    const portraitBits = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADP9WkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALOD/1ZVVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////WlVVVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP6b/JaVVVVVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+VWpVpVVVVVVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/lVVVW5VVVVVVVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/9WpqVVaVVVVVVVWlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//lZVVVW5VVVVVVVa5VAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//WlVVVaaWVVVVVVW+VQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/NaVVVVlaZVWVVVVW+pVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/5ZVVVVVW5VaVVVVa5VVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPzllVVVVVVZVvlVVVY+lVUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//mVVVVVVVVWz5VVVf6lVVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACv/WVVVVVVVVar1VVVqVVVVUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJv+aZVVVVVVVlmlVVVVVVVVVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAm/5elVVVVVVVVVVVVVVVVVVVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPm/liVVVVVVVVVVVVVVVVVVVVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+VVXKVVVVVVVVVVVVVVVVVVVVoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP5VVqiVlVVVVVVVVVVVVVVVVVWoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/1lVWyWlVVVVVVVVVVVqlVVVpZVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8mVVWybVVlVZVVVVVb//9VVVi5WAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACzlVVaublWlZaVVVVZv///VVq5ZYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/VVVVlaVW6uamVVVaf///VVbFVWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/llVWVZVW+lm6qVVWb///VVWlVZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP81lVVVZVXllms5VVVVv//VVVVVVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD5VVVVVVWVWVapWWVVb//ZVVVVVcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/lVVVVVVVVWVVVWFVVX//VVVVWVcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAw9VVVVVVVVVVVVVV9VVn//VVVVVVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPFpVVVVVVVVZVVVV/VVX/lVVVVVWDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPmlVVVVVVVVVVVVW/ZVX5VVVVVVYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACWVVVVVVlWVVVVVX/VVblVb5VVYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABZVVVVZVpVVVVVVb5VVvVWP9VVoAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA9ZVVZV5VpVVVVVlVVVq/luVxVVUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANVVVanlVuVVVVWVVVV///lVZVVsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACWVVv/lVWlVVVVVVVW///VVpVqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADWZVVaVVVaVVVVVVq///9pV9VYAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwFVVVWVVVaVVVVvOa///65V9XkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAFVVVWVVVWVVla/lVb///+V+XnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAJVVVVVVVVVVW/5ZVb////q/XnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOVVVVVVVVVVm/l9Vf//////WnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADA2VVVZVVVVW//X9Vf//////mUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAmVVVVVVVVV/9f+Vv//+///1YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOmVVVVVVVVVv+v/q////v//1gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwJmVVVVVVVVVv////////6//5gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABVVVVVVVVVVv////////1//9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADVVVVVVVVVVv////////2//9QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwJVVVVVW+5VX///////r7//8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD5VVVVYqiVX///////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJVVVVeumlf///////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACWVVVS+q/////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMADolVVf/7//////////+//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJlVb/5v////////+r//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJVVX75b////////q///AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACuVV//7///////+v+/+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKVVf/////////////9AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAClVVVW//W/////////+UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACVVVVVVVVVv////////lYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKVVVVVVVVVVX///////5X8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACVW5VVVVVVVV1v//////V/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlVv5VVVVVVVW+Wv////+b/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABVu/6VVVVVVVX/+v////Jv/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFb///1VVVVvVf///5r/+l//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFf+v/5VVVV/X////+VVVU//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlWr/v1VVVZ/b/////+VX3//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAClVb/VVVVVv/n//////5f///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGVVX/VVVVV//n//////1f///+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZVVVpVVVVV//m//////1f///9QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABZVVVVVVVVVa/F//////pb////UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1lVVVVVVVVVV+lf/////vV////lUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAllVVVVVVVVVVpWX/////+Vb///1VQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWVVVVVVVVVVVVVm////D9VU///5VVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAACXlVVVVVVVVVVVV5f////1VX///9VVUAAAAAAAAAAAAAAAAAAAAAAAAAAAAACblVVVVVVVVVVVVuW///+aVW////VVVAAAAAAAAAAAAAAAAAAAAAAAAAAAAANflVVVVVVVVVVVVf1b//ltVV////1VVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAJv+VVVVVVVVVVVVf+VqZX9VVv///5VVUAAAAAAAAAAAAAAAAAAAAAAAAAAAA1/+VVVVVVVVVVVVf/+VW/5VVf///+WVVAAAAAAAAAAAAAAAAAAAAAAAAAAAAm/9VVVVVVWWVVVVb/////5VVb////WVVQAAAAAAAAAAAAAAAAAAAAAAAAAADX9lVVVVVVX/lVVVX/////1VVX////1VVUAAAAAAAAAAAAAAAAAAAAAAAAAACb5VVVVVVWr/lVVVX//zP/1VVW////9VVVAAAAAAAAAAAAAAAAAAAAAAAAAABZVVVVVVVb//pVVVW/////lVVl/////VVVQAAAAAAAAAAAAAAAAAAAAAAAAAJVVVVVVVVf//+VVVW/////VVVZv////1VVQAAAAAAAAAAAAAAAAAAAAAAAAAFlVVVVVVVr//+VVVV/////VVVVf////9VVsAAAAAAAAAAAAAAAAAAAAAAAAAllVVVVVVVWr/+VVVV////+VVVVf/////VV/AAAAAAAAAAAAAAAAAAAAAAAAAWVVVVVVVVVf9VVVVV////+VVVVb/////1VvwAAAAAAAAAAAAAAAAAAAAAAACWVVVVVVVVVf9VVVVV////+VVVVX/////9VagAAAAAAAAAAAAAAAAAAAAAAABZVVVVVVVVVWlVVVVV////+ZVVVW//////VVsAAAAAAAAAAAAAAAAAAAAAAAJZVVVaVVVVVVVVVVVW////9dVVVV//////1VbAAAAAAAAAAAAAAAAAAAAAAAFlVVVvlVVVVVVVVVVW////9eVVVVv/////+VVAAAAAAAAAAAAAAAAAAAAAAAllVVV/1VVVVVVVVVVX////9flVVVf//////VVQAAAAAAAAAAAAAAAAAAAAAAWVVW+/lVVVVVVVVVVX////9flVVVf//////1VUAAAAAAAAAAAAAAAAAAAAACWVVb//+VVVVVVVVVVX////9aVVVVb//////9VVAAAAAAAAAAAAAAAAAAAAABZVVa/v/VVVVVVVVVVb////9VVVVVX///////VVAAAAAAAAAAAAAAAAAAAAABdVVWq//VVWlVVVVVVf///89VVVVVW///////1VQAAAAAAAAAAAAAAAAAAAAFuVVVb+aVVWlVVVVVVf///89VVVVVV///////9fUAAAAAAAAAAAAAAAAAAAAF+VVVf/VVVVVVVVVlVf///z9VVVVVVv///////UUAAAAAAAAAAAAAAAAAAAAGlVVVb6VVVVVVVVW/Vv///D9VVVuVVf///////nVAAAAAAAAAAAAAAAAAAAAFVVVVVVVVVVVVVVb/lv///P9VVW/lVf///////1lAAAAAAAAAAAAAAAAAAAAFVVVVVVVVVVVVVar/l/////9VVX/lVb///////5lQAAAAAAAAAAAAAAAAAAAlVVW//pVVVVVVVv//1/////9VW+/qVX///////+lgAAAAAAAAAAAAAAAAAAAJVVX///pVVVVVVv/v2///7/9VX///VW////////1AAAAAAAAAAAAAAAAAAAAOVVX////1VVVVVb/vm///v/9VX///lV////////FAAAAAAAAAAAAAAAAAAAAWlVX////+VVVVVWv/n///v/9VW//qVVv///////5AAAAAAAAAAAAAAAAAAAAVVVX/////5VVVVVv/X//+//9VVW/lVVf///////5AAAAAAAAAAAAAAAAAAAA+lVX////q9VVVVVv/b//7//9VVW/lVVb///////1AAAAAAAAAAAAAAAAAAAA/+VX////+ZVVVVVW5b//7//9VVVuVVVX///////1AAAAAAAAAAAAAAAAAAAA//+b/////5VVVVVVVf//v//9VVVVVVVV///////1AAAAAAAAAAAAAAAAAAAA///b//////lVVVVVVf/////9VVVVVVVVv//////mAkAAAAAAAAAAAAAAAMAA//8b//////+VVVVVVv/z///9VVVVVVVVf//////WpUAAAAAAAAAAAAAD//8A//6b///////1VVVVVv/////9VVVVVVVVX//////VW8AAAFgAAAAAAAP////z//+b///////+VVVVV//////9VVVVVVVWV/////+W//AD/lYAAAAAAA////////8b////////lVVVV//////9pVVVVVVUlb////9f//A//+WAAAAAAH/////////b////////5VVVV//////99VVVVVVr1Vf///5///D///lgAAAAAX/////////X/////////lVVW//////9uVVVVVW/+WVv//W///////9YAAAACb/////////m/////////1VVX//////5upVVVVb7/mlb/5b////////WAAAABb/////////1/////////+VVX/////+9v9VVVVb+/VVVpVv////////lAAAABf/////////9b/////////lVa/////r9v9VVVVW+ZVVVVb/////////1gAAABf//////////l/////////9Vb//////9eVVVVVVVVVVVv//////////5QAAABb//////////5b/////////Vf//////9eVVVVVVVVVVv///////////9QAAACb///////////V/////////5f/P/z//9ZVVVVVVVVWv////////////9YAAACX///////////5b////////+W//////9VVVVVVVVVv/////////////+UAAAAX////////////V/////////1b/////5VVVVVVVVf///////////////UAAAAm////////////5X////////9Vr///PuVVVblVVb////////////////UAAAAl/////////////lv////////l/+/rv/VVVvlVW/////////////////UAAAAJf////////////9W////////5b/////VVVv5Vv////////////////+UAAAAJb//P//////////lb////////W/////mVVv1b/////////////////9YAAAACX/////////////+V////////1VqqmlVVV+W//////////////////9YAAAAAl//////////////5X///////+VVVVVpVVlf//////////////////9QAAAAAJf//////////////Vf///////lvqr/9VVW///////////////////5QAAAAANX//////////////9V///////9Y///+VVv///////////////////1gAAAAADV/z/////////////5X///////Vv//PVb////////////////////VAAAAAAA1b///////////////lf//////+W//5V////////////////////+UAAAAAAACVv7/////////////+V///////1b+Vb////////////////////5YAAAAAAAAlb+//////////////5X//////+VlV/////////////////////lgAAAAAAAAOXDr//////////////lf//////5W5/////////////////////WAAAAAAAAAAVM6//////////////+V///////l9v/////////////////8/9YAAAAAAAAAAFv/r//////////////lW//////5Z//////////////////z/1gAAAAAAAAAAJb/5v/////////////Xlf//////Vv////////////////7/+WAAAAAAAAAAABX//lv///////////+bub//////1v///////////////6//5YAAAAAAAAAAAAV//6W///////////9f/n//////9f//////////////6r//VgAAAAAAAAAAAA1f/w5W//////////5/8n///////X/////////////+W//9WAAAAAAAAAAAAAJX6VZVW/////////1//2///////n////////////+Vv//1cAAAAAAAAAAAAACVVVVVVW////////n//5///////2///////////+lb//+WAAAAAAAAAAAAAADla+VVVVW///////b//5v//////1//////////+la///9UAAAAAAAAAAAAAANW/1VVVVVW/////+f//+f/////z1/////////+lVVWv/1cAAAAAAAAAAAAAA1f/lVVVpVVW////9u///X/////z5v///////+VVVVVW/VwAAAAAAAAAAAAAAlf/1VVVT5VVW///5////1/////r9f//////5VVVVVfVZWAAAAAAAAAAAAAACVv/1VVVf25VVW//1////9f//+vn9b////+pVVVVVVb+VYAAAAAAAAAAAAAABVv/5VVW9VWllVWvm/////X/7+v39W///qVVVW+VVVf/lgAAAAAAAAAAAAAABVv/9VVX9VVVVVVVXPv///5/7+v39l/6VVVlVV9VVV//5YAAAAAAAAAAAAAAJVv/9VVX/VVVVVWVVvqr//9v6/f69hVVVVVVVV9VVX//1UAAAAAAAAAAAAAAFVf/+VVW/VWaVWlVVVqqv/9f6/f25VVZVVVlVX9VVX//1WAAAAAAAAAAAAAAFVf//VVW/llmmppX9VVuq/pf5/b2FqVVVWWWVf1VVf//lWAAAAAAAAAAAAAAFVf//VVV/1llllpf/VVVqqmb5/f2VVVZlZaql/1VVf//VWAAAAAAAAAAAAAAFVf//VVV/1Vllpqb/1VVVq0/6+fVVb+mlpqam/lVV//+VWAAAAAAAAAAAAAAFVf//VVV/1VZppqb/1b6pVV/m5pVVr6qlmqqX/VVV//9VVAAAAAAAAAAAAAAFVb//VVV/1Vappqn/5fr85VVVVWVVpmmWWlmb/VVW//9VVAAAAAAAAAAAAAAFVb//VVV/1Vlpaqn/5f//w9VavuVVlWmWWVlb+VVW//5VWAAAAAAAAAAAAAAJVX//VVV/1VllZqm/1f//v+aVazVllZWWWVVf+VVX//1VWAAAAAAAAAAAAAAJVX/+VVVfVVVllpm/1f7///f6VbV5VZWVVllf+VVX//1VVAAAAAAAAAAAAAABVX/9VVVbVWVlllmvVv8///f/5VV+VaVVVVVb+VVX//1VWAAAAAAAAAAAAAABVX/9VVVWVVVVVllZV////yfw+aVv/aZaVlVb+VVX//1VWAAAAAAAAAAAAAACVW/9VVVWlVVVVWVVb/7/7qelVf5f/auvr69v5VVX//lVUAAAAAAAAAAAAAADVW/+VVVVK5plVWVVv/6qqVUAAAAAAav/////lVVW//VVYAAAAAAAAAAAAAAAlVP/VVVVP/++pWpVa/qlUAAAAAAAAAD////+VVVW//VVYAAAAAAAAAAAAAAA1V//lVVW////5Z+WVZVQAAAAAAAAAAAA///9VVVV//VVQAAAAAAAAAAAAAAAJVv/1VVX////pm+b5VAAAAAAAAAAAAAAAD/9VVVV//VVgAAAAAAAAAAAAAAACVf/9VVW//q/qr+b9AAAAAAAAAAAAAAAAAP9VVVW//VVAAAAAAAAAAAAAAAADVbv+VVVbqqZVVZUAAAAAAAAAAAAAAAAAAA9VVVX/+VWAAAAAAAAAAAAAAAAA1Vr/1VVWr5VVVQAAAAAAAAAAAAAAAAAAAAAVVVX+9VYAAAAAAAAAAAAAAAAANVV/+VVWlVVVAAAAAAAAAAAAAAAAAAAAAAABVVf69VgAAAAAAAAAAAAAAAAADlVaqlVVVVVAAAAAAAAAAAAAAAAAAAAAAAAAFV/71VAAAAAAAAAAAAAAAAAAA+VVVVVVWqQAAAAAAAAAAAAAAAAAAAAAAAAABb/qVYAAAAAAAAAAAAAAAAAAAA6VVVVa/wAAAAAAAAAAAAAAAAAAAAAAAAAAAD5VVsAAAAAAAAAAAAAAAAAAAAA6qqr/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVVWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFWgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
     function portraitMask() {
-      const m = document.createElement('canvas'); m.width = 540; m.height = 760;
-      const c = m.getContext('2d');
-      const shoulder = new Path2D();
-      shoulder.moveTo(0,760); shoulder.lineTo(0,668);
-      shoulder.bezierCurveTo(5,596,70,563,162,546);
-      shoulder.bezierCurveTo(194,540,216,517,222,493);
-      shoulder.lineTo(222,453); shoulder.lineTo(329,453); shoulder.lineTo(329,496);
-      shoulder.bezierCurveTo(339,528,367,539,416,552);
-      shoulder.bezierCurveTo(490,571,537,612,540,681);
-      shoulder.lineTo(540,760); shoulder.closePath();
-      let g = c.createLinearGradient(80,530,450,750);
-      g.addColorStop(0,'#777'); g.addColorStop(.35,'#292929'); g.addColorStop(.67,'#454545'); g.addColorStop(1,'#161616');
-      c.fillStyle=g; c.fill(shoulder);
-      // Neck: slight side lighting and shadow at the collar.
-      const neck = new Path2D(); neck.moveTo(217,447); neck.lineTo(336,447); neck.lineTo(335,533);
-      neck.bezierCurveTo(328,575,223,569,215,533); neck.closePath();
-      g=c.createLinearGradient(216,490,336,520);g.addColorStop(0,'#777');g.addColorStop(.45,'#393939');g.addColorStop(1,'#1b1b1b');c.fillStyle=g;c.fill(neck);
-      // Head and ears, with the high contrast silhouette from the video reference.
-      c.fillStyle='#555';c.beginPath();c.ellipse(147,352,20,50,-.12,0,TAU);c.fill();
-      c.beginPath();c.ellipse(392,350,19,49,.13,0,TAU);c.fill();
-      const head = new Path2D();
-      head.moveTo(271,61); head.bezierCurveTo(155,55,135,147,142,296);
-      head.bezierCurveTo(144,390,177,476,232,508);
-      head.bezierCurveTo(253,523,299,524,325,505);
-      head.bezierCurveTo(375,471,404,389,403,290);
-      head.bezierCurveTo(407,147,368,59,271,61); head.closePath();
-      g=c.createRadialGradient(202,220,24,271,278,267);
-      g.addColorStop(0,'#787878');g.addColorStop(.30,'#484848');g.addColorStop(.64,'#222');g.addColorStop(.90,'#6a6a6a');g.addColorStop(1,'#111');
-      c.fillStyle=g;c.fill(head);
-      // Light rim of face, chin and brow: gives dots volume without an external photo.
-      c.save();c.clip(head);
-      g=c.createLinearGradient(140,0,412,0);g.addColorStop(0,'rgba(255,255,255,.38)');g.addColorStop(.13,'rgba(255,255,255,0)');g.addColorStop(.82,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(255,255,255,.20)');c.fillStyle=g;c.fillRect(130,50,285,500);
-      c.fillStyle='rgba(0,0,0,.78)';c.beginPath();c.ellipse(214,323,35,13,-.09,0,TAU);c.fill();c.beginPath();c.ellipse(331,322,33,13,.1,0,TAU);c.fill();
-      c.strokeStyle='rgba(245,245,245,.16)';c.lineWidth=9;c.lineCap='round';c.beginPath();c.moveTo(277,315);c.bezierCurveTo(272,363,260,391,281,399);c.stroke();
-      c.fillStyle='rgba(0,0,0,.72)';c.beginPath();c.ellipse(274,434,52,15,0,0,TAU);c.fill();
-      c.strokeStyle='rgba(250,250,250,.20)';c.lineWidth=6;c.beginPath();c.moveTo(230,460);c.quadraticCurveTo(273,478,318,457);c.stroke();
-      c.restore();
-      return c.getImageData(0,0,540,760).data;
+      const raw = atob(portraitBits);
+      const data = new Uint8ClampedArray(PORTRAIT_COLS * PORTRAIT_ROWS * 4);
+      for (let i = 0; i < PORTRAIT_COLS * PORTRAIT_ROWS; i++) {
+        const type = (raw.charCodeAt(i >> 2) >> ((3 - (i & 3)) * 2)) & 3;
+        const k = i * 4;
+        data[k] = type === 1 ? 245 : type === 2 ? 150 : 58;
+        data[k + 3] = type ? 255 : 0;
+      }
+      return data;
     }
     function makeParticles() {
       seed = 0xC3E7E2;
       const mask = portraitMask();
-      const count = reduced ? 6200 : mobile ? 6800 : 15800;
+      const count = reduced ? 5500 : mobile ? 11000 : 17500;
       points = [];
-      for (let attempts=0;points.length<count && attempts<count*22;attempts++) {
-        const u=rand(), v=rand(); const x=Math.min(539,Math.floor(u*540)),y=Math.min(759,Math.floor(v*760));
-        const i=(y*540+x)*4, light=mask[i], a=mask[i+3];
-        if (a<100 || rand()>(.19+light/250)) continue;
-        points.push({u,v,dx:(rand()-.5)*2.6,dy:(rand()-.5)*2.0,depth:rand(),size:rand(),light,phase:rand()*TAU,alpha:.4+rand()*.6});
+      function add(u,v,light,seeded=false) {
+        points.push({u,v,dx:(rand()-.5)*2.6,dy:(rand()-.5)*2.0,depth:rand(),size:seeded?.96:rand(),light,phase:rand()*TAU,alpha:.52+rand()*.48,tone:light>220?2:light>100?1:0,bucket:Math.floor(rand()*4)});
       }
+      // First guarantee that the manga ink lines are sampled. Random sampling alone
+      // loses the eyes, curly hair, hand-on-cheek and floral shirt at small sizes.
+      for(let y=0;y<PORTRAIT_ROWS;y++) for(let x=0;x<PORTRAIT_COLS;x++) {
+        const i=(y*PORTRAIT_COLS+x)*4;
+        if(!mask[i+3]) continue;
+        const light=mask[i];
+        if(light>220 || (light>100 && rand()<.45) || (light<=100 && rand()<.14))
+          add((x+.5)/PORTRAIT_COLS,(y+.5)/PORTRAIT_ROWS,light,true);
+      }
+      for (let attempts=0;points.length<count && attempts<count*35;attempts++) {
+        const u=rand(), v=rand();
+        const x=Math.min(PORTRAIT_COLS-1,Math.floor(u*PORTRAIT_COLS)),y=Math.min(PORTRAIT_ROWS-1,Math.floor(v*PORTRAIT_ROWS));
+        const i=(y*PORTRAIT_COLS+x)*4, light=mask[i];
+        if (!mask[i+3] || rand()>(light>220 ? .82 : light>100 ? .63 : .39)) continue;
+        add(u,v,light);
+      }
+      // Minimize Canvas fillStyle changes: just 12 tone/opacity buckets per frame.
+      points.sort((a,b)=>(a.tone*4+a.bucket)-(b.tone*4+b.bucket));
       dust = Array.from({length: mobile ? 350 : 780},()=>({u:rand(),v:rand(),size:rand(),alpha:rand()*.23,phase:rand()*TAU}));
     }
     function resize() {
@@ -164,7 +158,7 @@
       canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);
       canvas.style.width=W+'px';canvas.style.height=H+'px';
       ctx.setTransform(DPR,0,0,DPR,0,0);
-      makeParticles();lastProgress=-1;update();
+      makeParticles();update();
     }
     function update() {
       const length=Math.max(1,stage.offsetHeight-H);
@@ -180,36 +174,87 @@
     }
     function render(now=0) {
       raf=0;
-      if (!running) return;
-      const t=now*.0004,scatter=reduced?0:smooth(clamp((progress-.06)/.79));
+      if (!running || !sceneVisible) return;
+      const t=now*.00045, scatter=reduced ? 0 : smooth(clamp((progress-.06)/.79));
       ctx.fillStyle='#090909';ctx.fillRect(0,0,W,H);
-      // Portrait is large, right-aligned and deliberately bleeds below the viewport.
-      const portraitW=mobile ? Math.min(W*1.16,560) : Math.min(W*.61,870);
-      const portraitH=portraitW*(760/540);
-      const left=mobile ? W*.29 : W*.465;
-      const top=mobile ? H*.17 : H*.06;
-      const jitter=reduced?0:1;
+      // Keep the illustrated seated boy large, right aligned, and readable.
+      const portraitW=mobile ? Math.min(W*.99,520) : Math.min(W*.51,770);
+      const portraitH=portraitW*(PORTRAIT_ROWS/PORTRAIT_COLS);
+      const left=mobile ? W*.17 : W*.475;
+      const top=mobile ? H*.30 : H*.15;
+      const radius=mobile ? 125 : 195;
+      // Smooth the cursor's velocity and let the figure settle when movement stops.
+      pointer.vx += (pointer.targetVX-pointer.vx)*.16;
+      pointer.vy += (pointer.targetVY-pointer.vy)*.16;
+      pointer.targetVX*=.89; pointer.targetVY*=.89;
+      pointer.tiltX += ((pointer.vx*2.2)-pointer.tiltX)*.075;
+      pointer.tiltY += ((pointer.vy*1.25)-pointer.tiltY)*.075;
+      const drift = reduced ? 0 : 1;
+      const motion = reduced ? 0 : 1-smooth(clamp((scatter-.35)/.65));
+      ctx.globalAlpha=1-.92*smooth(clamp((scatter-.16)/.84));
+      let lastStyle=-1;
       for (let i=0;i<points.length;i++) {
         const p=points[i];
-        const x0=left+p.u*portraitW,y0=top+p.v*portraitH;
-        const dx=p.dx*W*.52,dy=p.dy*H*.56;
+        const x0=left+p.u*portraitW, y0=top+p.v*portraitH;
+        const dx=p.dx*W*.52, dy=p.dy*H*.56;
         const spread=scatter*scatter;
-        const x=x0+dx*spread+Math.sin(t*1.7+p.phase)*jitter*(.4+scatter*4);
-        const y=y0+dy*spread+Math.cos(t*1.3+p.phase)*jitter*(.5+scatter*4);
+        // The whole silhouette subtly leans toward the direction of cursor travel.
+        const leanX=pointer.tiltX*(.32+p.depth*.58)*motion;
+        const leanY=pointer.tiltY*(.25+p.depth*.50)*motion;
+        let x=x0+dx*spread+leanX+Math.sin(t*1.7+p.phase)*drift*(.32+scatter*4);
+        let y=y0+dy*spread+leanY+Math.cos(t*1.3+p.phase)*drift*(.38+scatter*4);
+        if (pointer.active && motion>0 && !reduced) {
+          const px=x0-pointer.x,py=y0-pointer.y;
+          const dist2=px*px+py*py;
+          const influence=Math.exp(-dist2/(radius*radius)) * motion;
+          // Local directional stream: particles sweep in the mouse's travel direction.
+          x+=pointer.vx*(2.2+p.depth*2.1)*influence;
+          y+=pointer.vy*(2.2+p.depth*2.1)*influence;
+          // A gentle radial displacement makes the field react even to slow hovering.
+          const hover=13*influence/(Math.sqrt(dist2)+24);
+          x+=px*hover;
+          y+=py*hover;
+        }
         if(x<0||x>W||y<0||y>H) continue;
-        const brightness=.44+p.light/420;
-        const fade=1-.92*smooth(clamp((scatter-.16)/.84));
-        const alpha=Math.min(1,p.alpha*brightness*fade);
-        const s=(p.size>.93?1.65:p.size>.55?1.05:.67)*(mobile?.9:1)*(1+scatter*.4);
-        ctx.fillStyle=`rgba(${p.light>82?241:207},${p.light>82?238:208},${p.light>82?234:211},${alpha})`;
+        const s=(p.size>.90?2.2:p.size>.50?1.65:1.16)*(mobile?.88:1)*(1+scatter*.4);
+        const style=p.tone*4+p.bucket;
+        if(style!==lastStyle) {
+          const shade=p.tone===2?255:p.tone===1?222:169;
+          const alpha=(.60+p.bucket*.12)*(p.tone===2?1:p.tone===1?.85:.48);
+          ctx.fillStyle=`rgba(${shade},${shade},${shade},${alpha})`;
+          lastStyle=style;
+        }
         ctx.fillRect(x,y,s,s);
       }
+      ctx.globalAlpha=1;
       for (const p of dust) {
-        const alpha=p.alpha*(.2+scatter*.9);
+        const alpha=p.alpha*(.15+scatter*.9);
         ctx.fillStyle=`rgba(226,216,208,${alpha})`;
         ctx.fillRect(p.u*W,p.v*H,p.size>.8?1.1:.6,p.size>.8?1.1:.6);
       }
       if (!reduced && !document.hidden && progress<.99) raf=requestAnimationFrame(render);
+    }
+    function onPointerMove(event) {
+      if (reduced) return;
+      const now=performance.now(), x=event.clientX, y=event.clientY;
+      const elapsed=Math.max(12, Math.min(80, now-pointer.lastTime));
+      if (pointer.active) {
+        const dx=(x-pointer.lastX)*16.7/elapsed, dy=(y-pointer.lastY)*16.7/elapsed;
+        pointer.targetVX=Math.max(-32,Math.min(32,pointer.targetVX*.35+dx*.95));
+        pointer.targetVY=Math.max(-32,Math.min(32,pointer.targetVY*.35+dy*.95));
+      }
+      pointer.x=x;pointer.y=y;pointer.lastX=x;pointer.lastY=y;pointer.lastTime=now;pointer.active=true;
+      if (!raf) raf=requestAnimationFrame(render);
+    }
+    function onPointerLeave() { pointer.active=false;pointer.targetVX=0;pointer.targetVY=0; }
+    // The canvas can be covered by text. Track the whole scene, not only canvas hits.
+    document.querySelector('.scene').addEventListener('pointermove',onPointerMove,{passive:true});
+    document.querySelector('.scene').addEventListener('pointerleave',onPointerLeave,{passive:true});
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(entries=>{
+        sceneVisible=entries[0].isIntersecting;
+        if(sceneVisible) update();
+      },{threshold:0}).observe(document.querySelector('.scene'));
     }
     document.addEventListener('visibilitychange',()=>{running=!document.hidden;if(running)update();});
     addEventListener('scroll',update,{passive:true});
