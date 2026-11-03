@@ -61,11 +61,14 @@
       .pill { right: 14px; bottom: 15px; padding: 10px 12px; font-size: 9px; }
       .endnote { min-height: 56svh; padding: 60px 24px 42px; }
     }
+    .enable-motion { position:absolute; z-index:9; right:24px; bottom:80px; padding:11px 15px; border:1px solid #e8d2c0; border-radius:999px; background:#f2ede8; color:#222; cursor:pointer; font:600 11px/1.2 'DM Mono',monospace; }
+    .enable-motion:focus-visible { outline:3px solid #dba37b; outline-offset:3px; }
+    @media (max-width:700px) { .enable-motion { right:14px; bottom:66px; font-size:10px; } }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
-      .experience { height: 110svh; }
-      .hero { transform: translateY(-32%) !important; opacity: 1 !important; }
-      .intro { display: none; }
+      html:not(.motion-enabled) .experience { height: 110svh; }
+      html:not(.motion-enabled) .hero { transform: translateY(-32%) !important; opacity: 1 !important; }
+      html:not(.motion-enabled) .intro { display: none; }
     }
   </style>
 </head>
@@ -98,7 +101,7 @@
     const hero = document.getElementById('hero');
     const intro = document.getElementById('intro');
     const progressFill = document.getElementById('progressFill');
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mobile = matchMedia('(max-width: 700px)').matches;
         const TAU = Math.PI * 2;
     const clamp = v => Math.max(0, Math.min(1, v));
@@ -268,6 +271,23 @@
       if (!raf) raf=requestAnimationFrame(render);
     }
     function onPointerLeave() { pointer.active=false;pointer.targetVX=0;pointer.targetVY=0; }
+    // Respect the OS reduced-motion setting, but let visitors explicitly opt
+    // in to this animation without changing their system-wide preference.
+    if (reduced) {
+      const enable = document.createElement('button');
+      enable.type = 'button';
+      enable.className = 'enable-motion';
+      enable.textContent = 'ENABLE PARTICLE MOTION ↗';
+      enable.setAttribute('aria-label','开启粒子浮动和滚动动画');
+      enable.addEventListener('click', () => {
+        reduced = false;
+        document.documentElement.classList.add('motion-enabled');
+        enable.remove();
+        makeParticles();
+        update();
+      });
+      document.querySelector('.scene').appendChild(enable);
+    }
     // The canvas can be covered by text. Track the whole scene, not only canvas hits.
     document.querySelector('.scene').addEventListener('pointermove',onPointerMove,{passive:true});
     document.querySelector('.scene').addEventListener('pointerleave',onPointerLeave,{passive:true});
