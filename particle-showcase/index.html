@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#eae8e4">
 <meta name="description" content="CENTER DESIGN — eleve 好玩的设计：滑板少年双层粒子互动">
+<link rel="icon" type="image/x-icon" href="../favicon.ico?v=center-grin-20261023b"><link rel="icon" type="image/png" sizes="128x128" href="../favicon.png?v=center-grin-20261023b">
 <title>eleve — Playful Design / CENTER DESIGN</title>
 <style>
 :root{--paper:#eae8e4;--ink:#171716;--mute:#686763;--edge:rgba(22,22,22,.23)}
@@ -121,10 +122,55 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
   .pop-burst strong{font-size:14px;}
 }
 @media(prefers-reduced-motion:reduce){.pop-burst{transition:none}.pop-burst.is-popping{animation:none}}
+
+/* 2026-11-04 — live About → particle portrait → contact sequence */
+.page-sequence{position:relative;isolation:isolate}
+.sequence-panel{position:relative;width:100%;transform-origin:center center;backface-visibility:hidden}
+.about-panel{z-index:1;min-height:100svh;height:auto;overflow:visible;background:var(--paper)}
+.about-panel-inner{width:100%;min-height:100svh;height:auto}
+.about-frame{display:block;width:100%;height:100svh;border:0;background:var(--paper)}
+.particle-panel{z-index:2;height:100svh;min-height:100svh;overflow:hidden;background:var(--paper)}
+.particle-panel-inner{width:100%;height:100%}
+.experience{height:100svh;min-height:100svh;position:relative;overflow:hidden}
+.experience .scene{position:relative;top:auto;height:100svh;min-height:0}
+.end-panel{z-index:3;height:100svh;min-height:100svh;overflow:hidden;background:#161615;color:#f4f0e9}
+.end-panel-inner{width:100%;height:100%}
+.end{height:100%;min-height:100svh}
+.progress{left:50%;bottom:38px;width:min(320px,42vw);gap:0;transform:translateX(-50%)}
+.progress .track{flex:1;width:auto;height:3px}
+.stamp{right:28px;bottom:27px;width:132px;height:132px;display:block;border:0;border-radius:0;background:none;transform:none}
+.stamp svg{display:block;width:100%;height:100%;overflow:visible}
+.stamp .disc-line{fill:none;stroke:#171716;stroke-width:1.15}
+.stamp .disc-soft{fill:none;stroke:#8d8a84;stroke-width:.8;opacity:.62}
+.stamp text{fill:#171716;font:700 7px "Courier New",monospace;letter-spacing:1.55px}
+.stamp-rotor{transform-box:fill-box;transform-origin:center;animation:stamp-spin 26s linear infinite}
+@keyframes stamp-spin{to{transform:rotate(360deg)}}
+.pop-burst::before{background-color:#858780;background-image:radial-gradient(circle,rgba(255,255,255,.72) .8px,transparent 1.35px);background-size:8px 8px}
+.pop-burst strong{color:#fff}
+@media(max-width:700px){
+  .about-panel,.about-panel-inner{min-height:100svh}
+  .about-frame{height:100svh}
+  .experience,.experience .scene{height:100svh;min-height:0}
+  .progress{left:50%;bottom:28px;width:min(320px,70vw);transform:translateX(-50%)}
+  .progress .track{width:auto}
+  .stamp{right:12px;bottom:12px;width:84px;height:84px}
+  .end{padding:65px 24px}
+}
+@media(prefers-reduced-motion:reduce){
+  .stamp-rotor{animation:none}
+  .experience{height:100svh}
+}
 </style>
 </head>
 <body>
-<main>
+<main class="page-sequence">
+<section class="sequence-panel about-panel" id="aboutPanel" aria-label="About — 当前线上关于页面">
+ <div class="panel-inner about-panel-inner">
+  <iframe class="about-frame" src="../about/" title="CENTER DESIGN — About" loading="eager" scrolling="no"></iframe>
+ </div>
+</section>
+<section class="sequence-panel particle-panel" id="particlePanel" aria-label="滑板男孩粒子交互实验">
+ <div class="panel-inner particle-panel-inner">
 <section class="experience" id="experience" aria-label="滑板男孩粒子交互实验">
  <div class="scene" id="scene">
   <div class="backdrop" id="backdrop" aria-hidden="true">
@@ -163,13 +209,35 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
   <div class="hero" id="hero"><h1><span>PLAYFUL</span><span>DESIGN.</span></h1><p class="tag">好玩的设计，不设标准答案。<br>让想象力跳出框框，让设计更有趣。<br>MAKE DESIGN FUN.</p></div>
   
   
-  <div class="progress" aria-hidden="true"><span>00</span><span class="track"><span class="fill" id="fill"></span></span><span>01</span></div>
-  <div class="stamp" aria-hidden="true">STILL<br>IN<br>MOTION</div>
+  <div class="progress" aria-hidden="true"><span class="track"><span class="fill" id="fill"></span></span></div>
+  <div class="stamp" aria-hidden="true">
+ <svg viewBox="0 0 140 140" role="presentation">
+  <defs><path id="stamp-text-path" d="M70 70 m-50 0 a50 50 0 1 1 100 0 a50 50 0 1 1 -100 0"/></defs>
+  <circle class="disc-line" cx="70" cy="70" r="57"/>
+  <circle class="disc-soft" cx="70" cy="70" r="43"/>
+  <circle class="disc-soft" cx="70" cy="70" r="31"/>
+  <circle class="disc-line" cx="70" cy="70" r="7"/>
+  <g class="stamp-rotor">
+   <text><textPath href="#stamp-text-path" startOffset="0%">STILL IN MOTION · PLAY / MAKE / REPEAT · STILL IN MOTION ·</textPath></text>
+  </g>
+ </svg>
+</div>
   <div class="midcopy" id="midcopy"><span class="eyebrow">PLAYFUL DESIGN × CENTER</span><h2>MAKE<br>IT FUN.</h2><p>波普艺术是自由的表达。<br>让好奇心、想象力和有趣的设计一起发生。</p></div>
   <button class="motion-button" id="motionBtn" type="button">ENABLE PARTICLE MOTION ↗</button>
  </div>
 </section>
-
+ </div>
+</section>
+<section class="sequence-panel end-panel" id="endPanel" aria-label="联系">
+ <div class="panel-inner end-panel-inner">
+  <div class="end">
+   <small>CENTER / ABOUT V6B · VIDEO REFERENCE</small>
+   <h2>LET'S<br>CONNECT.</h2>
+   <p>DESIGN / RESEARCH / EXPERIENCE</p>
+   <a href="mailto:zhongxin6882@gmail.com">zhongxin6882@gmail.com ↗</a>
+  </div>
+ </div>
+</section>
 </main>
 <script>
 (() => {
@@ -313,12 +381,25 @@ function resize(){if(!personFigure.complete||!personFigure.naturalWidth||!boardF
   for(const p of points){p.x=geo.left+p.u*geo.w;p.y=geo.top+p.v*geo.h;p.vx=0;p.vy=0;}
   update();
 }
-function update(){const travel=Math.max(1,stage.offsetHeight-H);progress=reduced?0:clamp(-stage.getBoundingClientRect().top/travel);
-  scrollScatter=reduced?0:smooth((progress-.09)/.72);
-  const ex=smooth((progress-.19)/.49);hero.style.transform=`translate3d(${(-ex*115)}vw,0,0)`;hero.style.opacity=String(1-smooth((progress-.13)/.4));
-  midcopy.style.transform=`translate3d(-50%,${(1-ex)*35}vh,0)`;midcopy.style.opacity=String(smooth((progress-.43)/.30));
-  fill.style.width=(progress*100).toFixed(1)+'%';if(!frame)frame=requestAnimationFrame(render);
+function applyProgress(value){
+  progress=clamp(value);
+  // Keep the skater intact through the first part of the pinned panel;
+  // disperse the particles gradually as the next panel rises over it.
+  scrollScatter=reduced?0:smooth((progress-.40)/.60);
+  const ex=smooth((progress-.12)/.62);
+  hero.style.transform=`translate3d(${(-ex*115)}vw,0,0)`;
+  hero.style.opacity=String(1-smooth((progress-.20)/.54));
+  midcopy.style.transform=`translate3d(-50%,${(1-ex)*35}vh,0)`;
+  midcopy.style.opacity=String(smooth((progress-.55)/.32));
+  fill.style.width=(progress*100).toFixed(1)+'%';
+  if(!frame)frame=requestAnimationFrame(render);
 }
+function update(){
+  if(window.__particleScrollControlled)return;
+  const travel=Math.max(1,stage.offsetHeight-H);
+  applyProgress(reduced?0:clamp(-stage.getBoundingClientRect().top/travel));
+}
+window.addEventListener('particle:progress',event=>applyProgress(event.detail?.progress??0));
 function drawFigure(t,scatter){
   const idleX=reduced?0:Math.sin(t*.77)*2.8*(1-scatter);
   const idleY=reduced?0:Math.sin(t*1.36)*5.8*(1-scatter);
@@ -361,7 +442,7 @@ function drawFigure(t,scatter){
       // Soft spring + damping: particle positions are independent state.
       p.vx=(p.vx+differenceX*.030)*.900;
       p.vy=(p.vy+differenceY*.030)*.900;
-      if(influenceSpeed>.02&&scatter<.8){
+      if(influenceSpeed>.02&&scatter<.92){
         const relX=p.x-pointer.x,relY=p.y-pointer.y;
         const d2=relX*relX+relY*relY;
         if(d2<rr*3.4){
@@ -431,7 +512,7 @@ function pointerMove(e){if(reduced||!personFigure.naturalWidth||!boardFigure.nat
     const distance=Math.hypot(totalDX,totalDY);
     // Impulses apply along the entire cursor trail, including intermediate
     // pointer events between animation frames; the spring then regroups them.
-    if(distance>1.4 && distance<260 && progress<.76){
+    if(distance>1.4 && distance<260 && progress<.90){
       const radius=isMobile?128:180,r2=radius*radius;
       const xA=pointer.lastX,yA=pointer.lastY,seg2=distance*distance;
       const intensity=clamp(distance/27,.22,1.15);
@@ -453,7 +534,7 @@ function pointerMove(e){if(reduced||!personFigure.naturalWidth||!boardFigure.nat
     pointer.dy=clamp((y-pointer.lastY)*dt,-70,70);
     const magnitude=Math.hypot(pointer.dx,pointer.dy);
          pointer.speed=clamp(magnitude/24,0,1);
-     if(magnitude>2.5&&now-lastEchoTime>58&&progress<.75){
+     if(magnitude>2.5&&now-lastEchoTime>58&&progress<.90){
        hoverEchoes.push({x,y,life:.8,power:clamp(magnitude/37,0,1),seed:now*.001});
        if(hoverEchoes.length>15)hoverEchoes.shift();lastEchoTime=now;
      }
@@ -552,4 +633,5 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();}
 if('IntersectionObserver'in window){new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)update();},{threshold:0}).observe(scene);}
 })();
 </script>
+<script type="module" src="./panel-transitions.js"></script>
 </body></html>
