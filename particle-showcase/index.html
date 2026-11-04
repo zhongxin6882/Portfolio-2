@@ -76,8 +76,14 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
  .graphicShade{background:linear-gradient(180deg,rgba(234,232,228,.79),rgba(234,232,228,.34) 19%,transparent 41%);}
 }
 /* Light pop-art linework continues to the bottom edge on desktop + mobile. */
-.bottom-left-grid{position:absolute;left:0;bottom:0;width:min(43vw,470px);height:35%;pointer-events:none;overflow:hidden;opacity:.92}
-@media(max-width:700px){.bottom-left-grid{width:64vw;height:30%;opacity:.57}}
+.bottom-left-grid{position:absolute;left:0;bottom:0;width:min(34vw,380px);height:34%;pointer-events:none;overflow:hidden;opacity:.82;
+  -webkit-mask-image:radial-gradient(ellipse at 0% 104%,#000 0%,rgba(0,0,0,.87) 31%,rgba(0,0,0,.22) 69%,transparent 100%);
+  mask-image:radial-gradient(ellipse at 0% 104%,#000 0%,rgba(0,0,0,.87) 31%,rgba(0,0,0,.22) 69%,transparent 100%)}
+.waves-mark{position:absolute;left:clamp(145px,16vw,255px);bottom:11.5%;z-index:1;white-space:nowrap;
+  font:900 clamp(34px,5vw,73px)/1 Impact,'Arial Black',sans-serif;letter-spacing:-.06em;
+  color:#8a8882;opacity:.33;transform:rotate(-7deg);transform-origin:left center;pointer-events:none}
+@media(max-width:700px){.bottom-left-grid{width:53vw;height:27%;opacity:.52}
+.waves-mark{left:18%;bottom:11%;font-size:clamp(28px,7.5vw,43px);opacity:.23}}
 </style>
 </head>
 <body>
@@ -89,24 +95,24 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
    <svg class="wall" viewBox="0 0 1440 850" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs><pattern id="halftone" width="11" height="11" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="#464642" opacity=".40"/></pattern><pattern id="checker" width="55" height="55" patternUnits="userSpaceOnUse"><rect width="55" height="55" fill="#dedbd6"/><rect width="27.5" height="27.5" fill="#343431"/><rect x="27.5" y="27.5" width="27.5" height="27.5" fill="#343431"/></pattern></defs>
     <path d="M-45 420L280 592L280 750L-45 570Z" fill="url(#halftone)"/>
-    <path d="M1115 511L1484 413L1484 560L1115 646Z" fill="url(#checker)" opacity=".45" transform="rotate(-7 1270 525)"/>
+    <path d="M1115 511L1484 413L1484 560L1115 646Z" fill="url(#checker)" opacity=".19" transform="rotate(-7 1270 525)"/>
     
     
-    <g stroke="#232321" stroke-linecap="round" opacity=".8" stroke-width="8"><path d="M149 735l80 15-75 19 108 15"/><path d="M1134 800l80-20-50 32 126-34"/></g>
+    <g stroke="#232321" stroke-linecap="round" opacity=".38" stroke-width="5"><path d="M1134 800l80-20-50 32 126-34"/></g>
     
     
-    <text x="160" y="785" fill="#454440" font-family="Impact,Arial Black,Arial,sans-serif" font-size="100" font-weight="900" transform="rotate(-8 160 785)" opacity=".49">MAKE WAVES</text>
+    
     <text x="1185" y="795" fill="#282826" font-family="Impact,Arial Black,Arial,sans-serif" font-size="29" font-weight="900" transform="rotate(-10 1185 795)" opacity=".40">SKATE + CREATE</text>
    </svg>
-   <!-- Edge-attached diagonal grid: strokes continue through the bottom
-        of the viewport rather than stopping midway through the composition. -->
-   <svg class="bottom-left-grid" viewBox="0 0 440 390" preserveAspectRatio="none" aria-hidden="true">
-    <g fill="none" stroke-linecap="square">
-     <path d="M-85 1L442 432M-85 27L442 458M-85 53L442 484" stroke="#555450" stroke-width="5.2" opacity=".38"/>
-     <path d="M-85 79L442 510M-85 105L442 536M-85 131L442 562" stroke="#92908b" stroke-width="1.4" opacity=".45"/>
-     <path d="M-50 196L185-22M-12 248L249-8M25 307L310-5M63 374L369-8M131 440L431-5" stroke="#92908b" stroke-width="1.1" opacity=".38"/>
+   <!-- One unobtrusive corner motif; tapered away from the caption and text. -->
+   <svg class="bottom-left-grid" viewBox="0 0 420 360" preserveAspectRatio="none" aria-hidden="true">
+    <g fill="none" stroke-linecap="round">
+     <path d="M-125 18L326 400M-125 53L283 400M-125 87L244 400" stroke="#686661" stroke-width="3.2" opacity=".39"/>
+     <path d="M-65 145L205 380M-65 175L166 380" stroke="#93908b" stroke-width="1.3" opacity=".45"/>
+     <path d="M-35 352L220 65M12 380L259 118M73 380L303 173" stroke="#a6a49e" stroke-width="1.1" opacity=".40"/>
     </g>
    </svg>
+   <div class="waves-mark" aria-hidden="true">MAKE WAVES</div>
   </div>
   
    <div class="pop-burst" aria-hidden="true"><strong>POP!</strong></div>
@@ -178,6 +184,21 @@ function makePoints(){
     if(data[j+3]<180||data[j]>145||rand()>.8||(x<off.width*.19&&y<off.height*.25))continue;
     points.push({u:x/off.width,v:y/off.height,lum:data[j]/255,opacity:data[j+3]/255,x:null,y:null,vx:0,vy:0,dx:rand()*2-1,dy:rand()*2-1,r:rand(),phase:rand()*6.283,size:rand(),trail:0});i++;
   }
+  // Board and wheels: fine-grain detail sampling along the *entire* bottom
+  // deck. The previous version undersampled the right wheel and nose, which
+  // made the silhouette look clipped despite the source asset being complete.
+  const boardStep=isMobile?2.15:1.55;
+  for(let y=off.height*.71;y<off.height-1;y+=boardStep){
+    for(let x=off.width*.15;x<off.width-1;x+=boardStep){
+      const xx=Math.floor(x),yy=Math.floor(y),i=(yy*off.width+xx)*4;
+      const alpha=data[i+3]/255;if(alpha<.33)continue;
+      const lum=(data[i]*.2126+data[i+1]*.7152+data[i+2]*.0722)/255;
+      const density=lum<.33?.79:lum<.62?.54:.20;
+      if(rand()>density)continue;
+      points.push({u:xx/off.width,v:yy/off.height,lum,opacity:alpha,x:null,y:null,vx:0,vy:0,
+        dx:rand()*2-1,dy:rand()*2-1,r:rand(),phase:rand()*6.283,size:rand(),trail:0,deck:true});
+    }
+  }
   // Dark ink marks are drawn last, so they remain readable over skin dots.
   for(const p of points){
     p.tone=p.lum<.18?0:p.lum<.42?1:p.lum<.68?2:3;
@@ -188,18 +209,19 @@ function makePoints(){
   points.sort((a,b)=>a.group-b.group);
 }
  function geometry(){
-   // Reserve room for particle flow and the complete skateboard outline.
-   // No part of the resting skater may extend beyond a viewport edge.
+   // Contain the *entire* skater / deck / wheels, even on short laptop screens.
+   // A little extra bottom clearance accommodates natural idle bobbing.
    const ratio=figure.height/figure.width;
-   const margin=isMobile?14:Math.max(32,W*.04);
-   const size=isMobile
-     ?Math.min(W-2*margin,H*.56/ratio,540)
-     :Math.min(W*.57,H*.79/ratio,W*.88,850);
+   const margin=isMobile?16:Math.max(48,W*.062);
+   const topSafe=isMobile?110:65;
+   const bottomSafe=isMobile?92:105;
+   const widthLimit=isMobile?W-2*margin:Math.min(W*.55,W-margin*2,780);
+   const size=Math.max(100,Math.min(widthLimit,(H-topSafe-bottomSafe)/ratio));
    const h=size*ratio;
-   const left=isMobile?(W-size)/2:W-margin-size;
+   const left=isMobile?(W-size)/2:Math.max(margin,W-margin-size);
    const top=isMobile
-     ?Math.max(115,Math.min(H*.30,H-h-100))
-     :Math.max(54,(H-h)*.47);
+     ?Math.max(topSafe,Math.min(H*.27,H-h-bottomSafe))
+     :Math.max(topSafe,Math.min((H-h)*.43,H-h-bottomSafe));
    return{left,top,w:size,h};
  }
 let geo={left:0,top:0,w:0,h:0};
@@ -228,6 +250,16 @@ function drawFigure(t,scatter){
   ctx.save();ctx.globalAlpha=(reduced?.48:.355)*(1-scatter)*(1-.65*pointer.speed);
   const bx=0,by=112,bw=159,bh=114;
   ctx.drawImage(figure,bx,by,bw,bh,geo.left+idleX+(bx/figure.width)*geo.w,geo.top+idleY+(by/figure.height)*geo.h,geo.w*(bw/figure.width),geo.h*(bh/figure.height));
+  ctx.restore();
+  // The skateboard needs an anchor of its own: the original low-opacity
+  // figure layer made the wheels fade into the checkerboard. This crop keeps
+  // deck artwork and both wheel contours legible without freezing the dots.
+  const boardY=Math.floor(figure.height*.71);
+  ctx.save();
+  ctx.globalAlpha=(reduced?.26:isMobile?.19:.18)*(1-scatter)*(1-.82*pointer.speed);
+  ctx.drawImage(figure,0,boardY,figure.width,figure.height-boardY,
+    geo.left+idleX,geo.top+idleY+geo.h*boardY/figure.height,
+    geo.w,geo.h*(figure.height-boardY)/figure.height);
   ctx.restore();
   // One draw call for each ink particle: movement persists after cursor stops
   // and springs back to the hand-drawn reference contour.
@@ -270,7 +302,9 @@ function drawFigure(t,scatter){
       lastGroup=p.group;
     }
     const isHand=p.u<.185&&p.v>.118&&p.v<.24;
-    const sz=isHand?(p.size>.85?1.28:1.0)*(isMobile?.83:1):(p.size>.90?2.4:p.size>.45?1.85:1.42)*(isMobile?.87:1);
+    const sz=isHand?(p.size>.85?1.28:1.0)*(isMobile?.83:1)
+      :p.deck?(p.size>.7?1.35:1.0)*(isMobile?.8:1)
+      :(p.size>.90?2.4:p.size>.45?1.85:1.42)*(isMobile?.87:1);
     ctx.fillRect(p.x,p.y,sz,sz);
     // Flowing motion draws a short streak only while a particle is displaced.
     if(p.trail>.28){ctx.strokeStyle=`rgba(26,26,25,${(.11*p.trail).toFixed(3)})`;ctx.lineWidth=.65;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*1.4,p.y-p.vy*1.4);ctx.stroke();}
