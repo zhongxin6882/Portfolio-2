@@ -4,7 +4,7 @@ import { join } from 'node:path';
 
 const root = process.cwd();
 const dist = join(root, 'dist');
-const routes = ['index.html', 'about/index.html', 'playground.html', 'contact.html', 'fromanother.html'];
+const routes = ['index.html', 'about/index.html', 'playground.html', 'contact.html', 'fromanother.html', 'particle-showcase/index.html'];
 const png = readFileSync(join(root, 'favicon.png'));
 const ico = readFileSync(join(root, 'favicon.ico'));
 assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', 'favicon.png is not a PNG');
@@ -43,4 +43,4 @@ for (const marker of ['work-paper-ready', 'Canvas2D Mesh', 'UNPACK_FLIP_Y_WEBGL'
 }
 assert.equal(readdirSync(join(dist, 'assets/work')).filter(name => /^\d{2}\.(?:jpe?g|png|webp)$/i.test(name)).length,
   19, 'Expected 19 built Work cover photos');
-console.log(`Work release assets: five icon routes, ${dimensions} PNG, valid ICO, Demo 21 bundle, 19 covers OK`);
+console.log(`Work release assets: six icon routes, ${dimensions} PNG, valid ICO, Demo 21 bundle, 19 covers OK`);
