@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#eae8e4">
-<meta name="description" content="CENTER DESIGN — 1997 好玩的设计：滑板少年双层粒子互动">
-<title>1997 — Playful Design / CENTER DESIGN</title>
+<meta name="description" content="CENTER DESIGN — eleve 好玩的设计：滑板少年双层粒子互动">
+<title>eleve — Playful Design / CENTER DESIGN</title>
 <style>
 :root{--paper:#eae8e4;--ink:#171716;--mute:#686763;--edge:rgba(22,22,22,.23)}
 *{box-sizing:border-box}html{background:#161615;scroll-behavior:auto}
@@ -39,7 +39,7 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
 @media(max-width:700px){.experience{height:280svh}.scene{min-height:0}.head{left:17px;right:17px;top:18px;font-size:9px}.head .label{display:none}.bgtype{top:12%;left:-10%;font-size:68vw}.wall{bottom:-8%;height:80%}.hero{left:6vw;top:11%;max-width:100%}.hero h1{font-size:clamp(75px,21vw,125px)}.hero .index{font-size:10px;margin-bottom:10px}.hero .tag{display:none}.graphicShade{background:linear-gradient(180deg,rgba(234,232,228,.74) 0%,transparent 34%)}.vert{right:10px;top:38%;font-size:9px}.instructions{left:17px;bottom:20px;font-size:10px}.progress{left:44%;bottom:28px;gap:6px}.track{width:45px}.stamp{right:15px;bottom:15px;width:64px;height:64px;font-size:7px}.midcopy{width:88%}.midcopy h2{font-size:clamp(50px,12vw,80px)}.motion-button{bottom:90px;right:12px}.end{padding:65px 24px}}
 @media(prefers-reduced-motion:reduce){.backdrop{transition:none}html:not(.force-motion) .experience{height:105svh}html:not(.force-motion) .midcopy{display:none}}
 
-/* 1997 / POP ART — fit the full composition on narrow and wide screens. */
+/* eleve / POP ART — fit the full composition on narrow and wide screens. */
 .scene { min-height: 0; }
 .backdrop { inset: 0; transform: translate3d(var(--bgx,0px),var(--bgy,0px),0) scale(1.015); }
 .bgtype {
@@ -103,6 +103,24 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
 .hero h1{font-size:clamp(55px,8.7vw,150px);letter-spacing:-.09em}
 .hero h1 span:last-child{padding-left:0}
 @media(max-width:700px){.hero{max-width:100%;}.hero h1{font-size:clamp(43px,12.8vw,76px);letter-spacing:-.085em}}
+
+/* V12 — interactive Physics2D-style emitter; preserves the original portrait. */
+.bgtype {font-size:clamp(112px,min(21vw,34vh),350px);letter-spacing:-.085em;top:7%;}
+.pop-burst{z-index:6;appearance:none;border:0;padding:0;background:transparent;color:inherit;
+ cursor:pointer;touch-action:manipulation;user-select:none;-webkit-tap-highlight-color:transparent;
+ transition:transform .24s cubic-bezier(.2,.8,.2,1),filter .24s ease;}
+.pop-burst:hover{transform:rotate(-5deg) scale(1.065);filter:drop-shadow(0 4px 1px rgba(30,30,30,.15))}
+.pop-burst:active{transform:rotate(-14deg) scale(.91)}
+.pop-burst:focus-visible{outline:3px solid #e26d4e;outline-offset:6px;border-radius:12px;}
+.pop-burst.is-popping{animation:pop-burst-wiggle .52s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pop-burst-wiggle {0%{scale:1}28%{scale:.81}54%{scale:1.13}80%{scale:.96}100%{scale:1}}
+#popPhysics{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:7;pointer-events:none;}
+@media(max-width:700px){
+  .bgtype{font-size:clamp(62px,19vw,135px);top:27%;}
+  .pop-burst{display:grid;left:4%;top:46%;width:72px;height:72px;opacity:.96;}
+  .pop-burst strong{font-size:14px;}
+}
+@media(prefers-reduced-motion:reduce){.pop-burst{transition:none}.pop-burst.is-popping{animation:none}}
 </style>
 </head>
 <body>
@@ -110,7 +128,7 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
 <section class="experience" id="experience" aria-label="滑板男孩粒子交互实验">
  <div class="scene" id="scene">
   <div class="backdrop" id="backdrop" aria-hidden="true">
-   <div class="bgtype">1997</div>
+   <div class="bgtype">eleve</div>
    <svg class="wall" viewBox="0 0 1440 850" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs><pattern id="halftone" width="11" height="11" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="#464642" opacity=".40"/></pattern><pattern id="checker" width="55" height="55" patternUnits="userSpaceOnUse"><rect width="55" height="55" fill="#dedbd6"/><rect width="27.5" height="27.5" fill="#343431"/><rect x="27.5" y="27.5" width="27.5" height="27.5" fill="#343431"/></pattern></defs>
     
@@ -135,12 +153,13 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
    
   </div>
   
-   <div class="pop-burst" aria-hidden="true"><strong>POP!</strong></div>
+   <button class="pop-burst" id="popEmitter" type="button" aria-label="点击 POP，释放重力粒子特效" title="CLICK TO POP!" ><strong>POP!</strong></button>
    <div class="pop-ring" aria-hidden="true"></div>
    <div class="pop-caption" aria-hidden="true">PLAY / MAKE / REPEAT</div>
 <div class="graphicShade" aria-hidden="true"></div>
   <canvas id="portrait" aria-hidden="true"></canvas>
-  <div class="head"><span class="label">PLAYFUL DESIGN / 1997</span></div>
+  <canvas id="popPhysics" aria-hidden="true"></canvas>
+  <div class="head"><span class="label">PLAYFUL DESIGN / eleve</span></div>
   <div class="hero" id="hero"><h1><span>PLAYFUL</span><span>DESIGN.</span></h1><p class="tag">好玩的设计，不设标准答案。<br>让想象力跳出框框，让设计更有趣。<br>MAKE DESIGN FUN.</p></div>
   
   
@@ -442,6 +461,90 @@ function pointerMove(e){if(reduced||!personFigure.naturalWidth||!boardFigure.nat
   pointer.x=x;pointer.y=y;pointer.lastX=x;pointer.lastY=y;pointer.t=now;pointer.on=true;
   bg.style.setProperty('--bgx',`${clamp((x/W-.5)*-13,-7,7)}px`);bg.style.setProperty('--bgy',`${clamp((y/H-.5)*-9,-5,5)}px`);
 }
+
+// GSAP Physics2D-style explosion: randomized angle & velocity, real gravity,
+// damping/bounce and fade. Uses a self-contained canvas so the downloadable
+// HTML never needs a CDN or an extra Physics2DPlugin file.
+const popEmitter=document.getElementById('popEmitter');
+const popCanvas=document.getElementById('popPhysics');
+const popCtx=popCanvas.getContext('2d',{alpha:true});
+let popDots=[],popRings=[],popFrame=0,popLast=0,popDpr=1;
+function sizePopCanvas(){
+  const rect=scene.getBoundingClientRect();
+  popDpr=Math.min(1.7,devicePixelRatio||1);
+  popCanvas.width=Math.round(rect.width*popDpr);
+  popCanvas.height=Math.round(rect.height*popDpr);
+  popCtx.setTransform(popDpr,0,0,popDpr,0,0);
+}
+function firePhysicsPop(){
+  const a=popEmitter.getBoundingClientRect(),b=scene.getBoundingClientRect();
+  const x=a.left-b.left+a.width/2,y=a.top-b.top+a.height/2;
+  // Repeating clicks are allowed but old sprites are bounded for performance.
+  const amount=reduced?12:52;
+  for(let i=0;i<amount;i++){
+    const angle=Math.random()*Math.PI*2;
+    const power=125+Math.random()*330;
+    const scatter=Math.random()*23;
+    const life=(reduced?.45:1.45+Math.random()*.65);
+    popDots.push({x:x+Math.cos(angle)*scatter,y:y+Math.sin(angle)*scatter,
+      vx:Math.cos(angle)*power,vy:Math.sin(angle)*power-95,
+      gravity:reduced?0:500+Math.random()*400,drag:.997,
+      size:2.5+Math.random()*6.5,age:0,life,
+      shape:i%7===0?'diamond':i%4===0?'square':'circle',
+      ink:['#2c2b29','#75726e','#b6a599','#e17655','#57534f'][i%5],
+      spin:(Math.random()-.5)*7,rotation:Math.random()*6.28});
+  }
+  if(popDots.length>220)popDots.splice(0,popDots.length-220);
+  popRings.push({x,y,age:0,life:reduced?.32:.7});
+  // The emitter springs and settles without changing its layout position.
+  popEmitter.classList.remove('is-popping');
+  void popEmitter.offsetWidth;
+  popEmitter.classList.add('is-popping');
+  if(!popFrame){popLast=0;popFrame=requestAnimationFrame(renderPhysicsPop);}
+}
+function renderPhysicsPop(now){
+  popFrame=0;
+  if(document.hidden){popDots=[];popRings=[];return;}
+  const w=popCanvas.width/popDpr,h=popCanvas.height/popDpr;
+  const dt=popLast?Math.min(.032,(now-popLast)/1000):.016;
+  popLast=now;
+  popCtx.clearRect(0,0,w,h);
+  for(let i=popDots.length-1;i>=0;i--){
+    const p=popDots[i];p.age+=dt;
+    if(p.age>=p.life){popDots.splice(i,1);continue;}
+    p.vy+=p.gravity*dt;p.vx*=Math.pow(p.drag,dt*60);
+    p.x+=p.vx*dt;p.y+=p.vy*dt;
+    // Small floor bounce, like the referenced physics explosion.
+    const floor=h-10;
+    if(p.y>floor && p.vy>0){p.y=floor;p.vy*=-.33;p.vx*=.74;}
+    p.rotation+=p.spin*dt;
+    const fade=Math.min(1,(p.life-p.age)/.48),intro=Math.min(1,p.age/.07);
+    popCtx.globalAlpha=fade*intro*.95;
+    popCtx.fillStyle=p.ink;
+    popCtx.save();popCtx.translate(p.x,p.y);popCtx.rotate(p.rotation);
+    if(p.shape==='square')popCtx.fillRect(-p.size/2,-p.size/2,p.size,p.size);
+    else if(p.shape==='diamond'){
+      popCtx.beginPath();popCtx.moveTo(0,-p.size);popCtx.lineTo(p.size*.6,0);
+      popCtx.lineTo(0,p.size);popCtx.lineTo(-p.size*.6,0);popCtx.closePath();popCtx.fill();
+    }else{popCtx.beginPath();popCtx.arc(0,0,p.size*.5,0,Math.PI*2);popCtx.fill();}
+    popCtx.restore();
+  }
+  for(let i=popRings.length-1;i>=0;i--){
+    const ring=popRings[i];ring.age+=dt;
+    if(ring.age>ring.life){popRings.splice(i,1);continue;}
+    const t=ring.age/ring.life;
+    popCtx.globalAlpha=(1-t)*.43;popCtx.lineWidth=2.1*(1-t)+.35;
+    popCtx.strokeStyle='#31302e';popCtx.beginPath();
+    popCtx.arc(ring.x,ring.y,18+t*(reduced?36:98),0,Math.PI*2);popCtx.stroke();
+  }
+  popCtx.globalAlpha=1;
+  if(popDots.length||popRings.length)popFrame=requestAnimationFrame(renderPhysicsPop);
+  else popLast=0;
+}
+popEmitter.addEventListener('click',firePhysicsPop);
+window.addEventListener('resize',sizePopCanvas,{passive:true});
+sizePopCanvas();
+
 function pointerLeave(){pointer.on=false;pointer.speed=0;pointer.dx=0;pointer.dy=0;}
 window.addEventListener('pointermove',pointerMove,{passive:true});scene.addEventListener('pointerleave',pointerLeave,{passive:true});
 window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',resize,{passive:true});
