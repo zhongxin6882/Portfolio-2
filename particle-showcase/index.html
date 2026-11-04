@@ -255,9 +255,12 @@ function makePoints(){
     p.group=12+p.tone*3+p.bucket;
   }
   for(const p of boardPoints){
-    // Board source pixels are intentionally pale. Map their luminance into
-    // the SAME shared grayscale palette, so deck and wheels remain readable.
-    p.tone=p.lum<.65?0:p.lum<.86?1:p.lum<.96?2:3;
+    // Both layers use exactly the same four particle inks. The board sprite
+    // was deliberately brightened in V8/V9 (most values lie between .67–.94),
+    // so re-map that source luminance to the *person's* ink scale. Otherwise
+    // the same RGB palette still produces a visibly washed-out skateboard.
+    const normalizedInk=clamp((p.lum-.69)/.40);
+    p.tone=normalizedInk<.18?0:normalizedInk<.42?1:normalizedInk<.68?2:3;
     p.bucket=Math.min(2,Math.floor(p.r*3));
     p.group=p.tone*3+p.bucket;
   }
@@ -303,7 +306,9 @@ function drawFigure(t,scatter){
   // Independent pale skateboard under the person, so no dark crop of the
   // skater can be accidentally drawn over the deck or its wheels.
   ctx.save();
-  ctx.globalAlpha=(reduced?.20:isMobile?.085:.075)*(1-scatter)*(1-.78*pointer.speed);
+  // Match the person's faint tonal anchor: source bitmap lightness must not
+  // tint the independently moving skateboard dots or create a pale grey slab.
+  ctx.globalAlpha=(reduced?.055:isMobile?.022:.018)*(1-scatter)*(1-.78*pointer.speed);
   ctx.drawImage(boardFigure,geo.left+idleX,geo.top+idleY,geo.w,geo.h);
   ctx.restore();
   // The person is rendered independently in its original dark palette.
@@ -354,20 +359,18 @@ function drawFigure(t,scatter){
     }else{p.x=desiredX;p.y=desiredY;}
     if(p.x<0||p.x>W||p.y<0||p.y>H)continue;
     if(p.group!==lastGroup){
-      // Independent tone and opacity for every layer: very light deck/wheels,
-      // but the face, clothes and fingers keep their familiar high contrast.
-      // The person and skateboard share exactly the same ink colors and alpha.
-      // Their independently prepared source sprites retain different light/dark details.
+      // Identical ink and opacity for BOTH the skateboard and the person.
+      // Layer identity never enters the particle color computation.
       const colors=[58,84,116,151];
       const bases=[.92,.82,.70,.52];
       const a=bases[p.tone]*(1-scatter*.975)*(.82+p.bucket*.09);
       const c=colors[p.tone];ctx.fillStyle=`rgba(${c},${c},${c},${a})`;
       lastGroup=p.group;
     }
-    const sz=p.hand?(p.size>.85?1.28:1.0)*(isMobile?.83:1)
-      :p.wheel?(p.size>.7?1.45:1.10)*(isMobile?.85:1)
-      :p.board?(p.size>.7?1.20:.90)*(isMobile?.78:1)
-      :(p.size>.90?2.4:p.size>.45?1.85:1.42)*(isMobile?.87:1);
+    // The two layers now share the same apparent dot scale. Smaller wheel/
+    // finger grains preserve contour detail without a change in ink color.
+    const commonSize=(p.size>.90?2.4:p.size>.45?1.85:1.42)*(isMobile?.87:1);
+    const sz=p.hand?commonSize*.68:p.wheel?commonSize*.88:commonSize;
     ctx.fillRect(p.x,p.y,sz,sz);
     // Flowing motion draws a short streak only while a particle is displaced.
     if(p.trail>.28){ctx.strokeStyle=`rgba(84,84,84,${(.09*p.trail).toFixed(3)})`;ctx.lineWidth=.65;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*1.4,p.y-p.vy*1.4);ctx.stroke();}
