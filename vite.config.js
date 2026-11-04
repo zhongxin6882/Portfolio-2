@@ -102,7 +102,8 @@ export default defineConfig({
         about: resolve(root, 'about/index.html'),
         playground: resolve(root, 'playground.html'),
         contact: resolve(root, 'contact.html'),
-        fromanother: resolve(root, 'fromanother.html')
+        fromanother: resolve(root, 'fromanother.html'),
+        particleShowcase: resolve(root, 'particle-showcase/index.html')
       }
     }
   }

@@ -33,6 +33,7 @@
 | --- | --- | --- |
 | Work | `/` / `index.html` | 19 个精选项目；桌面端环形卡片堆叠、滚动吸附、左右信息同步，支持项目预览与详情 |
 | About | `/about/` | 个人介绍、经历及交互插画；元素动画由页面脚本与雪碧图驱动 |
+| Particle Showcase | `/particle-showcase/` | 复用线上 About 作为首屏，接入滑板人物粒子、GSAP 固定面板转场与联系尾屏 |
 | Playground | `/playground.html` | 24 张实验作品图片墙、GSAP 入场与计数动画；桌面端图片流独立滚动 |
 | Contact | `/contact.html` | 插画、社交标识与联系方式展示 |
 | Fromanother | `/fromanother.html` | 单项目案例展示，包含图片流与视差交互；不属于主导航一级入口 |
@@ -67,6 +68,8 @@ Portfolio-2/
 ├── about/index.html           # About
 ├── playground.html            # Playground
 ├── contact.html               # Contact
+├── particle-showcase/index.html # About → 人物粒子 → 联系的滚动叙事页
+├── particle-showcase/panel-transitions.js # GSAP ScrollTrigger 固定面板与 overscroll
 ├── fromanother.html           # 独立案例
 ├── style.css                  # 基础/通用样式
 ├── work.css / work.js         # Work 页面
@@ -80,7 +83,7 @@ Portfolio-2/
 ├── playground.js              # Playground 渲染与动画
 ├── assets/                    # 插画、项目与社交资源
 ├── scripts/                   # 构建回归检查与素材脚本
-├── vite.config.js             # 五入口构建与资源复制
+├── vite.config.js             # 六入口构建与资源复制
 ├── .github/workflows/         # 发布与移动端检查流程
 ├── AGENTS.md                  # 开发约束与实施指南
 └── VERSION.md                 # 版本定义与发布约定

@@ -30,11 +30,15 @@ for (let attempt = 1; attempt <= 12; attempt++) {
       assert.equal(digest(await get(icon)), digest(readFileSync(`dist/${icon}`)),
         `Live ${icon} differs from the built release`);
     }
-    for (const route of ['about/', 'playground.html', 'contact.html', 'fromanother.html']) {
+    for (const route of ['about/', 'playground.html', 'contact.html', 'fromanother.html', 'particle-showcase/']) {
       const html = (await get(route)).toString('utf8');
       assert(html.includes('sizes="128x128"'), `${route} still declares the wrong PNG icon size`);
     }
-    console.log(`Live Pages confirmed: new Work bundle, five routes, ICO and PNG (attempt ${attempt})`);
+    const showcase = (await get('particle-showcase/')).toString('utf8');
+    assert(showcase.includes('about-frame'), 'Live Particle Showcase does not use the About first screen');
+    assert(showcase.includes('particle:progress'), 'Live Particle Showcase is missing its particle progress bridge');
+    assert(showcase.includes('stamp-text-path'), 'Live Particle Showcase is missing its typographic disc');
+    console.log(`Live Pages confirmed: new Work bundle, six routes, About-led Particle Showcase, ICO and PNG (attempt ${attempt})`);
     process.exit(0);
   } catch (error) {
     lastError = error;

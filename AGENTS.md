@@ -38,6 +38,7 @@
 | --- | --- | --- | --- |
 | Work `/` | `index.html` | `work.js`、`work.css` | 卡片循环、浮层、计数与移动端切换 |
 | About `/about/` | `about/index.html` | `about-sprites.js`、`about-sprites.css` | 图片/精灵帧与点击状态、页内旧样式 |
+| Particle Showcase `/particle-showcase/` | `particle-showcase/index.html` | `particle-showcase/panel-transitions.js` | 同源 About iframe、GSAP pinned panels、粒子进度同步 |
 | Playground `/playground.html` | `playground.html` | `playground.js` 与 `style.css` | 图片墙独立滚动、数字与素材加载 |
 | Contact `/contact.html` | `contact.html` | `contact-redesign.css` | 插画底部定位、社交标识与菜单样式冲突 |
 | 案例 `/fromanother.html` | `fromanother.html` | `app.js` | 独立案例、远程图片、历史页头 |
@@ -142,6 +143,14 @@ CI 在部署前执行相同的全局品牌验证。如检查失败，**停止发
 - 对 `760px`、`850px` 两套历史断点存在交叉的功能要重点测试，例如 `760–850px` 区间。
 - 在 320 / 375 / 390 / 430px 等典型手机宽度下检查横向溢出、叠层和关闭状态。
 
+### 5.6 Particle Showcase：About → 粒子人物 → 联系
+
+- `/particle-showcase/` 是独立滚动叙事路由；第一屏通过同源 iframe 加载现有 `/about/`，不要复制 About 页面或另造一版个人简介。
+- `particle-showcase/panel-transitions.js` 使用 npm GSAP 的 ScrollTrigger，按 Pinned panels with overscroll 的方式固定前序面板、关闭 pin spacing，并在内容高于视口时模拟内层滚动。About iframe 加载后必须重新测量高度并刷新 ScrollTrigger。
+- 第二屏的粒子人物仍由 `particle-showcase/index.html` 内的 Canvas 采样与绘制；保持原始人物几何位置、粒子采样和图层分离。滚动进度通过 particle:progress 事件传递；人物应在转场后段才逐渐消散。
+- 圆盘标识使用细线圆环与环绕旋转文字，不恢复金属质感贴图；进度条保持居中且不显示 00/01 数字。
+- 最后一屏为深色联系尾屏。移动端检查 iframe 自适应高度、人物完整入镜、圆盘不遮挡文案；减少动态效果偏好下应保留正常可滚动内容，不强制 pin。
+
 ## 6. 国际化与文案修改规范
 
 `locale.js` 为文本节点翻译机制，并非完整的属性级 i18n 框架。应优先沿用当前的词典设计，不擅自改变语义或持久化键：
@@ -150,14 +159,14 @@ CI 在部署前执行相同的全局品牌验证。如检查失败，**停止发
 2. 文本替换按独立文本节点匹配，空白会规范化；标点、箭头、特殊空格等字符要精确对齐。
 3. 使用 `<br>` 分开的职责或奖项是**多个文本节点**，需要逐项添加词条。
 4. 新词条应在英文反向字典生成之前添加；源文为中文时应写入对应的 `en` 覆盖块，而非错误地反向放进 `zh`。
-5. 新增 `data-default-language` / `data-language-key` 时要验证本地持久化状态；当前五个入口页面都标记默认语言为中文，但实际仍可能被用户存储的选择覆盖。
+5. 新增 `data-default-language` / `data-language-key` 时要验证本地持久化状态；当前五个既有主站入口页面都标记默认语言为中文，但实际仍可能被用户存储的选择覆盖。
 6. `alt`、`aria-label`、`title`、`placeholder` 等属性不会因文本节点翻译自动更新；若需双语无障碍文本，单独实现并验证。
 
 更改文案后至少切换中文、英文各一次，并测试页面转场后是否恢复预期状态。
 
 ## 7. 构建、CSS 与资源管理
 
-- **Vite 多页面入口**：`index.html`、`about/index.html`、`playground.html`、`contact.html`、`fromanother.html`。
+- **Vite 多页面入口**：`index.html`、`about/index.html`、`playground.html`、`contact.html`、`fromanother.html`、`particle-showcase/index.html`。
 - **经典脚本**：历史脚本按原页面声明的顺序加载，`vite.config.js` 的 `copyClassicAssets()` 会把根目录相应静态资源与 `assets/` 复制到 `dist/`。新建脚本必须确认是否被插件复制；`playground.js` 等 ES modules 走 Vite。
 - **样式顺序**：构建阶段恢复源 HTML 的样式顺序，并为本地 CSS 链接加入基于文件内容的 12 位哈希 `?v=...`。不要以源 HTML 中的旧字符串判断线上缓存版本。
 - **样式边界**：`style.css` 为通用基准；`work.css`、`contact-redesign.css`、`mobile-responsive.css` 分别负责相应范围。公共版权样式始终在 `brand.css` 维护。
@@ -175,6 +184,7 @@ CI 在部署前执行相同的全局品牌验证。如检查失败，**停止发
 | Work | 构建 + Work/图标资源检查 + Playwright 桌面/手机回归 | 桌面滚轮/触控板的真实手感、层叠视觉、预览/详情及手机循环手势、中间断点原生滚动 |
 | Playground | 构建 +现有 Playground CI 断言 | 图片流仅右侧滚动、计数及不出现已删页脚 |
 | About | 构建 | 点击、Hover、雪碧图、触摸与元素裁切 |
+| Particle Showcase | 构建 + 线上路由校验 | About iframe 高度、2→3 屏固定转场、人物粒子消散时机、线性圆盘、手机端裁切 |
 | Contact | 构建 | 社交图标清晰度、标题间距、插画贴底、菜单不变 |
 | 响应式/页头 | 构建 + 适用的 Playwright 手机测试 | 小屏菜单、断点切换、无横向溢出 |
 | 发布/构建配置 | 构建 + 相关 CI | 与目标 SHA 对应的部署结果及在线路由 |
