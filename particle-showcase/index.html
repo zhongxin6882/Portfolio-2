@@ -75,6 +75,9 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
  .head{font-size:9px;}
  .graphicShade{background:linear-gradient(180deg,rgba(234,232,228,.79),rgba(234,232,228,.34) 19%,transparent 41%);}
 }
+/* Light pop-art linework continues to the bottom edge on desktop + mobile. */
+.bottom-left-grid{position:absolute;left:0;bottom:0;width:min(43vw,470px);height:35%;pointer-events:none;overflow:hidden;opacity:.92}
+@media(max-width:700px){.bottom-left-grid{width:64vw;height:30%;opacity:.57}}
 </style>
 </head>
 <body>
@@ -85,17 +88,24 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
    <div class="bgtype">1997</div>
    <svg class="wall" viewBox="0 0 1440 850" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs><pattern id="halftone" width="11" height="11" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="#464642" opacity=".40"/></pattern><pattern id="checker" width="55" height="55" patternUnits="userSpaceOnUse"><rect width="55" height="55" fill="#dedbd6"/><rect width="27.5" height="27.5" fill="#343431"/><rect x="27.5" y="27.5" width="27.5" height="27.5" fill="#343431"/></pattern></defs>
-    <path d="M-45 420L280 592L280 750L-45 570Z" fill="url(#halftone)"/><path d="M-45 510L283 655" stroke="#1f1f1d" stroke-width="7"/><path d="M-45 535L285 680" stroke="#1f1f1d" stroke-width="5"/>
-    <g stroke="#353431" stroke-width="1.5" opacity=".54"><path d="M-30 525l300 174m-300-140l280 162m-280-128l240 137m-230-227l280 165m-260-206l280 163m-280-130l280 162"/><path d="M-40 600l160-150m-102 197l165-155m-100 194l167-157m-90 192l117-111m-20 152l45-43"/></g>
+    <path d="M-45 420L280 592L280 750L-45 570Z" fill="url(#halftone)"/>
     <path d="M1115 511L1484 413L1484 560L1115 646Z" fill="url(#checker)" opacity=".45" transform="rotate(-7 1270 525)"/>
     
     
-    <g stroke="#242422" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" opacity=".78" transform="translate(725 10) rotate(-10)"><path d="M-58 0L-56-55L-24-27L0-73L26-27L56-53L65 7Z"/><path d="M-58 0Q5 13 65 7"/></g>
     <g stroke="#232321" stroke-linecap="round" opacity=".8" stroke-width="8"><path d="M149 735l80 15-75 19 108 15"/><path d="M1134 800l80-20-50 32 126-34"/></g>
     
     
     <text x="160" y="785" fill="#454440" font-family="Impact,Arial Black,Arial,sans-serif" font-size="100" font-weight="900" transform="rotate(-8 160 785)" opacity=".49">MAKE WAVES</text>
     <text x="1185" y="795" fill="#282826" font-family="Impact,Arial Black,Arial,sans-serif" font-size="29" font-weight="900" transform="rotate(-10 1185 795)" opacity=".40">SKATE + CREATE</text>
+   </svg>
+   <!-- Edge-attached diagonal grid: strokes continue through the bottom
+        of the viewport rather than stopping midway through the composition. -->
+   <svg class="bottom-left-grid" viewBox="0 0 440 390" preserveAspectRatio="none" aria-hidden="true">
+    <g fill="none" stroke-linecap="square">
+     <path d="M-85 1L442 432M-85 27L442 458M-85 53L442 484" stroke="#555450" stroke-width="5.2" opacity=".38"/>
+     <path d="M-85 79L442 510M-85 105L442 536M-85 131L442 562" stroke="#92908b" stroke-width="1.4" opacity=".45"/>
+     <path d="M-50 196L185-22M-12 248L249-8M25 307L310-5M63 374L369-8M131 440L431-5" stroke="#92908b" stroke-width="1.1" opacity=".38"/>
+    </g>
    </svg>
   </div>
   
@@ -211,11 +221,11 @@ function drawFigure(t,scatter){
   const idleY=reduced?0:Math.sin(t*1.36)*5.8*(1-scatter);
   // Low-opacity tonal anchor retains eyes, chains, and shoe details without
   // making a static raster the primary visible figure.
-  ctx.save();ctx.globalAlpha=(reduced?.52:isMobile?.22:.19)*(1-scatter)*(1-.80*pointer.speed);
+  ctx.save();ctx.globalAlpha=(reduced?.48:isMobile?.17:.135)*(1-scatter)*(1-.80*pointer.speed);
   ctx.drawImage(figure,geo.left+idleX,geo.top+idleY,geo.w,geo.h);ctx.restore();
   // Hand-only contour glazes: keep the full five-finger silhouette readable
   // over the 1997 halftone without covering the moving particle surface.
-  ctx.save();ctx.globalAlpha=(reduced?.54:.43)*(1-scatter)*(1-.65*pointer.speed);
+  ctx.save();ctx.globalAlpha=(reduced?.48:.355)*(1-scatter)*(1-.65*pointer.speed);
   const bx=0,by=112,bw=159,bh=114;
   ctx.drawImage(figure,bx,by,bw,bh,geo.left+idleX+(bx/figure.width)*geo.w,geo.top+idleY+(by/figure.height)*geo.h,geo.w*(bw/figure.width),geo.h*(bh/figure.height));
   ctx.restore();
@@ -255,7 +265,7 @@ function drawFigure(t,scatter){
     if(p.x<0||p.x>W||p.y<0||p.y>H)continue;
     if(p.group!==lastGroup){
       const colors=[18,48,89,128],bases=[.98,.88,.71,.48];
-      const a=bases[p.tone]*(1-scatter*.93)*(.82+p.bucket*.09);
+      const a=bases[p.tone]*(1-scatter*.975)*(.82+p.bucket*.09);
       const c=colors[p.tone];ctx.fillStyle=`rgba(${c},${c},${c},${a})`;
       lastGroup=p.group;
     }
