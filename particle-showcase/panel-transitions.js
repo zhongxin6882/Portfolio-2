@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 const frame = document.querySelector(".about-frame");
 const panels = () => gsap.utils.toArray(".sequence-panel");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+window.__particleScrollControlled = !reducedMotion;
 
 function syncAboutFrame() {
   if (!frame) return;
