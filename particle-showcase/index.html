@@ -250,11 +250,28 @@ function makePoints(){
       }
     }
   }
+  // Only soften the skateboard: identify its exact silhouette and wheel
+  // regions in the original 940 x 922 illustration, without fading the face,
+  // clothes, hand, sneakers or the surrounding 1997 graphics.
+  const boardOutline=[[139,793],[155,776],[242,762],[305,749],[460,733],[607,705],[753,681],[854,651],[913,638],[943,670],[930,728],[877,760],[780,789],[670,817],[530,845],[405,865],[271,876],[196,863],[150,840],[135,817]];
+  const withinPolygon=(x,y,poly)=>{let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+    const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y) && x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])inside=!inside;
+  }return inside;};
+  const inOval=(x,y,cx,cy,rx,ry)=>((x-cx)/rx)**2+((y-cy)/ry)**2<1.18;
+  const protectedHand=[[700,615],[767,610],[829,661],[827,745],[793,807],[748,793],[718,754]];
+  for(const p of points){
+    const x=p.u*figure.width,y=p.v*figure.height;
+    const wheel=p.wheel||inOval(x,y,308,883,46,46)||inOval(x,y,396,881,52,47)||inOval(x,y,817,806,46,44);
+    const board=withinPolygon(x,y,boardOutline)
+      &&!withinPolygon(x,y,protectedHand)
+      &&!inOval(x,y,372,697,112,94);
+    p.boardLight=wheel||board;
+  }
   // Dark ink marks are drawn last, so they remain readable over skin dots.
   for(const p of points){
     p.tone=p.lum<.18?0:p.lum<.42?1:p.lum<.68?2:3;
     p.bucket=Math.min(2,Math.floor(p.r*3));
-    p.group=p.tone*3+p.bucket;
+    p.group=(p.boardLight?12:0)+p.tone*3+p.bucket;
   }
   // Drawing neighboring points in identical palettes greatly reduces state changes.
   points.sort((a,b)=>a.group-b.group);
@@ -307,7 +324,7 @@ function drawFigure(t,scatter){
   // deck artwork and both wheel contours legible without freezing the dots.
   const boardY=Math.floor(figure.height*.71);
   ctx.save();
-  ctx.globalAlpha=(reduced?.28:isMobile?.23:.22)*(1-scatter)*(1-.86*pointer.speed);
+  ctx.globalAlpha=(reduced?.19:isMobile?.12:.095)*(1-scatter)*(1-.86*pointer.speed);
   ctx.drawImage(figure,0,boardY,figure.width,figure.height-boardY,
     geo.left+idleX,geo.top+idleY+geo.h*boardY/figure.height,
     geo.w,geo.h*(figure.height-boardY)/figure.height);
@@ -347,7 +364,10 @@ function drawFigure(t,scatter){
     }else{p.x=desiredX;p.y=desiredY;}
     if(p.x<0||p.x>W||p.y<0||p.y>H)continue;
     if(p.group!==lastGroup){
-      const colors=[18,48,89,128],bases=[.98,.88,.71,.48];
+      // The skater stays dark and crisp; only deck + wheel particles become
+      // a softer mid-grey. Keep contrast within the artwork for the POP/WOW art.
+      const colors=p.boardLight?[83,115,150,184]:[18,48,89,128];
+      const bases=p.boardLight?[.88,.79,.65,.45]:[.98,.88,.71,.48];
       const a=bases[p.tone]*(1-scatter*.975)*(.82+p.bucket*.09);
       const c=colors[p.tone];ctx.fillStyle=`rgba(${c},${c},${c},${a})`;
       lastGroup=p.group;
