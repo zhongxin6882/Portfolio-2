@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#eae8e4">
-<meta name="description" content="CENTER DESIGN — 1997 波普艺术与有趣设计：滑板少年粒子互动">
-<title>1997 — Pop Art &amp; Playful Design / CENTER DESIGN</title>
+<meta name="description" content="CENTER DESIGN — 1997 好玩的设计：滑板少年双层粒子互动">
+<title>1997 — Playful Design / CENTER DESIGN</title>
 <style>
 :root{--paper:#eae8e4;--ink:#171716;--mute:#686763;--edge:rgba(22,22,22,.23)}
 *{box-sizing:border-box}html{background:#161615;scroll-behavior:auto}
@@ -98,6 +98,11 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
  .hero h1{font-size:clamp(65px,18vw,105px)}
  .bottom-left-grid{width:48vw;height:21%;opacity:.44}
  .pop-burst{display:none}}
+/* V10: long English headline fits narrow and wide screens. */
+.hero{max-width:65vw}
+.hero h1{font-size:clamp(55px,8.7vw,150px);letter-spacing:-.09em}
+.hero h1 span:last-child{padding-left:0}
+@media(max-width:700px){.hero{max-width:100%;}.hero h1{font-size:clamp(43px,12.8vw,76px);letter-spacing:-.085em}}
 </style>
 </head>
 <body>
@@ -135,17 +140,17 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
    <div class="pop-caption" aria-hidden="true">PLAY / MAKE / REPEAT</div>
 <div class="graphicShade" aria-hidden="true"></div>
   <canvas id="portrait" aria-hidden="true"></canvas>
-  <div class="head"><span class="label">POP ART / PLAYFUL DESIGN</span></div>
-  <div class="hero" id="hero"><h1><span>POP</span><span>ART.</span></h1><p class="tag">波普艺术，不止一种玩法。<br>让灵感跳出框框，让设计更有趣。<br>MAKE DESIGN FUN.</p></div>
+  <div class="head"><span class="label">PLAYFUL DESIGN / 1997</span></div>
+  <div class="hero" id="hero"><h1><span>PLAYFUL</span><span>DESIGN.</span></h1><p class="tag">好玩的设计，不设标准答案。<br>让想象力跳出框框，让设计更有趣。<br>MAKE DESIGN FUN.</p></div>
   
   
   <div class="progress" aria-hidden="true"><span>00</span><span class="track"><span class="fill" id="fill"></span></span><span>01</span></div>
   <div class="stamp" aria-hidden="true">STILL<br>IN<br>MOTION</div>
-  <div class="midcopy" id="midcopy"><span class="eyebrow">POP ART × DESIGN</span><h2>MAKE<br>IT FUN.</h2><p>波普艺术是自由的表达。<br>让好奇心、想象力和有趣的设计一起发生。</p></div>
+  <div class="midcopy" id="midcopy"><span class="eyebrow">PLAYFUL DESIGN × CENTER</span><h2>MAKE<br>IT FUN.</h2><p>波普艺术是自由的表达。<br>让好奇心、想象力和有趣的设计一起发生。</p></div>
   <button class="motion-button" id="motionBtn" type="button">ENABLE PARTICLE MOTION ↗</button>
  </div>
 </section>
-<section class="end"><small>CENTER DESIGN — POP ART PLAYGROUND</small><div><h2>PLAY<br>MORE.</h2><p>从漫画网点、夸张符号到会流动的粒子，把波普艺术变成可以亲手参与的设计实验。保持好奇，勇敢尝试，做一些真正有趣的设计。</p><a href="https://zhongxin6882.github.io/Portfolio-2/">← BACK TO WORK</a></div></section>
+<section class="end"><small>CENTER DESIGN — PLAYFUL DESIGN PLAYGROUND</small><div><h2>PLAY<br>MORE.</h2><p>从漫画网点、夸张符号到会流动的粒子，把波普艺术变成可以亲手参与的设计实验。保持好奇，勇敢尝试，做一些真正有趣的设计。</p><a href="https://zhongxin6882.github.io/Portfolio-2/">← BACK TO WORK</a></div></section>
 </main>
 <script>
 (() => {
@@ -250,7 +255,9 @@ function makePoints(){
     p.group=12+p.tone*3+p.bucket;
   }
   for(const p of boardPoints){
-    p.tone=p.lum<.75?0:p.lum<.81?1:p.lum<.89?2:3;
+    // Board source pixels are intentionally pale. Map their luminance into
+    // the SAME shared grayscale palette, so deck and wheels remain readable.
+    p.tone=p.lum<.65?0:p.lum<.86?1:p.lum<.96?2:3;
     p.bucket=Math.min(2,Math.floor(p.r*3));
     p.group=p.tone*3+p.bucket;
   }
@@ -301,11 +308,11 @@ function drawFigure(t,scatter){
   ctx.restore();
   // The person is rendered independently in its original dark palette.
   ctx.save();
-  ctx.globalAlpha=(reduced?.48:isMobile?.17:.135)*(1-scatter)*(1-.80*pointer.speed);
+  ctx.globalAlpha=(reduced?.28:isMobile?.09:.07)*(1-scatter)*(1-.80*pointer.speed);
   ctx.drawImage(personFigure,geo.left+idleX,geo.top+idleY,geo.w,geo.h);
   ctx.restore();
   // Localized finger contour reinforcement, strictly from the person layer.
-  ctx.save();ctx.globalAlpha=(reduced?.48:.355)*(1-scatter)*(1-.65*pointer.speed);
+  ctx.save();ctx.globalAlpha=(reduced?.28:.19)*(1-scatter)*(1-.65*pointer.speed);
   const bx=0,by=112,bw=159,bh=114;
   ctx.drawImage(personFigure,bx,by,bw,bh,
     geo.left+idleX+(bx/personFigure.width)*geo.w,
@@ -349,8 +356,10 @@ function drawFigure(t,scatter){
     if(p.group!==lastGroup){
       // Independent tone and opacity for every layer: very light deck/wheels,
       // but the face, clothes and fingers keep their familiar high contrast.
-      const colors=p.board?[150,166,184,203]:[18,48,89,128];
-      const bases=p.board?[.57,.53,.45,.36]:[.98,.88,.71,.48];
+      // The person and skateboard share exactly the same ink colors and alpha.
+      // Their independently prepared source sprites retain different light/dark details.
+      const colors=[58,84,116,151];
+      const bases=[.92,.82,.70,.52];
       const a=bases[p.tone]*(1-scatter*.975)*(.82+p.bucket*.09);
       const c=colors[p.tone];ctx.fillStyle=`rgba(${c},${c},${c},${a})`;
       lastGroup=p.group;
@@ -361,7 +370,7 @@ function drawFigure(t,scatter){
       :(p.size>.90?2.4:p.size>.45?1.85:1.42)*(isMobile?.87:1);
     ctx.fillRect(p.x,p.y,sz,sz);
     // Flowing motion draws a short streak only while a particle is displaced.
-    if(p.trail>.28){ctx.strokeStyle=p.board?`rgba(140,139,137,${(.065*p.trail).toFixed(3)})`:`rgba(26,26,25,${(.11*p.trail).toFixed(3)})`;ctx.lineWidth=.65;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*1.4,p.y-p.vy*1.4);ctx.stroke();}
+    if(p.trail>.28){ctx.strokeStyle=`rgba(84,84,84,${(.09*p.trail).toFixed(3)})`;ctx.lineWidth=.65;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*1.4,p.y-p.vy*1.4);ctx.stroke();}
   }
 }
  function drawFlowEchoes(t){
