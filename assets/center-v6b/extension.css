@@ -1373,7 +1373,75 @@
 #center-v6b #experience .career-card,
 #center-v6b #experience .career-card:nth-child(even),
 #center-v6b #experience .career-card:nth-of-type(even),
-#center-v6b #make-it-matter.skater-bridge,
-#center-v6b #make-it-matter .skater-sticky,
-#center-v6b .gallery,
-#center-v6b .gallery-stage { background: var(--paper); }
+#center-v6b #make-it-matter .skater-sticky { background: var(--paper); }
+
+/* The original About scrolls away over the held WORK panel. */
+body.has-about-chapters main.about-page { position:relative; z-index:2; }
+body.has-about-chapters #center-v6b { z-index:1; margin-top:-100svh; }
+body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidden!important; pointer-events:none!important; }
+#center-v6b #experience .career-aside h2 { margin-top:clamp(60px,14vh,180px); }
+#center-v6b .tuner-toggle { display:none; }
+#center-v6b.show-motion-tools .tuner-toggle { display:flex; }
+#center-v6b .contact-outro { min-height:100svh; background:#000; color:#f3f3ec; padding:clamp(54px,8vh,100px) clamp(24px,4vw,80px) clamp(28px,5vh,54px); gap:clamp(45px,8vh,90px); }
+#center-v6b .contact-outro .footnote { align-items:center; flex-direction:row; gap:24px; }
+#center-v6b .contact-outro .outro-nav { display:flex; flex-wrap:wrap; gap:clamp(16px,2.5vw,42px); }
+#center-v6b .contact-outro .footnote a { color:#f3f3ec; border:0; padding:0; font:600 12px/1.3 Arial,sans-serif; letter-spacing:.04em; }
+#center-v6b .contact-outro .back-to-top { display:flex; align-items:center; gap:12px; white-space:nowrap; }
+#center-v6b .contact-outro .back-to-top span { display:grid; place-items:center; width:42px; height:42px; border:1px solid #aaa; border-radius:50%; font-size:21px; transform:rotate(-45deg); }
+@media(max-width:760px) { #center-v6b #experience .career-aside h2 { margin-top:clamp(44px,8vh,80px); } #center-v6b .contact-outro .footnote { align-items:flex-end; } #center-v6b .contact-outro .outro-nav { max-width:210px; gap:16px 22px; } }
+@media(prefers-reduced-motion:reduce) { body.has-about-chapters #center-v6b { margin-top:0; } }
+/* Lower the contact headline and email together while leaving navigation at the bottom. */
+#center-v6b .contact-outro { padding-top:clamp(115px, 23svh, 240px); }
+@media(max-width:760px) { #center-v6b .contact-outro { padding-top:clamp(115px, 19svh, 180px); } }
+#center-v6b #experience .kicker-bottom { margin:12px 0 8px; }
+
+/* Compact contact section with the original interactive globe on the right. */
+#center-v6b .contact-outro{position:relative;background:#333335;min-height:66.667svh;padding:clamp(24px,3vh,40px) clamp(24px,4vw,80px) clamp(18px,2.5vh,30px);gap:24px;overflow:hidden}
+#center-v6b .contact-outro>div:first-of-type{position:relative;z-index:1;width:56%;}
+#center-v6b .contact-outro h2{font-size:clamp(40px,5vw,76px);margin:0 0 16px;line-height:.9}
+#center-v6b .contact-outro>div:first-of-type>a{font-size:clamp(14px,1.2vw,19px)}
+#center-v6b .contact-globe{position:absolute;right:4%;top:0;width:38%;height:calc(100% - 64px);border:0;background:#333335}
+#center-v6b .contact-outro .footnote{position:relative;z-index:2;width:100%;padding-top:14px}
+@media(max-width:760px){#center-v6b .contact-outro{min-height:66.667svh;padding:26px 20px 20px;gap:24px}#center-v6b .contact-outro>div:first-of-type{width:58%}#center-v6b .contact-outro h2{font-size:clamp(30px,8vw,45px)}#center-v6b .contact-outro>div:first-of-type>a{font-size:12px}#center-v6b .contact-globe{right:0;top:0;width:43%;height:calc(100% - 70px)}#center-v6b .contact-outro .footnote{gap:12px}#center-v6b .contact-outro .footnote a{font-size:10px}#center-v6b .contact-outro .back-to-top span{width:30px;height:30px;font-size:16px}}
+/* Full-screen contact with a stronger headline and globe. */
+#center-v6b .contact-outro{min-height:100svh;padding:clamp(80px,15vh,160px) clamp(24px,4vw,80px) clamp(24px,4vh,48px);gap:32px}
+#center-v6b .contact-outro h2{font-size:clamp(58px,8vw,132px);margin:0 0 28px}
+#center-v6b .contact-outro>div:first-of-type>a{font-size:clamp(16px,1.7vw,25px)}
+#center-v6b .contact-globe{width:46%;height:calc(100% - 100px);right:3%}
+@media(max-width:760px){#center-v6b .contact-outro{min-height:100svh;padding:clamp(80px,13svh,120px) 20px 25px;gap:24px}#center-v6b .contact-outro>div:first-of-type{width:100%}#center-v6b .contact-outro h2{font-size:clamp(52px,14vw,84px)}#center-v6b .contact-outro>div:first-of-type>a{font-size:15px}#center-v6b .contact-globe{top:32%;right:2%;width:80%;height:48%}}
+/* Half-screen contact, with an oversized globe emerging from below. */
+#center-v6b .contact-outro{min-height:50svh;padding:clamp(30px,5vh,55px) clamp(24px,4vw,80px) clamp(22px,3vh,36px);gap:24px}
+#center-v6b .contact-outro h2{font-size:clamp(48px,6vw,96px);margin-bottom:18px}
+#center-v6b .contact-globe{top:auto;right:0;bottom:-37%;width:70%;height:150%}
+@media(max-width:760px){#center-v6b .contact-outro{min-height:50svh;padding:35px 20px 22px;gap:22px}#center-v6b .contact-outro>div:first-of-type{width:62%}#center-v6b .contact-outro h2{font-size:clamp(38px,10vw,58px)}#center-v6b .contact-globe{top:auto;right:-12%;bottom:-26%;width:85%;height:125%}}
+
+/* Align the gallery and contact backgrounds and refine the contact composition. */
+#center-v6b .gallery,#center-v6b .gallery-stage{background:#333335}
+#center-v6b .contact-outro>div:first-of-type{padding-top:100px}
+#center-v6b .contact-outro h2{font-size:clamp(88px,calc(6vw + 40px),136px)}
+#center-v6b .contact-globe{right:-100px}
+#center-v6b .contact-outro .back-to-top{display:flex;align-items:center;gap:10px;width:max-content;color:#f3f3ec;border:0;padding:0;font:600 12px/1.3 Arial,sans-serif;letter-spacing:.04em}
+#center-v6b .contact-outro .back-to-top span{display:grid;place-items:center;width:21px;height:21px;border:1px solid #aaa;border-radius:50%;font-size:11px;transform:rotate(-45deg)}
+@media(max-width:760px){#center-v6b .contact-outro>div:first-of-type{padding-top:60px;width:68%}#center-v6b .contact-outro h2{font-size:clamp(58px,13vw,90px)}#center-v6b .contact-globe{right:-100px}#center-v6b .contact-outro .back-to-top{font-size:10px}}
+/* Fine adjustments for the contact composition. */
+#center-v6b .contact-outro>div:first-of-type{padding-top:70px}
+#center-v6b .contact-outro h2{font-size:clamp(79.2px,calc(5.4vw + 36px),122.4px)}
+#center-v6b .contact-globe{transform:scale(.945);transform-origin:center bottom}
+#center-v6b .contact-outro>div:first-of-type>a.back-to-top{font-weight:400}
+#center-v6b .contact-outro .back-to-top span{width:25.2px;height:25.2px;font-weight:800}
+@media(max-width:760px){#center-v6b .contact-outro>div:first-of-type{padding-top:30px}#center-v6b .contact-outro h2{font-size:clamp(52.2px,11.7vw,81px)}}
+
+body.about-dark-section .chrome .brand-copyright{filter:brightness(0) invert(1)}
+
+/* The stationary backing remains visible during the footer bounce. */
+#center-v6b .contact-bounce-shell{background:#333335;overflow:hidden}
+#center-v6b .contact-outro .back-to-top{align-items:center}
+#center-v6b .contact-outro .back-to-top span{width:21.42px;height:21.42px;flex:0 0 21.42px}
+#center-v6b .contact-outro>div:first-of-type{padding-top:60px}
+#center-v6b .contact-globe{transform:translateY(5%) scale(.99225);transform-origin:center bottom}
+#center-v6b .contact-outro>div:first-of-type>a.back-to-top{font-size:clamp(12px,calc(1.7vw - 4px),21px)}
+@media(max-width:760px){#center-v6b .contact-outro>div:first-of-type{padding-top:20px}#center-v6b .contact-outro>div:first-of-type>a.back-to-top{font-size:11px}}
+/* Tighten the three requested experience-card gaps by 10px. */
+#center-v6b #experience .career-trailing .company{margin-bottom:10px!important}
+#center-v6b #experience .career-trailing .career-date{margin-bottom:22px!important}
+#center-v6b #experience .career-card:is(:hover,:focus-visible,.is-open) .career-detail{margin-top:6px!important}

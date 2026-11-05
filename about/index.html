@@ -369,6 +369,40 @@
 </style>
 <link rel="stylesheet" href="../about-sprites.css?v=three-lines-leaf-sway-20261022">
 <link rel="stylesheet" href="../mobile-responsive.css?v=mobile-20261022a"><link rel="stylesheet" href="../brand.css?v=brand-hover-20261022">
+<style>
+/* Image-led idea cards keep the original artwork and interaction intact. */
+.about-scroll-hint{position:absolute;z-index:5;left:clamp(24px,3vw,52px);bottom:24px;display:flex;align-items:center;gap:10px;color:#777;font:500 12px/1 Arial,sans-serif;letter-spacing:.04em;pointer-events:none}
+.about-scroll-arrow{position:relative;top:-4px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;line-height:1;animation:about-scroll-cue 1.6s ease-in-out infinite}
+@keyframes about-scroll-cue{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@media(max-width:760px){.about-scroll-hint{left:20px;bottom:16px}}
+@media(prefers-reduced-motion:reduce){.about-scroll-arrow{animation:none}}
+body.has-idea-preview main.about-page{z-index:30}
+.art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit:hover,.art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit:focus-visible{pointer-events:auto!important}
+.idea-preview{position:fixed;z-index:100;top:50%;left:50%;width:min(520px,calc(100vw - 40px));max-height:calc(100svh - 40px);min-height:0;padding:clamp(14px,2.3vw,24px);overflow-y:auto;background:#fff;border:0;box-shadow:0 8px 28px #0003;transform:translate(-50%,-46%) rotate(-2deg);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .24s,transform .35s,visibility .24s}
+.idea-preview.is-visible{transform:translate(-50%,-50%) rotate(-2deg);opacity:1;visibility:visible;pointer-events:auto}
+.idea-preview .idea-preview-image{display:block;width:100%;height:auto;aspect-ratio:1.55;object-fit:cover;background:#dededb}
+.idea-preview .idea-preview-content{padding:clamp(20px,3vw,34px) clamp(4px,1.5vw,18px) 4px}
+.idea-preview .idea-preview-kicker{display:block;color:#858585;font:700 10px/1.2 Arial,sans-serif;letter-spacing:.13em}
+.idea-preview h3{margin:12px 0 20px;font:700 clamp(28px,3.4vw,43px)/1.1 Georgia,"Songti SC",serif;letter-spacing:-.04em}
+.idea-preview p{margin:0 0 30px;max-width:44em;font:400 clamp(14px,1.25vw,17px)/1.65 Arial,"PingFang SC",sans-serif;letter-spacing:0}
+.idea-preview button{position:static;display:block;margin-left:auto;padding:8px 0;border:0;background:none;font-size:13px}
+.idea-preview button:focus-visible{outline:2px solid #111;outline-offset:4px}
+@media(max-width:760px){.idea-preview{width:min(420px,calc(100vw - 40px));max-height:calc(100svh - 36px);padding:14px;transform:translate(-50%,-46%) rotate(-1deg)}.idea-preview.is-visible{transform:translate(-50%,-50%) rotate(-1deg)}.idea-preview .idea-preview-content{padding:18px 8px 4px}.idea-preview h3{font-size:28px;margin:10px 0 14px}.idea-preview p{font-size:14px;margin-bottom:18px}}
+/* Compact card, anchored near the bottom of the artwork. */
+.idea-preview{position:absolute;top:auto;bottom:clamp(20px,4%,40px);left:clamp(20px,5%,45px);width:min(260px,calc(100% - 40px));max-height:calc(100% - 40px);padding:12px;transform:translateY(12px) rotate(-2deg)}
+.idea-preview.is-visible{transform:translateY(0) rotate(-2deg)}
+.idea-preview .idea-preview-content{padding:12px 5px 3px}
+.idea-preview .idea-preview-kicker{font-size:9px}
+.idea-preview h3{font-size:clamp(20px,2vw,24px);margin:8px 0 10px}
+.idea-preview p{font-size:12px;line-height:1.5;margin-bottom:10px}
+.idea-preview button{font-size:12px;padding:6px 0}
+@media(max-width:760px){.idea-preview{top:auto;bottom:18px;left:20px;width:min(260px,calc(100% - 40px));max-height:calc(100% - 36px);padding:10px;transform:translateY(12px) rotate(-1deg)}.idea-preview.is-visible{transform:translateY(0) rotate(-1deg)}.idea-preview .idea-preview-content{padding:10px 5px 3px}.idea-preview h3{font-size:21px;margin:7px 0}.idea-preview p{font-size:12px;margin-bottom:8px}}
+.idea-preview,.idea-preview.is-visible{left:50%}
+.idea-preview{transform:translate(-50%,12px) rotate(-2deg)}
+.idea-preview.is-visible{transform:translate(-50%,0) rotate(-2deg)}
+@media(max-width:760px){.idea-preview{left:50%;transform:translate(-50%,12px) rotate(-1deg)}.idea-preview.is-visible{transform:translate(-50%,0) rotate(-1deg)}}
+@media(prefers-reduced-motion:reduce){.idea-preview{transition:none}}
+</style>
 </head>
 <body data-default-language="zh">
 <header class="chrome">
@@ -400,8 +434,9 @@
       <button class="art-orbit orbit-7 plant" type="button" data-sprite="plant" data-title="生活灵感" data-description="从日常兴趣中收集新的设计视角。" aria-label="了解生活灵感"></button>
       <button class="art-orbit orbit-8 paper" type="button" data-sprite="paper" data-title="数据可视化" data-description="让复杂数据清楚、直观，也更容易探索。" aria-label="了解数据可视化"></button>
     </div>
-    </div><aside class="idea-preview" id="idea-preview" aria-hidden="true"><span>DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></aside>
-
+    </div>
+    <aside class="idea-preview" id="idea-preview" role="dialog" aria-labelledby="idea-title" aria-hidden="true" inert><img class="idea-preview-image" id="idea-image" alt=""><div class="idea-preview-content"><span class="idea-preview-kicker">DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></div></aside>
+    <div class="about-scroll-hint" aria-hidden="true"><span>SCROLL</span><span class="about-scroll-arrow">↓</span></div>
   </section>
   <div class="right-panel">
     <section class="hero-copy" aria-labelledby="about-title"><h1 id="about-title" data-en="About me">关于我</h1><span class="orange-square" aria-hidden="true"></span><h2 data-en="September Fifteen">九月十五</h2><p class="hero-role" data-en="Interaction &amp; Visual Designer">交互与视觉设计师</p><p class="hero-summary" data-en="I design clear, useful digital experiences from user flows to final interfaces. My work spans AI products, cybersecurity platforms and mobile applications, connecting structure, interaction and visual detail.">我是一名专注于交互与视觉设计的设计师，<br>热爱通过设计解决真实问题，让复杂的产品变得简单、易用且有温度。<br>从用户需求出发，结合商业目标与技术实现，持续探索更好的数字产品体验。</p></section>
@@ -413,6 +448,7 @@
     <section class="skills-block" aria-label="技能"><span class="section-label" data-en="SKILLS">专业技能</span><div class="skills-list"><span>UI/UX Design</span><span>Interaction Design</span><span>Visual Design</span><span>Product Design</span><span>Design System</span><span>AI Product Design</span><span>Figma</span><span>After Effects</span><span>Blender</span></div></section>
     <section class="contact-block" aria-label="联系方式"><span class="section-label" data-en="CONTACT">联系方式</span><div class="contact-items"><a href="mailto:zhongxin6882@gmail.com"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><path d="m3.5 7 8.5 6.5L20.5 7"/></svg></i>zhongxin6882@gmail.com</a></div></section>
   </div>
+
 </main>
 <script>
 (() => {
@@ -422,13 +458,46 @@
   const preview = document.getElementById('idea-preview');
   const previewTitle = document.getElementById('idea-title');
   const previewDescription = document.getElementById('idea-description');
-  let selected = null;
+  const previewImage = document.getElementById('idea-image');
+  const translations = [
+    ['Interaction Design','Start with context and flow to make complex actions clear and natural.'],
+    ['AI Products','Turn emerging technology into useful, understandable product experiences.'],
+    ['Visual Expression','Use hierarchy, typography and imagery to make information clear.'],
+    ['Product Experience','Connect features naturally with the situations in which they are used.'],
+    ['User Insight','Understand real problems before defining the design goals worth pursuing.'],
+    ['Design Systems','Build consistent components and guidelines that support products over time.'],
+    ['Everyday Inspiration','Find fresh design perspectives in everyday interests.'],
+    ['Data Visualization','Make complex data clear, intuitive and easier to explore.']
+  ];
+  const images = ['gallery-01-work-together.jpg','gallery-02-code-review.jpg','gallery-03-brainstorming.jpg','gallery-04-design-review.jpg','gallery-05-team-hiking.jpg','gallery-06-team-foosball.jpg','gallery-07-team-sunset.jpg','gallery-08-team-picnic.jpg'];
+  let selected = null, exitAnimation = null;
   const renderPreview = () => {
     const current = art.classList.contains('is-open') ? selected : null;
     ideas.forEach(idea => idea.setAttribute('aria-pressed', String(idea === selected)));
-    if (current) { previewTitle.textContent = current.dataset.title; previewDescription.textContent = current.dataset.description; }
-    preview.classList.toggle('is-visible', !!current);
+    if (current) {
+      const index = ideas.indexOf(current), english = document.documentElement.lang.toLowerCase().startsWith('en');
+      previewTitle.textContent = english ? translations[index][0] : current.dataset.title;
+      previewDescription.textContent = english ? translations[index][1] : current.dataset.description;
+      previewImage.src = '../assets/center-v6b/' + images[index];
+      const close = document.getElementById('idea-close');
+      close.textContent = english ? 'Close ×' : '关闭 ×';
+      close.setAttribute('aria-label', english ? 'Close idea card' : '关闭灵感卡片');
+    }
+    preview.inert = !current;
     preview.setAttribute('aria-hidden', String(!current));
+    if (current) {
+      exitAnimation?.cancel(); exitAnimation = null;
+      document.body.classList.add('has-idea-preview');
+      preview.classList.add('is-visible');
+    } else if (preview.classList.contains('is-visible')) {
+      exitAnimation?.cancel();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        preview.classList.remove('is-visible'); document.body.classList.remove('has-idea-preview');
+      } else {
+        exitAnimation=preview.animate([{transform:getComputedStyle(preview).transform,opacity:1},{transform:'translate(-50%, 180px) rotate(9deg)',opacity:0}],{duration:420,easing:'cubic-bezier(.55,.05,.8,.4)',fill:'forwards'});
+        exitAnimation.finished.then(()=>{if(!selected){preview.classList.remove('is-visible');document.body.classList.remove('has-idea-preview');}exitAnimation?.cancel();exitAnimation=null;}).catch(()=>{});
+      }
+    }
   };
   trigger.addEventListener('click', () => {
     const open = art.classList.toggle('is-open');
@@ -444,14 +513,15 @@
   trigger.addEventListener('blur', () => art.classList.remove('is-face-hover'));
   ideas.forEach(idea => {
     idea.tabIndex = -1;
-    idea.addEventListener('click', () => { selected = idea; renderPreview(); });
+    idea.addEventListener('click', () => { selected = idea; renderPreview(); document.getElementById('idea-close').focus(); });
   });
-  document.getElementById('idea-close').addEventListener('click', () => { selected = null; renderPreview(); trigger.focus(); });
-  document.addEventListener('keydown', event => { if (event.key === 'Escape') { selected = null; renderPreview(); } });
+  document.getElementById('idea-close').addEventListener('click', () => { const previous = selected; selected = null; renderPreview(); (previous || trigger).focus(); });
+  new MutationObserver(() => { if (selected) renderPreview(); }).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && selected) { const previous = selected; selected = null; renderPreview(); previous.focus(); } });
 })();
 </script>
 <script src="../site-header.js?v=mobile-20261022a"></script>
-<script src="../page-transition.js?v=about-unified-20261020"></script><script src="../locale.js?v=unified-20261022"></script>
+<script src="../page-transition.js?v=about-unified-20261020"></script><script src="../locale.js?v=global-i18n-20261105"></script>
 <script src="../about-sprites.js?v=orbit-loop-20261021"></script>
 <script type="module" src="../brand-motion.js"></script><script type="module" src="../about-v6b-extension.js"></script></body>
 </html>

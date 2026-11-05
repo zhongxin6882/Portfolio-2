@@ -49,6 +49,7 @@
     const value = tuning[section]?.[key];
     return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
   };
+  const introOverlap = () => prefersReducedMotion.matches ? 0 : innerHeight;
   let oneCardScreens = 0.85;
   let fourthHoldScreens = 0.9;
   let overscrollScreens = 1.35;
@@ -79,7 +80,7 @@
     // WORK panel sticky beyond its normal hold, and let the incoming
     // Skater panel occupy the SAME viewport behind it for this interval.
     // Real normal-flow geometry (no injected clone, no fake scroll listener).
-    career.style.height = `${(careerTotalScreens + overscrollScreens) * 100}svh`;
+    career.style.height = `${(careerTotalScreens + overscrollScreens + (prefersReducedMotion.matches ? 0 : 1)) * 100}svh`;
     rootStyle.setProperty('--panel-overlap-neg', `${-(1 + overscrollScreens) * 100}svh`);
     rootStyle.setProperty('--panel-overscroll-screens', `${overscrollScreens}`);
     rootStyle.setProperty('--skater-intro-hold-screens', `${introHoldScreens}`);
@@ -113,7 +114,7 @@
   // follows by native document flow.
   const railDistance = () => Math.max(0, careerTrack.scrollWidth - careerWindow.clientWidth);
   const slideScrollDistance = () => Math.max(1, innerHeight * oneCardScreens * cardCount); // intro + four cards
-  const railFraction = () => clamp((scrollY - topOf(career)) / slideScrollDistance(), 0, 1);
+  const railFraction = () => clamp((scrollY - topOf(career) - introOverlap()) / slideScrollDistance(), 0, 1);
   function phaseForCard(i) {
     const d = railDistance();
     if (!d) return 0;
@@ -200,7 +201,7 @@
 
   function goToCard(index) {
     const i = clamp(index, 0, cardCount - 1);
-    const target = topOf(career) + phaseForCard(i) * slideScrollDistance();
+    const target = topOf(career) + introOverlap() + phaseForCard(i) * slideScrollDistance();
     scrollTo({top:target, behavior:prefersReducedMotion.matches ? 'instant' : 'smooth'});
     if (innerWidth <= 760) {
       cards.forEach(card => card.classList.remove('is-open'));

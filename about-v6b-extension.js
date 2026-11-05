@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Flip } from 'gsap/Flip';
 import bodyMarkup from './assets/center-v6b/sections.html?raw';
 import cssText from './assets/center-v6b/extension.css?raw';
+import { installChapterLocalization } from './assets/center-v6b/localization.js';
 
 async function mountCenterV6B(){
   // The existing showcase embeds About as its first panel; do not nest the new chapters inside it.
@@ -18,6 +19,20 @@ async function mountCenterV6B(){
   extension.id='center-v6b';
   extension.innerHTML=bodyMarkup;
   about.insertAdjacentElement('afterend',extension);
+  installChapterLocalization(extension);
+  document.body.classList.add('has-about-chapters');
+  const chrome = document.querySelector('.chrome');
+  const controls = chrome ? [...chrome.children].filter(node => !node.matches('.brand')) : [];
+  const updateHeader = () => {
+    const hidden = about.getBoundingClientRect().bottom <= innerHeight * .98;
+    chrome?.classList.toggle('chapters-active', hidden);
+    if (hidden && chrome?.classList.contains('mobile-menu-open')) document.getElementById('menuToggle')?.click();
+    for (const node of controls) node.inert = hidden;
+  };
+  addEventListener('scroll', updateHeader, {passive:true});
+  addEventListener('resize', updateHeader, {passive:true});
+  updateHeader();
+  if (new URLSearchParams(location.search).get('motionTools') === '1') extension.classList.add('show-motion-tools');
   window.gsap=gsap;
   window.ScrollTrigger=ScrollTrigger;
   window.Flip=Flip;
@@ -28,6 +43,18 @@ async function mountCenterV6B(){
   await import('./assets/center-v6b/tuner.js');
   await import('./assets/center-v6b/skater-sync.js');
   window.initGsapEnhancements?.();
+  const gallery = extension.querySelector('#gallery');
+  const footer = extension.querySelector('.contact-outro');
+  const updateBrand = () => document.body.classList.toggle('about-dark-section', gallery.getBoundingClientRect().top <= 60 && footer.getBoundingClientRect().bottom > 0);
+  addEventListener('scroll', updateBrand, {passive:true});
+  addEventListener('resize', updateBrand, {passive:true});
+  updateBrand();
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    ScrollTrigger.create({trigger:footer,start:'top bottom',onEnter:self=>{
+      const amount=Math.max(20,Math.min(65,Math.abs(self.getVelocity())*.015));
+      gsap.fromTo(footer,{y:amount},{y:0,duration:.9,ease:'bounce.out',overwrite:true});
+    }});
+  }
   window.dispatchEvent(new Event('resize'));
 }
 mountCenterV6B().catch(error=>{

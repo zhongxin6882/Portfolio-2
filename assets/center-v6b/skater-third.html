@@ -136,13 +136,16 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
 .scene .stamp svg{display:block;width:100%;height:100%;overflow:visible;}
 .scene .stamp .ring-outline{fill:none;stroke:#333a34;stroke-width:1.25;opacity:.66;}
 .scene .stamp .ring-inner{fill:none;stroke:#333a34;stroke-width:.65;stroke-dasharray:2.2 7.5;opacity:.36;}
-.scene .stamp .ring-lettering{fill:#262d28;font:700 13px/1 'Courier New',monospace;letter-spacing:2.65px;}
+.scene .stamp .ring-lettering{fill:#262d28;font:700 17px/1 'Courier New',monospace;letter-spacing:.4px;}
+.scene .stamp .ring-detail{fill:none;stroke:#555;stroke-width:.6;opacity:.32}.scene .stamp .ring-ticks{stroke-width:2;stroke-dasharray:1 10;opacity:.55}.scene .stamp .ring-hub{fill:none;stroke:#555;stroke-width:.8;opacity:.55}.scene .stamp .ring-cross{fill:none;stroke:#555;stroke-width:.8;opacity:.5}
 .scene .stamp .ring-center{font:700 8px 'Courier New',monospace;letter-spacing:2px;fill:#444c43;}
 @keyframes center-type-ring{to{transform:rotate(360deg)}}
 @media(max-width:700px){.scene .progress{width:clamp(110px,30vw,165px);bottom:19px;}.scene .stamp{right:65px;bottom:105px;width:108px;height:108px;}}
 @media(prefers-reduced-motion:reduce){.scene .stamp{animation:none;}}
 
 @media(max-width:700px){.bgtype{font-size:clamp(93px,28.5vw,202px)}}
+.scene .stamp{right:clamp(18px,3vw,50px);bottom:clamp(18px,4vh,40px);width:clamp(128px,11vw,170px);height:clamp(128px,11vw,170px)}
+@media(max-width:700px){.scene .stamp{right:18px;bottom:65px;width:clamp(100px,27vw,120px);height:clamp(100px,27vw,120px)}}
 </style>
 </head>
 <body>
@@ -180,12 +183,12 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
 <div class="graphicShade" aria-hidden="true"></div>
   <canvas id="portrait" aria-hidden="true"></canvas>
   <canvas id="popPhysics" aria-hidden="true"></canvas>
-  <div class="head"><span class="label">PLAYFUL DESIGN / eleve</span></div>
+  
   <div class="hero" id="hero"><h1><span>PLAYFUL</span><span>DESIGN.</span></h1><p class="tag">好玩的设计，不设标准答案。<br>让想象力跳出框框，让设计更有趣。<br>MAKE DESIGN FUN.</p></div>
   
   
   <div class="progress" aria-hidden="true"><span class="track"><span class="fill" id="fill"></span></span></div>
-  <div class="stamp" aria-label="STILL IN MOTION" role="img"><svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="center-type-orbit" d="M100 100m-77 0a77 77 0 1 1 154 0a77 77 0 1 1-154 0" /></defs><circle class="ring-outline" cx="100" cy="100" r="87"/><circle class="ring-inner" cx="100" cy="100" r="61"/><text class="ring-lettering"><textPath href="#center-type-orbit" startOffset="0%">STILL IN MOTION · STILL IN MOTION · </textPath></text><text class="ring-center" x="100" y="104" text-anchor="middle">✳</text></svg></div>
+  <div class="stamp" aria-label="STILL IN MOTION" role="img"><svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="center-type-orbit" d="M100 100m-72 0a72 72 0 1 1 144 0a72 72 0 1 1-144 0" /></defs><circle class="ring-outline" cx="100" cy="100" r="87"/><circle class="ring-inner" cx="100" cy="100" r="50"/><circle class="ring-detail" cx="100" cy="100" r="39"/><circle class="ring-detail ring-ticks" cx="100" cy="100" r="93"/><circle class="ring-hub" cx="100" cy="100" r="18"/><path class="ring-cross" d="M100 75v10 M100 115v10 M75 100h10 M115 100h10"/><text class="ring-lettering"><textPath href="#center-type-orbit" startOffset="0%">STILL IN MOTION · STILL IN MOTION · </textPath></text><text class="ring-center" x="100" y="104" text-anchor="middle">✳</text></svg></div>
   <div class="midcopy" id="midcopy"><span class="eyebrow">PLAYFUL DESIGN × CENTER</span><h2>MAKE<br>IT FUN.</h2><p>波普艺术是自由的表达。<br>让好奇心、想象力和有趣的设计一起发生。</p></div>
   <button class="motion-button" id="motionBtn" type="button">ENABLE PARTICLE MOTION ↗</button>
  </div>
@@ -322,9 +325,9 @@ function makePoints(){
    const widthLimit=isMobile?W-2*margin:Math.min(W*.55,W-margin*2,780);
    const size=Math.max(100,Math.min(widthLimit,(H-topSafe-bottomSafe)/ratio)*(isMobile?.78:1));
    const h=size*ratio;
-   const left=isMobile?(W-size)/2:Math.max(margin,W-margin-size);
+   const left=isMobile?Math.min(W-size-8,(W-size)/2+W*.045):Math.max(margin,W-margin-size);
    const top=isMobile
-     ?Math.max(topSafe,Math.min(H*.43,H-h-bottomSafe))
+     ?Math.max(topSafe,Math.min(H*.39,H-h-bottomSafe))
      :Math.max(topSafe,Math.min((H-h)*.43,H-h-bottomSafe));
    return{left,top,w:size,h};
  }
@@ -514,7 +517,7 @@ function firePhysicsPop(){
       gravity:reduced?0:500+Math.random()*400,drag:.997,
       size:4+Math.random()*8,age:0,life,
       shape:i%7===0?'diamond':i%4===0?'square':'circle',
-      ink:['#ff614c','#ffc350','#6fa3c0','#88b18d','#d58eb4','#675e9a','#ff8b55'][i%7],
+      ink:['#454745','#666866','#858785','#a2a4a2','#777977','#b0b2b0','#5a5c5a'][i%7],
       spin:(Math.random()-.5)*7,rotation:Math.random()*6.28});
   }
   if(popDots.length>420)popDots.splice(0,popDots.length-420);
@@ -550,6 +553,14 @@ function renderPhysicsPop(now){
       popCtx.beginPath();popCtx.moveTo(0,-p.size);popCtx.lineTo(p.size*.6,0);
       popCtx.lineTo(0,p.size);popCtx.lineTo(-p.size*.6,0);popCtx.closePath();popCtx.fill();
     }else{popCtx.beginPath();popCtx.arc(0,0,p.size*.5,0,Math.PI*2);popCtx.fill();}
+    // Fine paper-like dots echo the halftone texture behind the portrait.
+    if (p.size >= 7) {
+      popCtx.fillStyle='rgba(237,237,237,.55)';
+      const dot=Math.max(.65,p.size*.105);
+      for (const [dx,dy] of [[-.18,-.18],[.18,-.18],[-.18,.18],[.18,.18]]) {
+        popCtx.beginPath();popCtx.arc(p.size*dx,p.size*dy,dot,0,Math.PI*2);popCtx.fill();
+      }
+    }
     popCtx.restore();
   }
   for(let i=popRings.length-1;i>=0;i--){
