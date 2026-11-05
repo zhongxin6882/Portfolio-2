@@ -1396,3 +1396,4 @@ body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidd
 /* Lower the contact headline and email together while leaving navigation at the bottom. */
 #center-v6b .contact-outro { padding-top:clamp(115px, 23svh, 240px); }
 @media(max-width:760px) { #center-v6b .contact-outro { padding-top:clamp(115px, 19svh, 180px); } }
+#center-v6b #experience .kicker-bottom { margin:12px 0 8px; }
