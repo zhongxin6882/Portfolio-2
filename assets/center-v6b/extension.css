@@ -1393,3 +1393,6 @@ body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidd
 #center-v6b .contact-outro .back-to-top span { display:grid; place-items:center; width:42px; height:42px; border:1px solid #aaa; border-radius:50%; font-size:21px; transform:rotate(-45deg); }
 @media(max-width:760px) { #center-v6b #experience .career-aside h2 { margin-top:clamp(44px,8vh,80px); } #center-v6b .contact-outro .footnote { align-items:flex-end; } #center-v6b .contact-outro .outro-nav { max-width:210px; gap:16px 22px; } }
 @media(prefers-reduced-motion:reduce) { body.has-about-chapters #center-v6b { margin-top:0; } }
+/* Lower the contact headline and email together while leaving navigation at the bottom. */
+#center-v6b .contact-outro { padding-top:clamp(115px, 23svh, 240px); }
+@media(max-width:760px) { #center-v6b .contact-outro { padding-top:clamp(115px, 19svh, 180px); } }
