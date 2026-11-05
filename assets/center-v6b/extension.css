@@ -1441,3 +1441,7 @@ body.about-dark-section .chrome .brand-copyright{filter:brightness(0) invert(1)}
 #center-v6b .contact-globe{transform:translateY(5%) scale(.99225);transform-origin:center bottom}
 #center-v6b .contact-outro>div:first-of-type>a.back-to-top{font-size:clamp(12px,calc(1.7vw - 4px),21px)}
 @media(max-width:760px){#center-v6b .contact-outro>div:first-of-type{padding-top:20px}#center-v6b .contact-outro>div:first-of-type>a.back-to-top{font-size:11px}}
+/* Tighten the three requested experience-card gaps by 10px. */
+#center-v6b #experience .career-trailing .company{margin-bottom:10px!important}
+#center-v6b #experience .career-trailing .career-date{margin-bottom:22px!important}
+#center-v6b #experience .career-card:is(:hover,:focus-visible,.is-open) .career-detail{margin-top:6px!important}
