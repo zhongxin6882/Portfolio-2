@@ -1373,9 +1373,7 @@
 #center-v6b #experience .career-card,
 #center-v6b #experience .career-card:nth-child(even),
 #center-v6b #experience .career-card:nth-of-type(even),
-#center-v6b #make-it-matter .skater-sticky,
-#center-v6b .gallery,
-#center-v6b .gallery-stage { background: var(--paper); }
+#center-v6b #make-it-matter .skater-sticky { background: var(--paper); }
 
 /* The original About scrolls away over the held WORK panel. */
 body.has-about-chapters main.about-page { position:relative; z-index:2; }
