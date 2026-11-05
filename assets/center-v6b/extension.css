@@ -1403,3 +1403,9 @@ body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidd
 #center-v6b .contact-globe{position:absolute;right:4%;top:0;width:38%;height:calc(100% - 64px);border:0;background:#333335}
 #center-v6b .contact-outro .footnote{position:relative;z-index:2;width:100%;padding-top:14px}
 @media(max-width:760px){#center-v6b .contact-outro{min-height:66.667svh;padding:26px 20px 20px;gap:24px}#center-v6b .contact-outro>div:first-of-type{width:58%}#center-v6b .contact-outro h2{font-size:clamp(30px,8vw,45px)}#center-v6b .contact-outro>div:first-of-type>a{font-size:12px}#center-v6b .contact-globe{right:0;top:0;width:43%;height:calc(100% - 70px)}#center-v6b .contact-outro .footnote{gap:12px}#center-v6b .contact-outro .footnote a{font-size:10px}#center-v6b .contact-outro .back-to-top span{width:30px;height:30px;font-size:16px}}
+/* Full-screen contact with a stronger headline and globe. */
+#center-v6b .contact-outro{min-height:100svh;padding:clamp(80px,15vh,160px) clamp(24px,4vw,80px) clamp(24px,4vh,48px);gap:32px}
+#center-v6b .contact-outro h2{font-size:clamp(58px,8vw,132px);margin:0 0 28px}
+#center-v6b .contact-outro>div:first-of-type>a{font-size:clamp(16px,1.7vw,25px)}
+#center-v6b .contact-globe{width:46%;height:calc(100% - 100px);right:3%}
+@media(max-width:760px){#center-v6b .contact-outro{min-height:100svh;padding:clamp(80px,13svh,120px) 20px 25px;gap:24px}#center-v6b .contact-outro>div:first-of-type{width:100%}#center-v6b .contact-outro h2{font-size:clamp(52px,14vw,84px)}#center-v6b .contact-outro>div:first-of-type>a{font-size:15px}#center-v6b .contact-globe{top:32%;right:2%;width:80%;height:48%}}
