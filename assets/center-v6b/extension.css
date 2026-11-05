@@ -1396,10 +1396,10 @@ body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidd
 #center-v6b #experience .kicker-bottom { margin:12px 0 8px; }
 
 /* Compact contact section with the original interactive globe on the right. */
-#center-v6b .contact-outro{position:relative;min-height:33.333svh;padding:clamp(24px,3vh,40px) clamp(24px,4vw,80px) clamp(18px,2.5vh,30px);gap:24px;overflow:hidden}
+#center-v6b .contact-outro{position:relative;background:#333335;min-height:33.333svh;padding:clamp(24px,3vh,40px) clamp(24px,4vw,80px) clamp(18px,2.5vh,30px);gap:24px;overflow:hidden}
 #center-v6b .contact-outro>div:first-of-type{position:relative;z-index:1;width:56%;}
 #center-v6b .contact-outro h2{font-size:clamp(40px,5vw,76px);margin:0 0 16px;line-height:.9}
 #center-v6b .contact-outro>div:first-of-type>a{font-size:clamp(14px,1.2vw,19px)}
-#center-v6b .contact-globe{position:absolute;right:4%;top:0;width:38%;height:calc(100% - 64px);border:0;background:#000}
+#center-v6b .contact-globe{position:absolute;right:4%;top:0;width:38%;height:calc(100% - 64px);border:0;background:#333335}
 #center-v6b .contact-outro .footnote{position:relative;z-index:2;width:100%;padding-top:14px}
 @media(max-width:760px){#center-v6b .contact-outro{min-height:33.333svh;padding:26px 20px 20px;gap:24px}#center-v6b .contact-outro>div:first-of-type{width:58%}#center-v6b .contact-outro h2{font-size:clamp(30px,8vw,45px)}#center-v6b .contact-outro>div:first-of-type>a{font-size:12px}#center-v6b .contact-globe{right:0;top:0;width:43%;height:calc(100% - 70px)}#center-v6b .contact-outro .footnote{gap:12px}#center-v6b .contact-outro .footnote a{font-size:10px}#center-v6b .contact-outro .back-to-top span{width:30px;height:30px;font-size:16px}}
