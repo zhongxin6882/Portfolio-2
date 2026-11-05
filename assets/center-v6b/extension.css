@@ -1366,3 +1366,14 @@
 
 /* Ultra-narrow CONTACT correction. */
 @media(max-width:420px){#center-v6b .contact-outro h2{font-size:clamp(54px,15.5vw,72px);letter-spacing:-.09em;}}
+
+/* Match the About page background across the three following chapters. */
+#center-v6b { --paper: #ededed; background: var(--paper); }
+#center-v6b #experience .career-aside,
+#center-v6b #experience .career-card,
+#center-v6b #experience .career-card:nth-child(even),
+#center-v6b #experience .career-card:nth-of-type(even),
+#center-v6b #make-it-matter.skater-bridge,
+#center-v6b #make-it-matter .skater-sticky,
+#center-v6b .gallery,
+#center-v6b .gallery-stage { background: var(--paper); }

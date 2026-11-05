@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#eae8e4">
+<meta name="theme-color" content="#ededed">
 <meta name="description" content="CENTER DESIGN — eleve 好玩的设计：滑板少年双层粒子互动">
 <title>eleve — Playful Design / CENTER DESIGN</title>
 <style>
-:root{--paper:#eae8e4;--ink:#171716;--mute:#686763;--edge:rgba(22,22,22,.23)}
+:root{--paper:#ededed;--ink:#171716;--mute:#686763;--edge:rgba(22,22,22,.23)}
 *{box-sizing:border-box}html{background:#161615;scroll-behavior:auto}
 body{margin:0;color:var(--ink);background:#161615;font-family:Arial,"Helvetica Neue",sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
 a{color:inherit}.experience{height:325svh;position:relative}.scene{position:sticky;top:0;height:100svh;min-height:520px;overflow:hidden;background:var(--paper);isolation:isolate}
 .backdrop{position:absolute;inset:-3%;z-index:0;pointer-events:none;transform:translate3d(var(--bgx,0px),var(--bgy,0px),0) scale(1.035);transition:transform .42s cubic-bezier(.2,.7,.2,1)}
 .backdrop::before{content:"";position:absolute;inset:0;background-image:radial-gradient(#151515 0.7px,transparent .8px);background-size:8px 8px;opacity:.095;mask-image:linear-gradient(130deg,#000,transparent 70%)}
 .bgtype{position:absolute;top:4%;left:16%;font-weight:900;font-size:clamp(180px,31vw,560px);line-height:.9;letter-spacing:-.085em;color:#aaa9a5;opacity:.38;transform:rotate(-8deg);user-select:none}
-.bgtype::after{content:"";position:absolute;inset:4% 0;background:radial-gradient(circle,#eae8e4 29%,transparent 33%);background-size:9px 9px;opacity:.4;pointer-events:none}
+.bgtype::after{content:"";position:absolute;inset:4% 0;background:radial-gradient(circle,#ededed 29%,transparent 33%);background-size:9px 9px;opacity:.4;pointer-events:none}
 .wall{position:absolute;left:0;bottom:-1%;width:100%;height:80%;opacity:.66}
 .wall path,.wall circle,.wall polyline{vector-effect:non-scaling-stroke}
 #portrait{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:2;pointer-events:none}
-.graphicShade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(234,232,228,.83) 0%,rgba(234,232,228,.54) 20%,transparent 43%,transparent 100%)}
+.graphicShade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(237,237,237,.83) 0%,rgba(237,237,237,.54) 20%,transparent 43%,transparent 100%)}
 .head{position:absolute;left:30px;right:30px;top:26px;z-index:5;display:flex;justify-content:space-between;align-items:flex-start;font-family:"Courier New",monospace;font-size:11px;letter-spacing:.045em;text-transform:uppercase;gap:18px}
 .head a{text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:5px}.head .label{font-weight:700}.head .right{white-space:nowrap}
 .hero{position:absolute;left:3.5vw;top:37%;z-index:3;pointer-events:none;will-change:transform,opacity;max-width:58vw}
@@ -36,7 +36,7 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
 .end{min-height:70svh;background:#161615;color:#f4f0e9;padding:8vw 7vw 6vw;display:flex;flex-direction:column;justify-content:space-between;gap:50px}.end small{font:600 11px "Courier New",monospace;letter-spacing:.15em}.end h2{margin:15px 0;font-size:clamp(56px,11vw,150px);letter-spacing:-.085em;line-height:.86}.end p{font:14px/1.8 "Courier New",monospace;max-width:700px;color:#ccc7be}.end a{text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:5px;width:max-content}
 .motion-button{position:absolute;z-index:9;bottom:132px;right:25px;background:#111;color:#fff;border:0;border-radius:40px;padding:13px 17px;font:700 11px "Courier New",monospace;cursor:pointer;display:none}
 .motion-button:focus-visible{outline:3px solid #e45e37;outline-offset:3px}
-@media(max-width:700px){.experience{height:280svh}.scene{min-height:0}.head{left:17px;right:17px;top:18px;font-size:9px}.head .label{display:none}.bgtype{top:12%;left:-10%;font-size:68vw}.wall{bottom:-8%;height:80%}.hero{left:6vw;top:11%;max-width:100%}.hero h1{font-size:clamp(75px,21vw,125px)}.hero .index{font-size:10px;margin-bottom:10px}.hero .tag{display:none}.graphicShade{background:linear-gradient(180deg,rgba(234,232,228,.74) 0%,transparent 34%)}.vert{right:10px;top:38%;font-size:9px}.instructions{left:17px;bottom:20px;font-size:10px}.progress{left:44%;bottom:28px;gap:6px}.track{width:45px}.stamp{right:15px;bottom:15px;width:64px;height:64px;font-size:7px}.midcopy{width:88%}.midcopy h2{font-size:clamp(50px,12vw,80px)}.motion-button{bottom:90px;right:12px}.end{padding:65px 24px}}
+@media(max-width:700px){.experience{height:280svh}.scene{min-height:0}.head{left:17px;right:17px;top:18px;font-size:9px}.head .label{display:none}.bgtype{top:12%;left:-10%;font-size:68vw}.wall{bottom:-8%;height:80%}.hero{left:6vw;top:11%;max-width:100%}.hero h1{font-size:clamp(75px,21vw,125px)}.hero .index{font-size:10px;margin-bottom:10px}.hero .tag{display:none}.graphicShade{background:linear-gradient(180deg,rgba(237,237,237,.74) 0%,transparent 34%)}.vert{right:10px;top:38%;font-size:9px}.instructions{left:17px;bottom:20px;font-size:10px}.progress{left:44%;bottom:28px;gap:6px}.track{width:45px}.stamp{right:15px;bottom:15px;width:64px;height:64px;font-size:7px}.midcopy{width:88%}.midcopy h2{font-size:clamp(50px,12vw,80px)}.motion-button{bottom:90px;right:12px}.end{padding:65px 24px}}
 @media(prefers-reduced-motion:reduce){.backdrop{transition:none}html:not(.force-motion) .experience{height:105svh}html:not(.force-motion) .midcopy{display:none}}
 
 /* eleve / POP ART — fit the full composition on narrow and wide screens. */
@@ -51,7 +51,7 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
 .bgtype::after { background-size: 8px 8px; opacity:.32; }
 .wall { height: 75%; bottom: 0; opacity: .74; }
 .wall svg { max-width:100%; }
-.graphicShade { background: linear-gradient(90deg,rgba(234,232,228,.66),rgba(234,232,228,.27) 25%,transparent 49%); }
+.graphicShade { background: linear-gradient(90deg,rgba(237,237,237,.66),rgba(237,237,237,.27) 25%,transparent 49%); }
 .pop-burst { position:absolute; z-index:1; left:9%; top:15%; width:110px; height:110px;
  display:grid;place-items:center;transform:rotate(-12deg); opacity:1; }
 .pop-burst::before { content:''; position:absolute; inset:0; background:rgba(170,169,165,.45);
@@ -73,7 +73,7 @@ a{color:inherit}.experience{height:325svh;position:relative}.scene{position:stic
  .hero{top:9%;}
  .hero h1{font-size:clamp(68px,19vw,110px);}
  .head{font-size:9px;}
- .graphicShade{background:linear-gradient(180deg,rgba(234,232,228,.79),rgba(234,232,228,.34) 19%,transparent 41%);}
+ .graphicShade{background:linear-gradient(180deg,rgba(237,237,237,.79),rgba(237,237,237,.34) 19%,transparent 41%);}
 }
 /* Light pop-art linework continues to the bottom edge on desktop + mobile. */
 .bottom-left-grid{position:absolute;left:0;bottom:0;width:min(34vw,380px);height:34%;pointer-events:none;overflow:hidden;opacity:.82;
