@@ -371,6 +371,11 @@
 <link rel="stylesheet" href="../mobile-responsive.css?v=mobile-20261022a"><link rel="stylesheet" href="../brand.css?v=brand-hover-20261022">
 <style>
 /* Image-led idea cards keep the original artwork and interaction intact. */
+.about-scroll-hint{position:absolute;z-index:5;left:clamp(24px,3vw,52px);bottom:24px;display:flex;align-items:center;gap:10px;color:#171717;font:500 14px/1 Arial,sans-serif;letter-spacing:.04em;pointer-events:none}
+.about-scroll-arrow{font-size:18px;animation:about-scroll-cue 1.6s ease-in-out infinite}
+@keyframes about-scroll-cue{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@media(max-width:760px){.about-scroll-hint{left:20px;bottom:16px}}
+@media(prefers-reduced-motion:reduce){.about-scroll-arrow{animation:none}}
 body.has-idea-preview main.about-page{z-index:30}
 .art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit:hover,.art-panel.is-open .art-stage .art-ideas.sprite-composition .art-orbit:focus-visible{pointer-events:auto!important}
 .idea-preview{position:fixed;z-index:100;top:50%;left:50%;width:min(520px,calc(100vw - 40px));max-height:calc(100svh - 40px);min-height:0;padding:clamp(14px,2.3vw,24px);overflow-y:auto;background:#fff;border:0;box-shadow:0 8px 28px #0003;transform:translate(-50%,-46%) rotate(-2deg);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .24s,transform .35s,visibility .24s}
@@ -431,6 +436,7 @@ body.has-idea-preview main.about-page{z-index:30}
     </div>
     </div>
     <aside class="idea-preview" id="idea-preview" role="dialog" aria-labelledby="idea-title" aria-hidden="true" inert><img class="idea-preview-image" id="idea-image" alt=""><div class="idea-preview-content"><span class="idea-preview-kicker">DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></div></aside>
+    <div class="about-scroll-hint" aria-hidden="true"><span>SCROLL</span><span class="about-scroll-arrow">↓</span></div>
   </section>
   <div class="right-panel">
     <section class="hero-copy" aria-labelledby="about-title"><h1 id="about-title" data-en="About me">关于我</h1><span class="orange-square" aria-hidden="true"></span><h2 data-en="September Fifteen">九月十五</h2><p class="hero-role" data-en="Interaction &amp; Visual Designer">交互与视觉设计师</p><p class="hero-summary" data-en="I design clear, useful digital experiences from user flows to final interfaces. My work spans AI products, cybersecurity platforms and mobile applications, connecting structure, interaction and visual detail.">我是一名专注于交互与视觉设计的设计师，<br>热爱通过设计解决真实问题，让复杂的产品变得简单、易用且有温度。<br>从用户需求出发，结合商业目标与技术实现，持续探索更好的数字产品体验。</p></section>
