@@ -383,6 +383,15 @@ body.has-idea-preview main.about-page{z-index:30}
 .idea-preview button{position:static;display:block;margin-left:auto;padding:8px 0;border:0;background:none;font-size:13px}
 .idea-preview button:focus-visible{outline:2px solid #111;outline-offset:4px}
 @media(max-width:760px){.idea-preview{width:min(420px,calc(100vw - 40px));max-height:calc(100svh - 36px);padding:14px;transform:translate(-50%,-46%) rotate(-1deg)}.idea-preview.is-visible{transform:translate(-50%,-50%) rotate(-1deg)}.idea-preview .idea-preview-content{padding:18px 8px 4px}.idea-preview h3{font-size:28px;margin:10px 0 14px}.idea-preview p{font-size:14px;margin-bottom:18px}}
+/* Compact card, anchored near the bottom of the artwork. */
+.idea-preview{position:absolute;top:auto;bottom:clamp(20px,4%,40px);left:clamp(20px,5%,45px);width:min(260px,calc(100% - 40px));max-height:calc(100% - 40px);padding:12px;transform:translateY(12px) rotate(-2deg)}
+.idea-preview.is-visible{transform:translateY(0) rotate(-2deg)}
+.idea-preview .idea-preview-content{padding:12px 5px 3px}
+.idea-preview .idea-preview-kicker{font-size:9px}
+.idea-preview h3{font-size:clamp(20px,2vw,24px);margin:8px 0 10px}
+.idea-preview p{font-size:12px;line-height:1.5;margin-bottom:10px}
+.idea-preview button{font-size:12px;padding:6px 0}
+@media(max-width:760px){.idea-preview{top:auto;bottom:18px;left:20px;width:min(260px,calc(100% - 40px));max-height:calc(100% - 36px);padding:10px;transform:translateY(12px) rotate(-1deg)}.idea-preview.is-visible{transform:translateY(0) rotate(-1deg)}.idea-preview .idea-preview-content{padding:10px 5px 3px}.idea-preview h3{font-size:21px;margin:7px 0}.idea-preview p{font-size:12px;margin-bottom:8px}}
 @media(prefers-reduced-motion:reduce){.idea-preview{transition:none}}
 </style>
 </head>
@@ -417,7 +426,7 @@ body.has-idea-preview main.about-page{z-index:30}
       <button class="art-orbit orbit-8 paper" type="button" data-sprite="paper" data-title="数据可视化" data-description="让复杂数据清楚、直观，也更容易探索。" aria-label="了解数据可视化"></button>
     </div>
     </div>
-
+    <aside class="idea-preview" id="idea-preview" role="dialog" aria-labelledby="idea-title" aria-hidden="true" inert><img class="idea-preview-image" id="idea-image" alt=""><div class="idea-preview-content"><span class="idea-preview-kicker">DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></div></aside>
   </section>
   <div class="right-panel">
     <section class="hero-copy" aria-labelledby="about-title"><h1 id="about-title" data-en="About me">关于我</h1><span class="orange-square" aria-hidden="true"></span><h2 data-en="September Fifteen">九月十五</h2><p class="hero-role" data-en="Interaction &amp; Visual Designer">交互与视觉设计师</p><p class="hero-summary" data-en="I design clear, useful digital experiences from user flows to final interfaces. My work spans AI products, cybersecurity platforms and mobile applications, connecting structure, interaction and visual detail.">我是一名专注于交互与视觉设计的设计师，<br>热爱通过设计解决真实问题，让复杂的产品变得简单、易用且有温度。<br>从用户需求出发，结合商业目标与技术实现，持续探索更好的数字产品体验。</p></section>
@@ -429,7 +438,7 @@ body.has-idea-preview main.about-page{z-index:30}
     <section class="skills-block" aria-label="技能"><span class="section-label" data-en="SKILLS">专业技能</span><div class="skills-list"><span>UI/UX Design</span><span>Interaction Design</span><span>Visual Design</span><span>Product Design</span><span>Design System</span><span>AI Product Design</span><span>Figma</span><span>After Effects</span><span>Blender</span></div></section>
     <section class="contact-block" aria-label="联系方式"><span class="section-label" data-en="CONTACT">联系方式</span><div class="contact-items"><a href="mailto:zhongxin6882@gmail.com"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><path d="m3.5 7 8.5 6.5L20.5 7"/></svg></i>zhongxin6882@gmail.com</a></div></section>
   </div>
-<aside class="idea-preview" id="idea-preview" role="dialog" aria-labelledby="idea-title" aria-hidden="true" inert><img class="idea-preview-image" id="idea-image" alt=""><div class="idea-preview-content"><span class="idea-preview-kicker">DESIGN / IDEAS</span><h3 id="idea-title"></h3><p id="idea-description"></p><button type="button" id="idea-close" aria-label="关闭灵感卡片">关闭 ×</button></div></aside>
+
 </main>
 <script>
 (() => {
