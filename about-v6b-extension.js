@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Flip } from 'gsap/Flip';
 import bodyMarkup from './assets/center-v6b/sections.html?raw';
 import cssText from './assets/center-v6b/extension.css?raw';
+import { installChapterLocalization } from './assets/center-v6b/localization.js';
 
 async function mountCenterV6B(){
   // The existing showcase embeds About as its first panel; do not nest the new chapters inside it.
@@ -18,6 +19,7 @@ async function mountCenterV6B(){
   extension.id='center-v6b';
   extension.innerHTML=bodyMarkup;
   about.insertAdjacentElement('afterend',extension);
+  installChapterLocalization(extension);
   document.body.classList.add('has-about-chapters');
   const chrome = document.querySelector('.chrome');
   const controls = chrome ? [...chrome.children].filter(node => !node.matches('.brand')) : [];

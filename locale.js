@@ -114,6 +114,11 @@
     'DESIGN / IDEAS':'设计 / 想法',
     '2020 — NOW':'2020 — 至今'
   });
+  Object.assign(zh,{
+    'comes say Hi':'来打个招呼', 'Work':'作品', 'About':'关于', 'Playground':'灵感实验室', 'Contact':'联系',
+    'Subscribe':'订阅', 'SOCIAL':'社交平台', 'Privacy Policy':'隐私政策', '2026 Made In CENTER ©':'2026 CENTER 出品 ©',
+    'Contact — CENTER':'联系 — CENTER'
+  });
   const en=Object.assign(Object.fromEntries(Object.entries(zh).map(([english,chinese])=>[chinese,english])),{
     '设计数字产品，坚持':'Design digital products with intention,','清晰、结构与人本体验':'clarity, structure, and a human touch','——从用户流程到最终界面。':'— from first user flow to final pixel.','设计工具':'Tools',
     // about/index.html 的中文源文 → 英文（该页文案是中文写死的，反转字典覆盖不到）
@@ -184,7 +189,33 @@
   // 每个文本节点先 trim 并压缩连续空格再查字典；命中则把原文存进 sourceText / stored 以便还原，
   // 然后原地改写 nodeValue（保留原有的首尾空白）。动态插入的节点由 childList 分支捕获，
   // 所以 work.js / playground.js 生成的卡片无需额外接线即可被翻译。
-  const textObserver=new MutationObserver(records=>{for(const record of records){const nodes=record.type==='characterData'?[record.target]:[...record.addedNodes].filter(node=>node.nodeType===Node.TEXT_NODE);for(const node of nodes){const raw=node.nodeValue||'';const value=raw.trim().replace(/\s+/g,' ');if(zh[value]!==undefined||en[value]!==undefined){if(!sourceText.has(node)){sourceText.set(node,raw);stored.push([node,raw]);}else if(record.type==='characterData')sourceText.set(node,raw);const translated=language==='zh'?zh[value]:en[value];if(translated){const start=raw.match(/^\s*/)?.[0]||'';const end=raw.match(/\s*$/)?.[0]||'';node.nodeValue=start+translated+end;}}}}});
+  function registerDynamicText(node){
+    if(node.parentElement?.closest('script,style,.language-toggle')) return;
+    const raw=node.nodeValue||'', value=raw.trim().replace(/\s+/g,' ');
+    if(zh[value]===undefined && en[value]===undefined) return;
+    if(!sourceText.has(node)){sourceText.set(node,raw);stored.push([node,raw]);}
+    const translated=language==='zh'?zh[value]:en[value];
+    if(translated!==undefined){const start=raw.match(/^\s*/)?.[0]||'', end=raw.match(/\s*$/)?.[0]||'';node.nodeValue=start+translated+end;}
+  }
+  const textObserver=new MutationObserver(records=>{
+    for(const record of records){
+      if(record.type==='characterData'){
+        const node=record.target, original=sourceText.get(node);
+        if(original!==undefined){
+          const key=original.trim().replace(/\s+/g,' '), expected=language==='zh'?zh[key]:en[key];
+          if(node.nodeValue.trim().replace(/\s+/g,' ')===(expected??key)) continue;
+          sourceText.delete(node);
+        }
+        registerDynamicText(node);
+      } else for(const added of record.addedNodes){
+        if(added.nodeType===Node.TEXT_NODE) registerDynamicText(added);
+        else if(added.nodeType===Node.ELEMENT_NODE){
+          const walk=document.createTreeWalker(added,NodeFilter.SHOW_TEXT);
+          while(walk.nextNode()) registerDynamicText(walk.currentNode);
+        }
+      }
+    }
+  });
   // About is static; avoid a body-wide observer during its initial render.
   if(!document.querySelector('.about-page')) textObserver.observe(document.body,{subtree:true,characterData:true,childList:true});
   // ── 语言切换按钮 .language-toggle：点击后中英翻转，更新按钮文字与 aria-pressed，并持久化。
