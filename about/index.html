@@ -392,6 +392,10 @@ body.has-idea-preview main.about-page{z-index:30}
 .idea-preview p{font-size:12px;line-height:1.5;margin-bottom:10px}
 .idea-preview button{font-size:12px;padding:6px 0}
 @media(max-width:760px){.idea-preview{top:auto;bottom:18px;left:20px;width:min(260px,calc(100% - 40px));max-height:calc(100% - 36px);padding:10px;transform:translateY(12px) rotate(-1deg)}.idea-preview.is-visible{transform:translateY(0) rotate(-1deg)}.idea-preview .idea-preview-content{padding:10px 5px 3px}.idea-preview h3{font-size:21px;margin:7px 0}.idea-preview p{font-size:12px;margin-bottom:8px}}
+.idea-preview,.idea-preview.is-visible{left:50%}
+.idea-preview{transform:translate(-50%,12px) rotate(-2deg)}
+.idea-preview.is-visible{transform:translate(-50%,0) rotate(-2deg)}
+@media(max-width:760px){.idea-preview{left:50%;transform:translate(-50%,12px) rotate(-1deg)}.idea-preview.is-visible{transform:translate(-50%,0) rotate(-1deg)}}
 @media(prefers-reduced-motion:reduce){.idea-preview{transition:none}}
 </style>
 </head>
@@ -460,7 +464,7 @@ body.has-idea-preview main.about-page{z-index:30}
     ['Data Visualization','Make complex data clear, intuitive and easier to explore.']
   ];
   const images = ['gallery-01-work-together.jpg','gallery-02-code-review.jpg','gallery-03-brainstorming.jpg','gallery-04-design-review.jpg','gallery-05-team-hiking.jpg','gallery-06-team-foosball.jpg','gallery-07-team-sunset.jpg','gallery-08-team-picnic.jpg'];
-  let selected = null;
+  let selected = null, exitAnimation = null;
   const renderPreview = () => {
     const current = art.classList.contains('is-open') ? selected : null;
     ideas.forEach(idea => idea.setAttribute('aria-pressed', String(idea === selected)));
@@ -474,9 +478,20 @@ body.has-idea-preview main.about-page{z-index:30}
       close.setAttribute('aria-label', english ? 'Close idea card' : '关闭灵感卡片');
     }
     preview.inert = !current;
-    document.body.classList.toggle('has-idea-preview', !!current);
-    preview.classList.toggle('is-visible', !!current);
     preview.setAttribute('aria-hidden', String(!current));
+    if (current) {
+      exitAnimation?.cancel(); exitAnimation = null;
+      document.body.classList.add('has-idea-preview');
+      preview.classList.add('is-visible');
+    } else if (preview.classList.contains('is-visible')) {
+      exitAnimation?.cancel();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        preview.classList.remove('is-visible'); document.body.classList.remove('has-idea-preview');
+      } else {
+        exitAnimation=preview.animate([{transform:getComputedStyle(preview).transform,opacity:1},{transform:'translate(-50%, 180px) rotate(9deg)',opacity:0}],{duration:420,easing:'cubic-bezier(.55,.05,.8,.4)',fill:'forwards'});
+        exitAnimation.finished.then(()=>{if(!selected){preview.classList.remove('is-visible');document.body.classList.remove('has-idea-preview');}exitAnimation?.cancel();exitAnimation=null;}).catch(()=>{});
+      }
+    }
   };
   trigger.addEventListener('click', () => {
     const open = art.classList.toggle('is-open');

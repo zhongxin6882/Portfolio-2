@@ -43,6 +43,18 @@ async function mountCenterV6B(){
   await import('./assets/center-v6b/tuner.js');
   await import('./assets/center-v6b/skater-sync.js');
   window.initGsapEnhancements?.();
+  const gallery = extension.querySelector('#gallery');
+  const footer = extension.querySelector('.contact-outro');
+  const updateBrand = () => document.body.classList.toggle('about-dark-section', gallery.getBoundingClientRect().top <= 60 && footer.getBoundingClientRect().bottom > 0);
+  addEventListener('scroll', updateBrand, {passive:true});
+  addEventListener('resize', updateBrand, {passive:true});
+  updateBrand();
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    ScrollTrigger.create({trigger:footer,start:'top bottom',onEnter:self=>{
+      const amount=Math.max(20,Math.min(65,Math.abs(self.getVelocity())*.015));
+      gsap.fromTo(footer,{y:amount},{y:0,duration:.9,ease:'bounce.out',overwrite:true});
+    }});
+  }
   window.dispatchEvent(new Event('resize'));
 }
 mountCenterV6B().catch(error=>{
