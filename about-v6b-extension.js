@@ -18,6 +18,19 @@ async function mountCenterV6B(){
   extension.id='center-v6b';
   extension.innerHTML=bodyMarkup;
   about.insertAdjacentElement('afterend',extension);
+  document.body.classList.add('has-about-chapters');
+  const chrome = document.querySelector('.chrome');
+  const controls = chrome ? [...chrome.children].filter(node => !node.matches('.brand')) : [];
+  const updateHeader = () => {
+    const hidden = about.getBoundingClientRect().bottom <= innerHeight * .98;
+    chrome?.classList.toggle('chapters-active', hidden);
+    if (hidden && chrome?.classList.contains('mobile-menu-open')) document.getElementById('menuToggle')?.click();
+    for (const node of controls) node.inert = hidden;
+  };
+  addEventListener('scroll', updateHeader, {passive:true});
+  addEventListener('resize', updateHeader, {passive:true});
+  updateHeader();
+  if (new URLSearchParams(location.search).get('motionTools') === '1') extension.classList.add('show-motion-tools');
   window.gsap=gsap;
   window.ScrollTrigger=ScrollTrigger;
   window.Flip=Flip;

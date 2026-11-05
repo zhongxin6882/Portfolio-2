@@ -1,0 +1,8 @@
+---
+description: Require global Chinese and English switching on new pages
+alwaysApply: true
+---
+
+# New pages and language switching
+
+Every new page must integrate the site's shared top-right Chinese/English switch and persisted language preference. Use the existing shared header and locale mechanisms; do not create an independent switch. Translate page content and relevant accessible labels in both languages, including dynamically added content, and verify switching, persistence, and navigation on desktop and mobile.

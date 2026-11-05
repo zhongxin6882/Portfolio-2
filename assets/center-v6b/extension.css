@@ -1377,3 +1377,19 @@
 #center-v6b #make-it-matter .skater-sticky,
 #center-v6b .gallery,
 #center-v6b .gallery-stage { background: var(--paper); }
+
+/* The original About scrolls away over the held WORK panel. */
+body.has-about-chapters main.about-page { position:relative; z-index:2; }
+body.has-about-chapters #center-v6b { z-index:1; margin-top:-100svh; }
+body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidden!important; pointer-events:none!important; }
+#center-v6b #experience .career-aside h2 { margin-top:clamp(60px,14vh,180px); }
+#center-v6b .tuner-toggle { display:none; }
+#center-v6b.show-motion-tools .tuner-toggle { display:flex; }
+#center-v6b .contact-outro { min-height:100svh; background:#000; color:#f3f3ec; padding:clamp(54px,8vh,100px) clamp(24px,4vw,80px) clamp(28px,5vh,54px); gap:clamp(45px,8vh,90px); }
+#center-v6b .contact-outro .footnote { align-items:center; flex-direction:row; gap:24px; }
+#center-v6b .contact-outro .outro-nav { display:flex; flex-wrap:wrap; gap:clamp(16px,2.5vw,42px); }
+#center-v6b .contact-outro .footnote a { color:#f3f3ec; border:0; padding:0; font:600 12px/1.3 Arial,sans-serif; letter-spacing:.04em; }
+#center-v6b .contact-outro .back-to-top { display:flex; align-items:center; gap:12px; white-space:nowrap; }
+#center-v6b .contact-outro .back-to-top span { display:grid; place-items:center; width:42px; height:42px; border:1px solid #aaa; border-radius:50%; font-size:21px; transform:rotate(-45deg); }
+@media(max-width:760px) { #center-v6b #experience .career-aside h2 { margin-top:clamp(44px,8vh,80px); } #center-v6b .contact-outro .footnote { align-items:flex-end; } #center-v6b .contact-outro .outro-nav { max-width:210px; gap:16px 22px; } }
+@media(prefers-reduced-motion:reduce) { body.has-about-chapters #center-v6b { margin-top:0; } }
