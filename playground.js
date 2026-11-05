@@ -7,7 +7,7 @@ import { gsap } from 'gsap';
  * 动画有两个分支：正常模式走 GSAP 时间轴，用户开启减弱动效时走降级分支。
  *    **改动画效果时两个分支都要改**，否则降级路径会与主路径表现不一致。
  *
- * 依赖的 DOM 契约：.play-grid、[data-count]、.play-tagline
+ * 依赖的 DOM 契约：.play-grid、[data-count]、.play-tagline、.play-topline
  * （后三者缺失时各自功能静默跳过，不报错。）
  */
 // ── 数据源：24 个 {title, image}。图片全部热链 framerusercontent.com，仓库内无本地副本。
@@ -28,13 +28,15 @@ const target=83;
 const key='september15-play-count-seen';
 const cards=[...document.querySelectorAll('.play-card')];
 const tagline=document.querySelector('.play-tagline');
+const topLine=document.querySelector('.play-topline');
 
-  // ── 主分支（GSAP 可用）：tagline → 计数器 → 卡片的串行时间轴。
+  // ── 主分支（GSAP 可用）：topline → tagline → 计数器 → 卡片的串行时间轴。
   // 计数器只在首次访问时播放（localStorage 标记），回访直接显示终值。
   // 前 4 张卡片进时间轴，其余交给 IntersectionObserver（threshold .12）滚动触发。
 if(!prefersReducedMotion){
   const intro=gsap.timeline({defaults:{ease:'power3.out'}});
-  if(tagline) intro.from(tagline,{y:18,opacity:0,duration:.65});
+  if(topLine) intro.from(topLine,{y:12,opacity:0,duration:.55});
+  if(tagline) intro.from(tagline,{y:18,opacity:0,duration:.65},'-=.24');
   if(count){
     const firstVisit=!localStorage.getItem(key);
     if(firstVisit){
