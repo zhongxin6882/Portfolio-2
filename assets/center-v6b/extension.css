@@ -1423,3 +1423,10 @@ body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidd
 #center-v6b .contact-outro .back-to-top{display:flex;align-items:center;gap:10px;width:max-content;color:#f3f3ec;border:0;padding:0;font:600 12px/1.3 Arial,sans-serif;letter-spacing:.04em}
 #center-v6b .contact-outro .back-to-top span{display:grid;place-items:center;width:21px;height:21px;border:1px solid #aaa;border-radius:50%;font-size:11px;transform:rotate(-45deg)}
 @media(max-width:760px){#center-v6b .contact-outro>div:first-of-type{padding-top:60px;width:68%}#center-v6b .contact-outro h2{font-size:clamp(58px,13vw,90px)}#center-v6b .contact-globe{right:-100px}#center-v6b .contact-outro .back-to-top{font-size:10px}}
+/* Fine adjustments for the contact composition. */
+#center-v6b .contact-outro>div:first-of-type{padding-top:70px}
+#center-v6b .contact-outro h2{font-size:clamp(79.2px,calc(5.4vw + 36px),122.4px)}
+#center-v6b .contact-globe{transform:scale(.9);transform-origin:center bottom}
+#center-v6b .contact-outro>div:first-of-type>a.back-to-top{font-weight:400}
+#center-v6b .contact-outro .back-to-top span{width:25.2px;height:25.2px;font-weight:800}
+@media(max-width:760px){#center-v6b .contact-outro>div:first-of-type{padding-top:30px}#center-v6b .contact-outro h2{font-size:clamp(52.2px,11.7vw,81px)}}
