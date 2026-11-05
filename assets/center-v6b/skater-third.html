@@ -516,7 +516,7 @@ function firePhysicsPop(){
       gravity:reduced?0:500+Math.random()*400,drag:.997,
       size:4+Math.random()*8,age:0,life,
       shape:i%7===0?'diamond':i%4===0?'square':'circle',
-      ink:['#ff614c','#ffc350','#6fa3c0','#88b18d','#d58eb4','#675e9a','#ff8b55'][i%7],
+      ink:['#454745','#666866','#858785','#a2a4a2','#777977','#b0b2b0','#5a5c5a'][i%7],
       spin:(Math.random()-.5)*7,rotation:Math.random()*6.28});
   }
   if(popDots.length>420)popDots.splice(0,popDots.length-420);
@@ -552,6 +552,14 @@ function renderPhysicsPop(now){
       popCtx.beginPath();popCtx.moveTo(0,-p.size);popCtx.lineTo(p.size*.6,0);
       popCtx.lineTo(0,p.size);popCtx.lineTo(-p.size*.6,0);popCtx.closePath();popCtx.fill();
     }else{popCtx.beginPath();popCtx.arc(0,0,p.size*.5,0,Math.PI*2);popCtx.fill();}
+    // Fine paper-like dots echo the halftone texture behind the portrait.
+    if (p.size >= 7) {
+      popCtx.fillStyle='rgba(237,237,237,.55)';
+      const dot=Math.max(.65,p.size*.105);
+      for (const [dx,dy] of [[-.18,-.18],[.18,-.18],[-.18,.18],[.18,.18]]) {
+        popCtx.beginPath();popCtx.arc(p.size*dx,p.size*dy,dot,0,Math.PI*2);popCtx.fill();
+      }
+    }
     popCtx.restore();
   }
   for(let i=popRings.length-1;i>=0;i--){
