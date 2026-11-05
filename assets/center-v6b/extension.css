@@ -1426,9 +1426,14 @@ body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidd
 /* Fine adjustments for the contact composition. */
 #center-v6b .contact-outro>div:first-of-type{padding-top:70px}
 #center-v6b .contact-outro h2{font-size:clamp(79.2px,calc(5.4vw + 36px),122.4px)}
-#center-v6b .contact-globe{transform:scale(.9);transform-origin:center bottom}
+#center-v6b .contact-globe{transform:scale(.945);transform-origin:center bottom}
 #center-v6b .contact-outro>div:first-of-type>a.back-to-top{font-weight:400}
 #center-v6b .contact-outro .back-to-top span{width:25.2px;height:25.2px;font-weight:800}
 @media(max-width:760px){#center-v6b .contact-outro>div:first-of-type{padding-top:30px}#center-v6b .contact-outro h2{font-size:clamp(52.2px,11.7vw,81px)}}
 
 body.about-dark-section .chrome .brand-copyright{filter:brightness(0) invert(1)}
+
+/* The stationary black backing remains visible during the footer bounce. */
+#center-v6b .contact-bounce-shell{background:#000;overflow:hidden}
+#center-v6b .contact-outro .back-to-top{align-items:center}
+#center-v6b .contact-outro .back-to-top span{width:21.42px;height:21.42px;flex:0 0 21.42px}
