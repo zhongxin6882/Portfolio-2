@@ -1433,7 +1433,7 @@ body.has-about-chapters .chrome.chapters-active > :not(.brand) { visibility:hidd
 
 body.about-dark-section .chrome .brand-copyright{filter:brightness(0) invert(1)}
 
-/* The stationary black backing remains visible during the footer bounce. */
-#center-v6b .contact-bounce-shell{background:#000;overflow:hidden}
+/* The stationary backing remains visible during the footer bounce. */
+#center-v6b .contact-bounce-shell{background:#ededed;overflow:hidden}
 #center-v6b .contact-outro .back-to-top{align-items:center}
 #center-v6b .contact-outro .back-to-top span{width:21.42px;height:21.42px;flex:0 0 21.42px}
