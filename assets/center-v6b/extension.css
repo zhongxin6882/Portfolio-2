@@ -1445,3 +1445,8 @@ body.about-dark-section .chrome .brand-copyright{filter:brightness(0) invert(1)}
 #center-v6b #experience .career-trailing .company{margin-bottom:10px!important}
 #center-v6b #experience .career-trailing .career-date{margin-bottom:22px!important}
 #center-v6b #experience .career-card:is(:hover,:focus-visible,.is-open) .career-detail{margin-top:6px!important}
+
+/* Keep the footer rule aligned with the width of the contact headline. */
+#center-v6b .contact-outro{display:grid;grid-template-columns:minmax(0,max-content) 1fr;grid-template-rows:1fr auto}
+#center-v6b .contact-outro>div:first-of-type{grid-column:1;grid-row:1;width:100%}
+#center-v6b .contact-outro .footnote{grid-column:1;grid-row:2;min-width:0}
