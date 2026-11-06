@@ -1450,3 +1450,7 @@ body.about-dark-section .chrome .brand-copyright{filter:brightness(0) invert(1)}
 #center-v6b .contact-outro{display:grid;grid-template-columns:minmax(0,max-content) 1fr;grid-template-rows:1fr auto}
 #center-v6b .contact-outro>div:first-of-type{grid-column:1;grid-row:1;width:100%}
 #center-v6b .contact-outro .footnote{grid-column:1;grid-row:2;min-width:0}
+
+/* Increase the contact section by 15% and reduce the return control by 20%. */
+#center-v6b .contact-outro{min-height:57.5svh}
+#center-v6b .contact-outro .back-to-top{transform:scale(.8);transform-origin:left center}
