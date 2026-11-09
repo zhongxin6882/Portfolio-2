@@ -1456,7 +1456,7 @@ body.about-dark-section .chrome .brand-copyright{filter:brightness(0) invert(1)}
 #center-v6b .contact-outro .back-to-top{transform:scale(.8);transform-origin:left center}
 
 /* Soft, slow light for the contact finale. */
-#center-v6b .contact-globe{display:none}
+#center-v6b .contact-globe{display:block;z-index:1;background:transparent}
 #center-v6b .contact-aurora{position:absolute;inset:0;overflow:hidden;pointer-events:none;background:#333335}
 #center-v6b .contact-aurora i{position:absolute;display:block;width:80%;height:150%;left:0;top:-25%;filter:blur(48px);border-radius:45%}
 #center-v6b .contact-aurora i:nth-child(1){background:radial-gradient(ellipse,#829184 0%,#5d6c60 20%,transparent 68%);opacity:.25;animation:contact-wave-one 18s ease-in-out infinite alternate}
