@@ -367,7 +367,7 @@
 @media(prefers-reduced-motion:reduce){.chrome .header-slot nav a,.chrome .header-slot nav a::before{animation:none;transition:none}.chrome .header-slot nav a[aria-current="page"]::before{opacity:1;transform:translate(0,-.06em) rotate(-45deg)}}
 
 </style>
-<link rel="stylesheet" href="../about-sprites.css?v=three-lines-leaf-sway-20261022">
+<link rel="stylesheet" href="../about-sprites.css?v=idle-blink-20261110">
 <link rel="stylesheet" href="../mobile-responsive.css?v=mobile-20261022a"><link rel="stylesheet" href="../brand.css?v=brand-hover-20261022">
 <style>
 /* Image-led idea cards keep the original artwork and interaction intact. */
@@ -416,6 +416,14 @@ body.has-idea-preview main.about-page{z-index:30}
     <div class="art-stage">
       <span class="portrait-stage" aria-hidden="true">
         <img class="portrait-idle" src="../assets/about/portrait-idle-transparent.png" width="1342" height="1172" alt="">
+        <svg class="portrait-expression" viewBox="0 0 1342 1172" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+          <defs><clipPath id="brow-crop"><rect x="718" y="524" width="43" height="20" rx="8"/></clipPath></defs>
+          <g class="portrait-brow-motion" clip-path="url(#brow-crop)"><image href="../assets/about/portrait-idle-transparent.png" width="1342" height="1172"/></g>
+          <g class="portrait-blink">
+            <ellipse cx="664" cy="573" rx="24" ry="17" fill="#fafafa"/><path d="M644 574 Q663 561 684 568" fill="none" stroke="#111" stroke-width="3.2" stroke-linecap="round"/>
+            <ellipse cx="744" cy="555" rx="18" ry="16" fill="#fafafa"/><path d="M727 557 Q743 546 759 550" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </svg>
         <img class="portrait-smile" src="../assets/about/portrait-smile.webp" width="1342" height="1172" alt="">
         <img class="portrait-character" src="../assets/about/portrait-character.webp" width="1324" height="1188" alt="">
         <span class="art-hover-note">EVER WONDERED<br>WHAT’S GOING ON<br>INSIDE MY HEAD?<span aria-hidden="true">↗</span></span>

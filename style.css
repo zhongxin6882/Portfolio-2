@@ -42,7 +42,7 @@
 .intro-name span{display:block}
 .intro-curtain{position:absolute;inset:0;z-index:1;background:#050505;transform:translateX(0);animation:intro-push 3s .8s linear forwards;will-change:transform}
 .intro-pusher{--pusher-w:clamp(330px,27vw,440px);position:absolute;width:var(--pusher-w);aspect-ratio:1;height:auto;left:0;top:50%;transform:translateY(-50%);pointer-events:none}
-.intro-pusher-pose{position:absolute;top:0;width:100%;height:100%;background-image:url("pusher-poses.svg?v=2");background-size:300% 200%;background-repeat:no-repeat;opacity:0;will-change:opacity}
+.intro-pusher-pose{position:absolute;top:0;width:100%;height:100%;background-image:url("pusher-poses.webp?v=3");background-size:300% 200%;background-repeat:no-repeat;opacity:0;will-change:opacity}
 .pose-step-1{left:calc(-.926 * var(--pusher-w));background-position:left top;animation:pose-step-1 3s .8s both}
 .pose-step-2{left:calc(-.818 * var(--pusher-w));background-position:center top;animation:pose-step-2 3s .8s both}
 .pose-step-3{left:calc(-.787 * var(--pusher-w));background-position:right top;animation:pose-step-3 3s .8s both}
@@ -94,10 +94,10 @@ html.has-route-transition #intro-loader{display:none}
 .intro-name{opacity:0;animation:intro-name-show 5.4s step-end both}
 .intro-curtain{animation:intro-arrive-push 5.4s linear both}
 .intro-pusher{visibility:hidden;animation:intro-pusher-show 5.4s step-end both}
-.intro-pusher-pose{animation-duration:3.35s;animation-delay:1.08s}
+.intro-pusher-pose{animation-duration:3.35s;animation-delay:.92s}
 @keyframes intro-ground{0%,19.99%{background:transparent}20%,100%{background:#faf9f6}}
 @keyframes intro-name-show{0%,19.99%{opacity:0}20%,100%{opacity:1}}
-@keyframes intro-pusher-show{0%,19.99%{visibility:hidden}20%,100%{visibility:visible}}
+@keyframes intro-pusher-show{0%,16.99%{visibility:hidden}17%,100%{visibility:visible}}
 @keyframes intro-arrive-push{0%,10%{transform:translateX(100%)}20%{transform:translateX(0)}35%{transform:translateX(30%)}42%{transform:translateX(30%)}50%{transform:translateX(52%)}55%{transform:translateX(60%)}68%{transform:translateX(60%)}72%{transform:translateX(64%)}78%{transform:translateX(75%)}82%,100%{transform:translateX(100%)}}
 @media(prefers-reduced-motion:reduce){#intro-loader{animation:none;background:#faf9f6}.intro-name{animation:none;opacity:1}.intro-curtain{animation:none;transform:translateX(100%)}.intro-pusher{animation:none;visibility:hidden}.intro-pusher-pose{animation:none}}
 
