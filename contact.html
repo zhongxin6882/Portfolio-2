@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=global-nav-20261021">
-  <link rel="stylesheet" href="contact-redesign.css?v=contact-enhance-20261110">
+  <link rel="stylesheet" href="contact-redesign.css?v=contact-blinds-area-20261110">
   <link rel="stylesheet" href="mobile-responsive.css?v=mobile-20261022a"><link rel="stylesheet" href="brand.css?v=brand-hover-20261022">
   <script>try{if(sessionStorage.getItem('portfolio-route-transition'))document.documentElement.classList.add('has-route-transition')}catch{}</script>
 </head>
@@ -72,9 +72,11 @@
       <div class="contact-bottom-cell contact-legal"><span>Privacy Policy</span><span>2026 Made In CENTER ©</span></div>
     </footer>
   </main>
-  <aside class="contact-preview-controls" aria-label="转场时长预览设置"><label for="contact-transition-effect">切换效果</label><select id="contact-transition-effect"><option value="curl">卷页翻转</option><option value="blinds" selected>横向百叶窗</option></select><label for="contact-transition-duration">转场时长 <output id="contact-transition-value">1.2 秒</output></label><input id="contact-transition-duration" type="range" min="0.4" max="3" step="0.1" value="1.2"></aside>
+  <aside class="contact-preview-controls" aria-label="转场时长预览设置" hidden><label for="contact-transition-effect">切换效果</label><select id="contact-transition-effect"><option value="curl">卷页翻转</option><option value="blinds" selected>横向百叶窗</option></select><label for="contact-transition-duration">转场时长 <output id="contact-transition-value">1.2 秒</output></label><input id="contact-transition-duration" type="range" min="0.4" max="3" step="0.1" value="1.2"></aside>
   <script>
     (() => {
+      const controls = document.querySelector('.contact-preview-controls');
+      if (new URLSearchParams(location.search).get('motion') === '1') controls.hidden = false;
       const video = document.querySelector('.contact-motion');
       const second = document.querySelector('.contact-motion-second');
       const canvas = document.querySelector('.contact-motion-transition');
@@ -90,8 +92,15 @@
         image.width = canvas.width; image.height = canvas.height;
         const context = image.getContext('2d', {willReadFrequently: true});
         context.fillStyle="#ededed"; context.fillRect(0, 0, image.width, image.height);
-        const groundOffset = source === video ? image.height * .014 : 0;
-        context.drawImage(source, 0, groundOffset, image.width, image.height);
+        const area = canvas.getBoundingClientRect();
+        const bounds = source.getBoundingClientRect();
+        const ratio = source.videoWidth / source.videoHeight;
+        const drawWidth = Math.min(bounds.width, bounds.height * ratio);
+        const drawHeight = drawWidth / ratio;
+        const scaleX = image.width / area.width, scaleY = image.height / area.height;
+        const x = (bounds.left + (bounds.width - drawWidth) / 2 - area.left) * scaleX;
+        const y = (bounds.bottom - drawHeight - area.top) * scaleY;
+        context.drawImage(source, x, y, drawWidth * scaleX, drawHeight * scaleY);
         const pixels = context.getImageData(0, 0, image.width, image.height);
         for (let i = 0; i < pixels.data.length; i += 4) {
           const gray = .2126 * pixels.data[i] + .7152 * pixels.data[i + 1] + .0722 * pixels.data[i + 2];
@@ -132,7 +141,9 @@
       async function switchToSecond() {
         if(switched || reduced.matches || !video.videoWidth) return;
         switched=true;video.pause();
-        canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+        const area=canvas.getBoundingClientRect();
+        const scale=Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width=Math.max(1,Math.round(area.width*scale));canvas.height=Math.max(1,Math.round(area.height*scale));
         const oldFrame=frame(video);
         ctx.drawImage(oldFrame,0,0);canvas.style.transform='none';canvas.classList.add('is-visible');
         if(second.readyState<2) await new Promise(resolve => second.addEventListener('loadeddata',resolve,{once:true}));

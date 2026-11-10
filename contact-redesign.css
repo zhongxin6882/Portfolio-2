@@ -225,3 +225,9 @@ body.contact-redesign .chrome { z-index: 30; color: #080808; }
 /* Consistent neutral matte and restrained edge enhancement for both videos. */
 .contact-motion{filter:url(#contact-video-enhance)}
 .contact-motion-transition{filter:url(#contact-frame-sharpen)}
+
+/* Motion controls are available only when explicitly requested in the URL. */
+.contact-preview-controls[hidden]{display:none}
+
+/* The blinds cover the entire illustration panel, including its empty margins. */
+.contact-redesign .contact-motion-transition{left:0;right:0;top:clamp(60px,25%,210px);bottom:0;width:100%;height:calc(100% - clamp(60px,25%,210px));object-fit:fill;-webkit-mask-image:none;mask-image:none}
