@@ -267,3 +267,7 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 .play-viewer nav button{position:absolute;top:50%;transform:translateY(-50%);pointer-events:auto;color:#fff;padding:16px}
 .play-viewer-prev{left:0}.play-viewer-next{right:0}
 @media(max-width:620px){.play-viewer-inner{padding:55px 18px 75px}.play-viewer header{top:12px;right:18px}.play-viewer-label{left:18px;top:22px}.play-viewer-image{max-height:calc(100svh - 180px)}.play-viewer nav{inset:auto 12px 14px;height:45px}.play-viewer nav button{top:0;transform:none;padding:12px}}
+
+/* Keep the artwork wall independently scrollable on desktop and touch devices. */
+@media(min-width:851px){.playground-body .play-grid{overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}}
+.playground-body .play-grid:focus-visible{outline:2px solid #8c9c88;outline-offset:2px}

@@ -1482,3 +1482,38 @@ body.about-dark-section .chrome .brand-copyright{filter:brightness(0) invert(1)}
 #center-v6b .contact-aurora::after{content:"";position:absolute;inset:0;background:rgba(51,51,53,.5);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px)}
 @keyframes contact-glass-drift{from{background-position:0% 50%}to{background-position:100% 50%}}
 @media(prefers-reduced-motion:reduce){#center-v6b .contact-aurora::before{animation:none}}
+
+/* Simplified return arrow and a centered mobile contact composition. */
+#center-v6b .contact-outro .back-to-top span{border:0;border-radius:0}
+@media(max-width:760px){
+  #center-v6b .contact-outro{display:flex;flex-direction:column;min-height:75svh;padding:38px 20px 24px;gap:20px}
+  #center-v6b .contact-outro>div:first-of-type{width:100%;padding-top:0;text-align:center;z-index:2}
+  #center-v6b .contact-outro h2{font-size:clamp(27px,7.4vw,54px);line-height:1;letter-spacing:-.065em;white-space:nowrap;margin:0 0 18px}
+  #center-v6b .contact-outro h2 br{display:none}
+  #center-v6b .contact-outro>div:first-of-type>a.back-to-top{margin:0 auto;transform-origin:center}
+  #center-v6b .contact-globe{left:50%;right:auto;top:auto;bottom:0;width:100%;height:76%;transform:translateX(-50%) translateY(5%) scale(.99225);transform-origin:center bottom}
+  #center-v6b .contact-outro .footnote{width:100%;margin-top:auto;justify-content:center;padding-top:14px}
+  #center-v6b .contact-outro .outro-nav{max-width:none;justify-content:center;gap:12px clamp(12px,4vw,25px)}
+}
+
+/* The phone wordmark remains legible on About's dark chapters. */
+@media(max-width:850px){body.about-dark-section .chrome:not(.mobile-menu-open) .brand::after{color:#fff}}
+
+/* Give the mobile headline more presence and bring the globe closer. */
+@media(max-width:760px){
+  #center-v6b .contact-outro h2{font-size:clamp(32.4px,8.88vw,64.8px)}
+  #center-v6b .contact-globe{bottom:12%}
+}
+
+/* Mobile: lower the text group and increase the headline and return label. */
+@media(max-width:760px){
+  #center-v6b .contact-outro>div:first-of-type{padding-top:24px}
+  #center-v6b .contact-outro h2{font-size:clamp(32px,10.656vw,77.76px)}
+  #center-v6b .contact-outro>div:first-of-type>a.back-to-top{font-size:15.4px}
+}
+
+/* Mobile footer: lift the navigation and add breathing room under the rule. */
+@media(max-width:760px){
+  #center-v6b .contact-outro{padding-bottom:36px}
+  #center-v6b .contact-outro .footnote{padding-top:21px}
+}
