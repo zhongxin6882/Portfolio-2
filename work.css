@@ -499,3 +499,31 @@
   .work-paper-cursor.show{opacity:1;visibility:visible}
 }
 @media(max-width:850px){.work-paper-stage,.work-paper-masks,.work-paper-hotspot,.work-paper-hotspot-neighbor,.work-paper-cursor{display:none!important}}
+
+.detail-gallery video { display:block; width:100%; height:auto; margin-bottom:7vh; background:#111; }
+
+/* Keep the tall project artwork undistorted in each viewing context. */
+.work-card-urban-air img { object-fit:cover; object-position:center top; }
+#work-focus.urban-air .focus-cover > img { object-fit:cover; object-position:center; background:#111; }
+#work-detail.urban-air .detail-hero { display:block; width:100%; height:auto; aspect-ratio:auto; object-fit:contain; }
+#work-detail.urban-air .detail-gallery img { height:auto; aspect-ratio:auto; }
+
+#work-detail.urban-air .detail-body { padding:0; }
+#work-detail.urban-air .detail-gallery { background:#111; }
+#work-detail.urban-air .detail-gallery img, #work-detail.urban-air .detail-gallery video { display:block; width:100%; height:auto; max-height:none; margin:0; object-fit:contain; }
+#work-detail.urban-air .detail-gallery video { aspect-ratio:1918 / 1080; }
+
+#work-detail.urban-air { background:#ededed; }
+#work-detail.urban-air .urban-air-intro { padding:clamp(32px,7vh,80px) 7%; }
+#work-detail.urban-air .urban-air-intro h1 { font: 600 clamp(35px,5vw,82px)/1.02 var(--font-sans); letter-spacing:-.055em; margin:0 0 clamp(28px,5vh,55px); }
+#work-detail.urban-air .detail-description { padding:0; }
+#work-detail.urban-air .detail-gallery { width:min(100%,calc(80dvh * 1918 / 1080)); margin:0 auto; }
+#work-detail.urban-air .detail-gallery video { width:100%; height:auto; max-height:80dvh; object-fit:contain; }
+#work-detail.urban-air .detail-gallery img { margin:0; padding:0; vertical-align:top; }
+@media(max-width:760px){#work-detail.urban-air .urban-air-intro { padding:64px 20px 36px; } #work-detail.urban-air .detail-description { grid-template-columns:1fr; gap:16px; }}
+
+#work-detail.urban-air .detail-gallery video{width:100%;max-width:100%;height:auto;max-height:80dvh;aspect-ratio:1920/1081;object-fit:contain;display:block}
+#work-detail.urban-air .detail-gallery .detail-description{background:#ededed;padding:clamp(30px,5vw,70px) 4%;color:#111}
+
+/* Separate project images with a consistent black 100px interval. */
+#work-detail.urban-air .detail-gallery img + img { margin-top:100px; }

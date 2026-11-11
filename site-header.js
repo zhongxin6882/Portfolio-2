@@ -10,6 +10,39 @@
 (() => {
   const header = document.querySelector('.chrome');
   if (!header) return;
+  // Shared email interaction: hover for a hint, click to copy.
+  const inquiry = header.querySelector('.inquiry');
+  const email = inquiry?.querySelector('a[href^="mailto:"]');
+  if (email) {
+    for (const node of Array.from(inquiry.childNodes)) {
+      if (node.nodeType === Node.TEXT_NODE && /(?:For inquiries|咨询|联系)/i.test(node.textContent)) node.remove();
+    }
+    const hint = document.createElement('span');
+    hint.className = 'inquiry-copy-hint';
+    hint.setAttribute('aria-live', 'polite');
+    email.before(hint);
+    let state = 'default', timer;
+    const renderHint = () => {
+      const zh = document.documentElement.lang.toLowerCase().startsWith('zh');
+      hint.textContent = zh ? ({ default: '商务咨询', hover: '点击复制', copied: '已复制' })[state] : ({ default: 'For inquiries', hover: 'Click to copy', copied: 'Copied' })[state];
+    };
+    const setState = value => { state = value; renderHint(); };
+    new MutationObserver(renderHint).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    renderHint();
+    email.addEventListener('mouseenter', () => { if (state !== 'copied') setState('hover'); });
+    email.addEventListener('mouseleave', () => { if (state !== 'copied') setState('default'); });
+    email.addEventListener('focus', () => { if (state !== 'copied') setState('hover'); });
+    email.addEventListener('blur', () => { if (state !== 'copied') setState('default'); });
+    email.addEventListener('click', async event => {
+      if (!navigator.clipboard?.writeText) return; // Keep the email link usable when clipboard access is unavailable.
+      event.preventDefault();
+      try {
+        await navigator.clipboard.writeText(email.getAttribute('href').slice(7));
+        clearTimeout(timer); setState('copied');
+        timer = setTimeout(() => setState(email.matches(':hover, :focus') ? 'hover' : 'default'), 2000);
+      } catch { window.location.href = email.href; }
+    });
+  }
   // ── 1) 菜单开关：切换 #menu 的 .closed，同步 aria-expanded；
   // 重新展开时先移除再加回 .typing，以重放打字机动画。
   const menuButton = header.querySelector('#menuToggle');

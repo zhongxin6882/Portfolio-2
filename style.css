@@ -271,3 +271,13 @@ body:has(.about-showcase) .chrome .location{position:fixed;top:20px;left:70%}
 /* Keep the artwork wall independently scrollable on desktop and touch devices. */
 @media(min-width:851px){.playground-body .play-grid{overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}}
 .playground-body .play-grid:focus-visible{outline:2px solid #8c9c88;outline-offset:2px}
+
+/* Shared header email copy interaction. */
+.chrome .inquiry-copy-hint{display:inline-block;color:#888;margin-right:.8em;white-space:nowrap}
+.chrome .inquiry a[href^="mailto:"]{text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+/* The email underline draws in from left to right on hover. */
+.chrome .inquiry a[href^="mailto:"]{position:relative;text-decoration:none!important}
+.chrome .inquiry a[href^="mailto:"]::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.22,1,.36,1)}
+.chrome .inquiry a[href^="mailto:"]:hover::after,.chrome .inquiry a[href^="mailto:"]:focus-visible::after{transform:scaleX(1)}
+@media (prefers-reduced-motion:reduce){.chrome .inquiry a[href^="mailto:"]::after{transition:none}}
