@@ -74,7 +74,11 @@ try {
       await page.locator('.work-paper-hotspot').hover();
       await page.waitForFunction(() => document.querySelector('.work-paper-cursor')?.classList.contains('show'));
       await page.locator('.work-paper-hotspot').click();
-      await page.locator('#work-focus').waitFor({ state: 'visible' });
+      await page.locator('#work-detail').waitFor({ state: 'visible' });
+      await page.locator('#work-detail .reference-gallery').waitFor({ state: 'visible' });
+      assert.equal(await page.locator('#work-detail .reference-rail button').count() > 0, true, 'Project gallery navigation missing');
+      await page.keyboard.press('Escape');
+      assert(await page.locator('#work-detail').isHidden(), 'Project detail did not close');
     }
     if (viewport.width === 1280) {
       await page.mouse.wheel(0, 520);
