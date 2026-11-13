@@ -527,3 +527,63 @@
 
 /* Separate project images with a consistent black 100px interval. */
 #work-detail.urban-air .detail-gallery img + img { margin-top:100px; }
+
+/* Work case view: fixed information, scrolling media and thumbnail rail. */
+#work-detail.reference-detail{inset:0;overflow-y:auto;background:#ededed;z-index:40;scroll-behavior:smooth}
+#work-detail.reference-detail .detail-body{padding:0;display:grid;grid-template-columns:26% minmax(0,1fr) 64px;gap:2.5%;align-items:start}
+.reference-info{position:sticky;top:0;height:100svh;padding:clamp(200px,34vh,340px) 18px 40px 24px;overflow:auto;font:14px/1.4 var(--font-sans)}
+.reference-info h1{font:600 clamp(22px,2vw,36px)/1.05 var(--font-sans);letter-spacing:-.05em;margin:0 0 38px}
+.reference-info-row{display:grid;grid-template-columns:75px 1fr;gap:12px;margin-bottom:30px}.reference-info-row span{color:#888}.reference-info-row p{margin:0}
+.reference-gallery{padding:12vh 0 8vh;min-width:0}.reference-gallery img,.reference-gallery video{display:block;width:100%;height:auto;margin:0 0 80px;object-fit:contain;scroll-margin-top:20px}.reference-gallery video{aspect-ratio:1920/1081;background:#000;max-height:85vh}
+.reference-rail{position:sticky;top:30vh;height:40vh;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:0 6px}.reference-rail button{border:1px solid transparent;padding:1px;background:none;cursor:pointer}.reference-rail button:hover,.reference-rail button:focus-visible{border-color:#111}.reference-rail img{display:block;width:100%;height:32px;object-fit:cover}.reference-detail .detail-close{z-index:80}
+@media(max-width:760px){#work-detail.reference-detail .detail-body{display:flex;flex-direction:column;gap:0}.reference-info{position:relative;top:auto;height:auto;padding:90px 20px 30px;width:100%}.reference-gallery{width:100%;padding:0 16px 32px}.reference-gallery img,.reference-gallery video{margin-bottom:32px}.reference-rail{display:none}}
+@media(min-width:761px){body.work-home:has(#work-detail.reference-detail:not([hidden])) .chrome{z-index:60;pointer-events:none}body.work-home:has(#work-detail.reference-detail:not([hidden])) .chrome a,body.work-home:has(#work-detail.reference-detail:not([hidden])) .chrome button{pointer-events:auto}}
+
+.reference-next{grid-column:1/-1;width:100%;min-height:42vh;padding:50px 3%;border:0;background:#ededed;color:#111;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}.reference-next span{font:13px var(--font-sans)}.reference-next strong{color:#ff4648;max-width:100%;font:400 clamp(42px,9vw,180px)/.9 var(--font-serif,Georgia,serif);letter-spacing:-.055em;overflow-wrap:anywhere;transition:color .25s}.reference-next:hover strong,.reference-next:focus-visible strong{color:#d93236}.reference-next:focus-visible{outline:2px solid #111;outline-offset:-5px}@media(max-width:760px){.reference-next{min-height:30vh;padding:40px 16px}.reference-next strong{font-size:clamp(38px,10vw,72px)}}
+
+.reference-opening{position:relative}.reference-opening img,.reference-opening video{margin-bottom:80px}.reference-title{position:absolute;z-index:2;right:-5%;bottom:55px;max-width:125%;color:#ff4648;text-align:right;font:400 clamp(42px,8vw,145px)/.9 var(--font-serif,Georgia,serif);letter-spacing:-.055em;pointer-events:none;overflow-wrap:anywhere}.reference-rail button.is-active{border-color:#999;outline:1px solid #aaa;outline-offset:3px}.reference-info{transition:opacity .25s ease}.reference-info-hidden .reference-info{opacity:0;pointer-events:none}@media(max-width:760px){.reference-title{right:0;bottom:14px;max-width:100%;font-size:clamp(30px,9vw,64px)}.reference-opening img,.reference-opening video{margin-bottom:32px}.reference-info-hidden .reference-info{opacity:1}}@media(prefers-reduced-motion:reduce){.reference-info{transition:none}}
+
+/* Project entry and loading sequence */
+@media(min-width:761px){.reference-gallery{padding-top:31vh}}
+.reference-loader{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#ededed;color:#111;font:11px var(--font-mono,monospace);letter-spacing:.12em;pointer-events:none;transition:opacity .45s ease,visibility .45s ease}
+.reference-loader-line{width:110px;height:1px;background:#c8c8c8;overflow:hidden}.reference-loader-line i{display:block;width:100%;height:100%;background:#111;transform-origin:left;animation:reference-load 1.5s ease-out both}
+.reference-ready .reference-loader{opacity:0;visibility:hidden}.reference-gallery,.reference-rail{opacity:0}.reference-ready .reference-gallery{animation:reference-enter-up .85s .12s cubic-bezier(.22,1,.36,1) both}.reference-ready .reference-rail{animation:reference-enter-right .7s .25s cubic-bezier(.22,1,.36,1) both}.reference-title{transition:opacity .35s ease,transform .35s ease}.reference-scrolled .reference-title{opacity:0;transform:translateY(20px)}
+@keyframes reference-load{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes reference-enter-up{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}@keyframes reference-enter-right{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){.reference-loader,.reference-title{transition:none}.reference-loader-line i{animation:none}.reference-ready .reference-gallery,.reference-ready .reference-rail{animation:none;opacity:1}}
+/* A dark curtain follows the project click and reveals the case from below. */
+.reference-loader{background:#000;opacity:1;visibility:visible;transform:translateY(0);animation:reference-curtain-in .4s cubic-bezier(.76,0,.24,1) both;transition:transform .65s cubic-bezier(.76,0,.24,1),visibility .65s;}
+.reference-loader span,.reference-loader-line{display:none}
+.reference-ready .reference-loader{animation:none;opacity:1;transform:translateY(-100%);visibility:hidden}
+.reference-ready .reference-gallery{animation-delay:.25s}.reference-ready .reference-rail{animation-delay:.4s}
+@keyframes reference-curtain-in{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.reference-loader{animation:none;transition:none}.reference-ready .reference-loader{visibility:hidden}.reference-ready .reference-gallery,.reference-ready .reference-rail{animation:none;opacity:1}}
+@media(min-width:761px){.reference-title{position:fixed;right:4%;bottom:4vh;max-width:72vw}}
+/* Place the close control on the left and align the title with the bottom edge. */
+#work-detail.reference-detail .detail-close{left:24px;right:auto;bottom:24px}
+@media(min-width:761px){#work-detail.reference-detail .reference-title{bottom:0}}
+@media(max-width:760px){#work-detail.reference-detail .detail-close{left:16px;right:auto;bottom:16px}}
+
+/* Project name appears centered on the dark transition curtain. */
+.reference-loader .reference-loader-title{display:block;color:#fff;text-align:center;max-width:90vw;padding:0 20px;font:400 clamp(32px,5.5vw,110px)/1 var(--font-serif,Georgia,serif);letter-spacing:-.04em;overflow-wrap:anywhere;animation:reference-loader-title-in .38s .18s ease both}
+.reference-ready .reference-loader{transform:translateY(100%)}
+@keyframes reference-loader-title-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.reference-loader .reference-loader-title{animation:none}}
+
+/* Keep the active preview centered while concealing the scrollbar. */
+.reference-rail{padding:calc(20vh - 18px) 6px;scrollbar-width:none;overscroll-behavior:contain}.reference-rail::-webkit-scrollbar{display:none}.reference-rail button{flex:none}.reference-title{position:fixed;z-index:45;right:4%;bottom:0;max-width:72vw}.reference-scrolled .reference-title{opacity:0;visibility:hidden}.reference-title{visibility:visible;transition:opacity .35s ease,transform .35s ease,visibility .35s}
+@media(max-width:760px){.reference-title{position:fixed;right:16px;bottom:16px;max-width:85vw}}
+
+/* Individual project themes; the original gray remains the default. */
+.reference-theme-control{display:flex;align-items:center;gap:12px;margin-top:22px;font-size:12px}.reference-theme-control label{color:#888}.reference-theme-control select{font:inherit;color:inherit;background:transparent;border:1px solid currentColor;border-radius:20px;padding:4px 8px;cursor:pointer}.reference-theme-control option{color:#111;background:#fff}
+#work-detail.reference-detail[data-theme="black"]{background:#000;color:#fff}#work-detail.reference-detail[data-theme="white"]{background:#fff;color:#111}#work-detail.reference-detail[data-theme="black"] .reference-next{background:#000;color:#fff}#work-detail.reference-detail[data-theme="white"] .reference-next{background:#fff;color:#111}#work-detail.reference-detail[data-theme="black"] .reference-info-row span,#work-detail.reference-detail[data-theme="black"] .reference-theme-control label{color:#aaa}#work-detail.reference-detail[data-theme="black"] .reference-rail button.is-active{border-color:#fff;outline-color:#aaa}#work-detail.reference-detail[data-theme="black"] .detail-close{background:#fff;color:#000}#work-detail.reference-detail[data-theme="black"] .reference-next:focus-visible{outline-color:#fff}
+@media(min-width:761px){body.work-home[data-project-theme="black"] .chrome{color:#fff}body.work-home[data-project-theme="black"] .chrome :is(#menuToggle,#menu a,.audio button,.location,.inquiry a,.language-toggle){color:#fff}body.work-home[data-project-theme="black"] .chrome :is(.audio,.inquiry-copy-hint){color:#aaa}body.work-home[data-project-theme="black"] .chrome .brand-copyright{filter:brightness(0) invert(1)}body.work-home[data-project-theme="black"] .chrome .language-toggle{border-color:#aaa}}
+@media(max-width:760px){body.work-home[data-project-theme="black"] .chrome:not(.mobile-menu-open) .brand::after{color:#fff}body.work-home[data-project-theme="black"] .chrome:not(.mobile-menu-open) #menuToggle::before,body.work-home[data-project-theme="black"] .chrome:not(.mobile-menu-open) #menuToggle::after{background:#fff}}
+/* Uniform spacing between project media on desktop and mobile. */
+#work-detail.reference-detail .reference-gallery > img,
+#work-detail.reference-detail .reference-gallery > video,
+#work-detail.reference-detail .reference-gallery > .reference-opening{margin:0 0 40px}
+#work-detail.reference-detail .reference-opening > img,
+#work-detail.reference-detail .reference-opening > video{margin:0}
+#work-detail.reference-detail .reference-gallery > :last-child{margin-bottom:0}
+/* Center the next-project link in the viewport at the end of a case. */
+#work-detail.reference-detail .reference-next{min-height:100svh}

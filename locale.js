@@ -18,6 +18,11 @@
   // ── 主字典：英文源文 → 中文译文。全站中文文案的唯一真源。
   // 键必须与 DOM 文本逐字符一致（仅忽略首尾空白与连续空格），含 ↗ · — 等符号。
   const zh = {
+    'Theme':'主题', 'Gray':'灰色', 'Black':'黑色', 'White':'白色',
+
+    'JINGWUTONG APP':'警务通 APP',
+    'Mobile App':'移动应用',
+    'A mobile app design for police services, bringing information and workflows together in a clear interface.':'警务服务移动应用设计，通过清晰的界面整合信息与业务流程。',
     'LOW-ALTITUDE DIGITAL TWIN':'低空数字孪生平台',
     'Digital Twin':'数字孪生',
     'A digital twin platform that brings low-altitude airspace, flight missions and drone operations together in one visual overview.':'通过数字孪生技术，将低空空域、飞行任务和无人机运行整合到统一的可视化平台。',

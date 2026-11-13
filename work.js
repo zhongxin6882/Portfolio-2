@@ -42,6 +42,12 @@ const projects=[
 // 派生实际使用的对象：image 指向本地 assets/work/NN.ext（NN=数组序号+1，补零两位），
 // remote 是 framerusercontent 兜底地址。调整项目顺序时必须同步重命名本地图片文件。
 ].map(([name,type,date,description,role,awards,image],i)=>({name,type,date,description,role,awards,image:`assets/work/${String(i+1).padStart(2,'0')}.${image.split('.').pop()}`,remote:`https://framerusercontent.com/images/${image}?width=1138`,number:i+1}));
+// 警务通项目：原始图片按编号展示。
+Object.assign(projects[1], {
+  name:'JINGWUTONG APP', type:'Mobile App', date:'',
+  description:'A mobile app design for police services, bringing information and workflows together in a clear interface.',
+  role:'', awards:'', image:'assets/work/jingwutong/cover-selected.png', remote:'assets/work/jingwutong/cover-selected.png', jingwutong:true, theme:'white'
+});
 // Source: 佳进陈, ZCOOL — the media are presented as a referenced project.
 Object.assign(projects[6], {
   name:'LOW-ALTITUDE DIGITAL TWIN', type:'Digital Twin', date:'2026',
@@ -49,7 +55,7 @@ Object.assign(projects[6], {
   role:'', awards:'',
   image:'assets/work/urban-air/cover-drone.webp',
   remote:'assets/work/urban-air/cover-drone.webp',
-  urbanAir:true
+  urbanAir:true, theme:'black'
 });
 // The reference sequence places DEFIANT directly after MAT VOYCE.
 // ⚠️ 顺序重排：以下两个 splice 用的是硬编码下标，增删项目后必须重新核对。
@@ -192,13 +198,55 @@ addEventListener('resize',()=>{if(looping()){render()}else{cards.forEach(c=>{c.s
 if(looping())render();else updateMobile();
 // ── 两级浮层：openFocus 预览 → openDetail 详情 → closeOverlays 关闭（Esc 同样触发）。
 // i === 0 是特例：详情里额外注入 3 张远程图，并给出通往 fromanother.html 的案例链接。
-const focus=document.getElementById('work-focus'),detail=document.getElementById('work-detail');function openFocus(i){focused=i;const p=projects[i];focus.classList.toggle('urban-air',!!p.urbanAir);focus.querySelector('img').src=p.image;focus.querySelector('img').onerror=e=>e.target.src=p.remote;focus.querySelector('.focus-caption span').textContent=`${p.type}  /  ${p.date}`;focus.querySelector('h2').textContent=p.name;focus.querySelector('p').textContent=p.description;focus.hidden=false;document.body.style.overflow='hidden';focus.querySelector('.focus-cover').onclick=e=>{if(e.target.closest('.focus-close'))return;openDetail(i)};focus.querySelector('.focus-caption button').onclick=()=>openDetail(i)}
-function openDetail(i){const p=projects[i],next=projects[(i+1)%projects.length];focused=i;focus.hidden=true;detail.hidden=false;detail.classList.toggle('urban-air',!!p.urbanAir);document.body.style.overflow='hidden';if(p.urbanAir){
-  const files=['bc05684fca8844cb.png', 'd466299053079e74.png', '60fc621e21a0dbc8.gif', '306b09acd5c363c6.png', '4971e1bb1e25ecc0.png', 'upload-06.webp', 'd4cb1fdf9e21fc01.png', 'upload-08.webp', 'upload-09.webp', 'upload-10.webp', 'upload-11.webp', '95bf083627cbb8ee.png', 'upload-13.webp', 'upload-14.webp', 'upload-15.webp', 'upload-16.webp', 'upload-17.webp', 'upload-18.webp'];
-  detail.querySelector('.detail-body').innerHTML=`<header class="urban-air-intro"><h1>${p.name}</h1></header><div class="detail-gallery"><video controls playsinline preload="metadata"><source src="assets/work/urban-air/video.mp4" type="video/mp4"></video><div class="detail-description"><span>${p.type} / ${p.date}</span><p>${p.description}</p></div>${files.map(file=>`<img src="assets/work/urban-air/${file}" alt="${p.name} project image" loading="lazy">`).join('')}</div>`;
-  detail.scrollTop=0;return;
-}const extra=p.urbanAir?`<video controls playsinline preload="metadata" poster="${p.image}"><source src="assets/work/urban-air/video.mp4" type="video/mp4"></video>${['d466299053079e74.png','60fc621e21a0dbc8.gif','306b09acd5c363c6.png','4971e1bb1e25ecc0.png','d4cb1fdf9e21fc01.png','95bf083627cbb8ee.png'].map(file=>`<img src="assets/work/urban-air/${file}" alt="${p.name} project image" loading="lazy">`).join('')}<a href="https://www.zcool.com.cn/work/ZNzQxNzIwNDQ=.html" target="_blank" rel="noopener noreferrer">查看原作品 ↗</a>`:i===0?['SbcAb0YDNv6PLqpq5XAlze41BM.jpg','F487AXTxDP4zFhdlhNPN7uwgOIk.jpg','ykCmCfzhgrEyaaT99BSLyOoMNM.jpg'].map(name=>`<img src="https://framerusercontent.com/images/${name}?width=1500" alt="${p.name} project image" loading="lazy">`).join(''):`<img src="${p.image}" alt="${p.name} project image" loading="lazy">`;detail.querySelector('.detail-body').innerHTML=`<h1>${p.name}</h1><img class="detail-hero" src="${p.image}" alt="${p.name} cover"><div class="detail-description"><span>${p.type} / ${p.date}</span><p>${p.description}<br><br>${p.role.replace(/<br>/g, ' · ')}${i===0?'<br><br><a href="fromanother.html">View full case study ↗</a>':''}</p></div><div class="detail-gallery">${extra}</div><button class="detail-next" type="button"><span>Next project</span><img src="${next.image}" alt=""><strong>${next.name}</strong><span>View next →</span></button>`;detail.querySelector('.detail-next').onclick=()=>{detail.scrollTop=0;openDetail((i+1)%projects.length)};detail.scrollTop=0}
-function closeOverlays(){detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
+const focus=document.getElementById('work-focus'),detail=document.getElementById('work-detail');
+function openFocus(i){openDetail(i)}
+let detailLoadToken=0;
+function openDetail(i){
+  const token=++detailLoadToken;
+  detail.querySelectorAll('video').forEach(video=>video.pause());
+  const p=projects[i]; focused=i; focus.hidden=true; detail.hidden=false;
+  const themeKey=`portfolio-theme:${p.name}`;
+  let storedTheme;try{storedTheme=localStorage.getItem(themeKey)}catch{}
+  const allowedThemes=['gray','black','white'];
+  const chosenTheme=allowedThemes.includes(storedTheme)?storedTheme:(p.theme||'gray');
+  detail.dataset.theme=chosenTheme;document.body.dataset.projectTheme=chosenTheme;
+  detail.classList.remove('urban-air'); detail.classList.add('reference-detail'); document.body.style.overflow='hidden';
+  let media;
+  if(p.jingwutong) media=Array.from({length:18},(_,n)=>({type:'image',src:`assets/work/jingwutong/${n+1}.png`}));
+  else if(p.urbanAir){
+    const files=['bc05684fca8844cb.png','d466299053079e74.png','60fc621e21a0dbc8.gif','306b09acd5c363c6.png','4971e1bb1e25ecc0.png','upload-06.webp','d4cb1fdf9e21fc01.png','upload-08.webp','upload-09.webp','upload-10.webp','upload-11.webp','95bf083627cbb8ee.png','upload-13.webp','upload-14.webp','upload-15.webp','upload-16.webp','upload-17.webp','upload-18.webp'];
+    media=[{type:'video',src:'assets/work/urban-air/video.mp4',poster:'assets/work/urban-air/cover-drone.webp'},...files.map(f=>({type:'image',src:`assets/work/urban-air/${f}`}))];
+  } else if(i===0) media=[p.image,...['SbcAb0YDNv6PLqpq5XAlze41BM.jpg','F487AXTxDP4zFhdlhNPN7uwgOIk.jpg','ykCmCfzhgrEyaaT99BSLyOoMNM.jpg'].map(f=>`https://framerusercontent.com/images/${f}?width=1500`)].map(src=>({type:'image',src}));
+  else media=[{type:'image',src:p.image}];
+  const info=[p.type,p.date].filter(Boolean).join(' / ');
+  const renderMedia=(m,n)=>m.type==='video'?`<video id="reference-media-${n}" controls playsinline preload="metadata" poster="${m.poster}"><source src="${m.src}" type="video/mp4"></video>`:`<img id="reference-media-${n}" src="${m.src}" alt="${p.name} ${n+1}" loading="${n?'lazy':'eager'}">`;
+  detail.querySelector('.detail-body').innerHTML=`<div class="reference-loader" role="status" aria-label="Loading project"><span class="reference-loader-title">${p.name}</span></div><aside class="reference-info"><div class="reference-info-row"><span>About</span><p>${p.description}</p></div><div class="reference-info-row"><span>Type</span><p>${info}</p></div>${p.role?`<div class="reference-info-row"><span>Role</span><p>${p.role}</p></div>`:''}${p.awards?`<div class="reference-info-row"><span>Recognition</span><p>${p.awards}</p></div>`:''}<div class="reference-theme-control"><label for="project-theme">Theme</label><select id="project-theme"><option value="gray">Gray</option><option value="black">Black</option><option value="white">White</option></select></div></aside><div class="reference-gallery">${media.map((m,n)=>n===0?`<div class="reference-opening">${renderMedia(m,n)}</div>`:renderMedia(m,n)).join('')}</div><nav class="reference-rail" aria-label="Project gallery">${media.map((m,n)=>`<button type="button" data-media-index="${n}" aria-label="${p.name} ${n+1}"><img src="${m.poster||m.src}" alt="" loading="lazy"></button>`).join('')}</nav><div class="reference-title">${p.name}</div><button type="button" class="reference-next"><span>Next project</span><strong>${projects[(i+1)%projects.length].name}</strong></button>`;
+  const themeSelect=detail.querySelector('#project-theme');themeSelect.value=chosenTheme;
+  themeSelect.addEventListener('change',()=>{const value=themeSelect.value;if(!allowedThemes.includes(value))return;detail.dataset.theme=value;document.body.dataset.projectTheme=value;try{localStorage.setItem(themeKey,value)}catch{}});
+  detail.querySelector('.reference-next').addEventListener('click',()=>{openDetail((i+1)%projects.length);detail.scrollTo({top:0,behavior:'instant'});});
+  const railButtons=[...detail.querySelectorAll('.reference-rail button')];
+  const mediaNodes=media.map((_,n)=>detail.querySelector(`#reference-media-${n}`));
+  railButtons.forEach(button=>button.addEventListener('click',()=>mediaNodes[Number(button.dataset.mediaIndex)].scrollIntoView({behavior:'smooth',block:'start'})));
+  const rail=detail.querySelector('.reference-rail');
+  let previousThumbnail=-1;
+  const updateProgress=()=>{
+    detail.classList.toggle('reference-scrolled',detail.scrollTop>24);
+    const viewport=detail.getBoundingClientRect(), marker=viewport.top+viewport.height*.5;
+    let current=0, best=Infinity;
+    mediaNodes.forEach((node,n)=>{const r=node.getBoundingClientRect();const distance=marker<r.top?r.top-marker:marker>r.bottom?marker-r.bottom:0;if(distance<best){best=distance;current=n;}});
+    railButtons.forEach((button,n)=>{button.classList.toggle('is-active',n===current);if(n===current)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');});
+    if(current!==previousThumbnail && rail.clientHeight){const button=railButtons[current];rail.scrollTo({top:button.offsetTop-(rail.clientHeight-button.offsetHeight)/2,behavior:previousThumbnail<0||matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});previousThumbnail=current;}
+    const last=mediaNodes[mediaNodes.length-1].getBoundingClientRect();
+    detail.classList.toggle('reference-info-hidden',last.top+last.height/2<=marker);
+  };
+  detail.classList.remove('reference-ready','reference-scrolled');
+  detail.onscroll=updateProgress;detail.scrollTo({top:0,behavior:'instant'});requestAnimationFrame(updateProgress);
+  const first=mediaNodes[0], reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ready=first.tagName==='IMG'?(first.complete?Promise.resolve():new Promise(resolve=>{first.addEventListener('load',resolve,{once:true});first.addEventListener('error',resolve,{once:true});})):Promise.resolve();
+  Promise.all([Promise.race([ready,new Promise(resolve=>setTimeout(resolve,1800))]),new Promise(resolve=>setTimeout(resolve,reduced?0:1100))]).then(()=>{if(token===detailLoadToken&&!detail.hidden){detail.classList.add('reference-ready');updateProgress();}});
+
+}
+function closeOverlays(){delete document.body.dataset.projectTheme;detailLoadToken++;detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
 
 // ── 开场动画收尾：5500ms 后加 .is-done（about.js 用的是 4700ms，两者并不统一）。
 // prefers-reduced-motion 时立即结束。若由站内跳转进入，page-transition.js 会直接移除该元素。
