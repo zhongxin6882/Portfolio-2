@@ -46,7 +46,7 @@ const projects=[
 Object.assign(projects[1], {
   name:'JINGWUTONG APP', type:'Mobile App', date:'',
   description:'A mobile app design for police services, bringing information and workflows together in a clear interface.',
-  role:'', awards:'', image:'assets/work/jingwutong/cover-selected.png', remote:'assets/work/jingwutong/cover-selected.png', jingwutong:true, theme:'white'
+  role:'', awards:'', image:'assets/work/jingwutong/cover-card-fit.png', remote:'assets/work/jingwutong/cover-card-fit.png', jingwutong:true, theme:'white'
 });
 // Source: 佳进陈, ZCOOL — the media are presented as a referenced project.
 Object.assign(projects[6], {
