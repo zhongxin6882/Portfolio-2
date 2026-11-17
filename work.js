@@ -207,9 +207,10 @@ if(looping())render();else updateMobile();
 // i === 0 是特例：详情里额外注入 3 张远程图，并给出通往 fromanother.html 的案例链接。
 const focus=document.getElementById('work-focus'),detail=document.getElementById('work-detail');
 function openFocus(i){openDetail(i)}
-let detailLoadToken=0;
+let detailLoadToken=0, detailResizeObserver;
 function openDetail(i){
   const token=++detailLoadToken;
+  detailResizeObserver?.disconnect();
   detail.querySelectorAll('video').forEach(video=>video.pause());
   const p=projects[i]; focused=i; focus.hidden=true; detail.hidden=false;
   const themeKey=`portfolio-theme:${p.name}`;
@@ -234,27 +235,45 @@ function openDetail(i){
   detail.querySelector('.reference-next').addEventListener('click',()=>{openDetail((i+1)%projects.length);detail.scrollTo({top:0,behavior:'instant'});});
   const railButtons=[...detail.querySelectorAll('.reference-rail button')];
   const mediaNodes=media.map((_,n)=>detail.querySelector(`#reference-media-${n}`));
-  railButtons.forEach(button=>button.addEventListener('click',()=>mediaNodes[Number(button.dataset.mediaIndex)].scrollIntoView({behavior:'smooth',block:'start'})));
   const rail=detail.querySelector('.reference-rail');
-  let previousThumbnail=-1;
+  const indicator=document.createElement('span');
+  indicator.className='reference-rail-indicator';indicator.setAttribute('aria-hidden','true');rail.append(indicator);
+  railButtons.forEach(button=>button.addEventListener('click',()=>{
+    const node=mediaNodes[Number(button.dataset.mediaIndex)];
+    const top=detail.scrollTop+node.getBoundingClientRect().top-detail.getBoundingClientRect().top-detail.clientHeight*.31;
+    detail.scrollTo({top:Math.max(0,top),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  }));
   const updateProgress=()=>{
     detail.classList.toggle('reference-scrolled',detail.scrollTop>24);
-    const viewport=detail.getBoundingClientRect(), marker=viewport.top+viewport.height*.5;
-    let current=0, best=Infinity;
-    mediaNodes.forEach((node,n)=>{const r=node.getBoundingClientRect();const distance=marker<r.top?r.top-marker:marker>r.bottom?marker-r.bottom:0;if(distance<best){best=distance;current=n;}});
+    const viewport=detail.getBoundingClientRect(), marker=viewport.top+viewport.height*.31;
+    const positions=mediaNodes.map(node=>node.getBoundingClientRect().top);
+    let lower=0;
+    while(lower<positions.length-1 && marker>=positions[lower+1])lower++;
+    const upper=Math.min(lower+1,positions.length-1);
+    const span=positions[upper]-positions[lower];
+    const fraction=upper===lower||span<=0?0:Math.max(0,Math.min(1,(marker-positions[lower])/span));
+    const current=Math.min(railButtons.length-1,Math.round(lower+fraction));
     railButtons.forEach((button,n)=>{button.classList.toggle('is-active',n===current);if(n===current)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');});
-    if(current!==previousThumbnail && rail.clientHeight){const button=railButtons[current];rail.scrollTo({top:button.offsetTop-(rail.clientHeight-button.offsetHeight)/2,behavior:previousThumbnail<0||matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});previousThumbnail=current;}
+    if(rail.clientHeight){
+      const a=railButtons[lower],b=railButtons[upper];
+      const top=a.offsetTop+(b.offsetTop-a.offsetTop)*fraction;
+      const height=a.offsetHeight+(b.offsetHeight-a.offsetHeight)*fraction;
+      indicator.style.height=`${height+6}px`;indicator.style.transform=`translateY(${top-3}px)`;
+      indicator.dataset.progress=String(lower+fraction);
+      rail.scrollTop=top-(rail.clientHeight-height)/2;
+    }
     const last=mediaNodes[mediaNodes.length-1].getBoundingClientRect();
-    detail.classList.toggle('reference-info-hidden',last.top+last.height/2<=marker);
+    detail.classList.toggle('reference-info-hidden',last.top+last.height/2<=viewport.top+viewport.height*.5);
   };
   detail.classList.remove('reference-ready','reference-scrolled');
   detail.onscroll=updateProgress;detail.scrollTo({top:0,behavior:'instant'});requestAnimationFrame(updateProgress);
+  if('ResizeObserver' in window){detailResizeObserver=new ResizeObserver(()=>{if(token===detailLoadToken&&!detail.hidden)updateProgress()});detailResizeObserver.observe(detail.querySelector('.reference-gallery'));detailResizeObserver.observe(rail);}
   const first=mediaNodes[0], reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ready=first.tagName==='IMG'?(first.complete?Promise.resolve():new Promise(resolve=>{first.addEventListener('load',resolve,{once:true});first.addEventListener('error',resolve,{once:true});})):Promise.resolve();
   Promise.all([Promise.race([ready,new Promise(resolve=>setTimeout(resolve,1800))]),new Promise(resolve=>setTimeout(resolve,reduced?0:1100))]).then(()=>{if(token===detailLoadToken&&!detail.hidden){detail.classList.add('reference-ready');updateProgress();}});
 
 }
-function closeOverlays(){delete document.body.dataset.projectTheme;detailLoadToken++;detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
+function closeOverlays(){delete document.body.dataset.projectTheme;detailLoadToken++;detailResizeObserver?.disconnect();detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
 
 // ── 开场动画收尾：5500ms 后加 .is-done（about.js 用的是 4700ms，两者并不统一）。
 // prefers-reduced-motion 时立即结束。若由站内跳转进入，page-transition.js 会直接移除该元素。

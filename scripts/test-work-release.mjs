@@ -90,6 +90,22 @@ try {
         Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`),
         'NEON HOUND images are out of order');
       assert.equal(await page.locator('#work-detail .reference-rail button').count() > 0, true, 'Project gallery navigation missing');
+      await page.waitForFunction(() => document.querySelector('#work-detail')?.classList.contains('reference-ready'));
+      await images.nth(0).evaluate(img => img.decode());
+      await images.nth(1).evaluate(img => img.decode());
+      const galleryBox = await page.locator('#work-detail .reference-gallery').boundingBox();
+      assert(Math.abs(galleryBox.width - 840) < 1, `Desktop gallery width is ${galleryBox.width}, expected 840px`);
+      assert(Math.abs(galleryBox.x + galleryBox.width / 2 - viewport.width / 2) < 1, 'Desktop gallery is not centered');
+      const indicator = page.locator('#work-detail .reference-rail-indicator');
+      await page.waitForFunction(() => document.querySelector('.reference-rail-indicator')?.dataset.progress !== undefined);
+      await page.locator('#work-detail').evaluate(el => el.scrollTo({top: 350, behavior: 'instant'}));
+      await page.waitForFunction(() => {
+        const p = Number(document.querySelector('.reference-rail-indicator')?.dataset.progress);
+        return p > .05 && p < .95;
+      });
+      assert(await indicator.isVisible(), 'Continuous thumbnail indicator is hidden');
+      await images.nth(0).hover({position:{x:420,y:380}});
+      await page.waitForFunction(() => new DOMMatrix(getComputedStyle(document.querySelector('#reference-media-0')).transform).a > 1.01);
       await page.keyboard.press('Escape');
       assert(await page.locator('#work-detail').isHidden(), 'Project detail did not close');
     }
