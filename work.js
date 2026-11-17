@@ -66,8 +66,8 @@ const [district2,dafi]=projects.splice(17,2);projects.push(dafi,district2);
 projects.push({
   name:'NEON HOUND', type:'Character IP', date:'2026',
   description:'A cyberpunk mechanical hound explored through character design, diverse perspectives and future-world scenes.',
-  role:'', awards:'', image:'assets/work/neon-hound/cover.webp',
-  remote:'assets/work/neon-hound/cover.webp', neonHound:true, theme:'black'
+  role:'', awards:'', image:'assets/work/neon-hound/cover-white.webp',
+  remote:'assets/work/neon-hound/cover-white.webp', neonHound:true, theme:'black'
 });
 projects.forEach((p,i)=>p.number=i+1);
 // 右侧索引卡片的配色 chips，12 组，按 i % 12 循环取用。

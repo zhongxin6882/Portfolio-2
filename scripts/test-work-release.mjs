@@ -71,6 +71,14 @@ try {
       await page.keyboard.press('ArrowUp');
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '20', null,
         { timeout: 10000 });
+      const cover = page.locator('.work-card img').last();
+      const coverInfo = await cover.evaluate(async img => {
+        await img.decode();
+        return {src: img.currentSrc, width: img.naturalWidth, height: img.naturalHeight};
+      });
+      assert(coverInfo.src.includes('/neon-hound/cover-white.webp'), 'NEON HOUND cover is not the updated artwork');
+      assert(Math.abs(coverInfo.height / coverInfo.width - .775) < .002,
+        'NEON HOUND cover does not match the desktop card ratio');
       await page.locator('.work-paper-hotspot').hover();
       await page.waitForFunction(() => document.querySelector('.work-paper-cursor')?.classList.contains('show'));
       await page.locator('.work-paper-hotspot').click();
