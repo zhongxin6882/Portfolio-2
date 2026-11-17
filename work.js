@@ -62,18 +62,25 @@ Object.assign(projects[6], {
 const [defiant]=projects.splice(9,1);projects.splice(7,0,defiant);
 // The reference closes the loop through DAFI and then DISTRICT2 before 01.
 const [district2,dafi]=projects.splice(17,2);projects.push(dafi,district2);
+// Add the IP project after the historical reordering to preserve existing image mappings.
+projects.push({
+  name:'NEON HOUND', type:'Character IP', date:'2026',
+  description:'A cyberpunk mechanical hound explored through character design, diverse perspectives and future-world scenes.',
+  role:'', awards:'', image:'assets/work/neon-hound/cover.webp',
+  remote:'assets/work/neon-hound/cover.webp', neonHound:true, theme:'black'
+});
 projects.forEach((p,i)=>p.number=i+1);
 // 右侧索引卡片的配色 chips，12 组，按 i % 12 循环取用。
 const palettes=[['#090f25','#f5f1db','#075ad8'],['#14151e','#d9d7ed','#8a72e9'],['#c83e35','#e3ddd3','#ffac51'],['#332c25','#efe5d4','#90a2a6'],['#251e22','#e5b59b','#dc6058'],['#d453cc','#f4e2f3','#7e319d'],['#d9d5d3','#4a3b53','#ec9d48'],['#4236ce','#f1f1ee','#111'],['#e5c2b0','#24201e','#cf4660'],['#ef6b83','#10264e','#e8dbca'],['#071b5c','#d45c7c','#f0a760'],['#b9c7bf','#26201d','#bb5248']];
 // ── DOM 引用与运行时状态 ──
 const stack=document.getElementById('work-stack'),list=document.getElementById('work-index-items'),info={role:document.getElementById('work-role'),date:document.getElementById('work-date'),awards:document.getElementById('work-awards'),number:document.getElementById('work-number')};
 const cards=[],items=[];let active=-1,focused=-1;
-// count 是真实项目数；但 index.html 里的分母 <small>/19</small> 是硬编码的，增删项目要两处同步。
+// count 是真实项目数；index.html 里的分母是硬编码的，增删项目要两处同步。
 const count=projects.length,phoneLooping=()=>innerWidth<=760,looping=()=>innerWidth>850||phoneLooping();
 const clamp=gsap.utils.clamp;
 const wrap=n=>((n%count)+count)%count;
-// 环形最短距离（带符号）：决定卡片往哪个方向偏移，并处理 19 → 01 的回绕。
-// Keep the shortest distance through the circular stack, including 19 → 01.
+// 环形最短距离（带符号）：决定卡片往哪个方向偏移，并处理首尾回绕。
+// Keep the shortest distance through the circular stack, including the wraparound.
 const distance=(i,p)=>wrap(i-p+count/2)-count/2;
 let position=0,targetPosition=0,framePending=false,snapTimer;
 let previousPosition=0,motionVelocity=0,motionBend=0;
@@ -213,6 +220,7 @@ function openDetail(i){
   detail.classList.remove('urban-air'); detail.classList.add('reference-detail'); document.body.style.overflow='hidden';
   let media;
   if(p.jingwutong) media=Array.from({length:18},(_,n)=>({type:'image',src:`assets/work/jingwutong/${n+1}.png`}));
+  else if(p.neonHound) media=Array.from({length:16},(_,n)=>({type:'image',src:`assets/work/neon-hound/${String(n+1).padStart(2,'0')}.webp`}));
   else if(p.urbanAir){
     const files=['bc05684fca8844cb.png','d466299053079e74.png','60fc621e21a0dbc8.gif','306b09acd5c363c6.png','4971e1bb1e25ecc0.png','upload-06.webp','d4cb1fdf9e21fc01.png','upload-08.webp','upload-09.webp','upload-10.webp','upload-11.webp','95bf083627cbb8ee.png','upload-13.webp','upload-14.webp','upload-15.webp','upload-16.webp','upload-17.webp','upload-18.webp'];
     media=[{type:'video',src:'assets/work/urban-air/video.mp4',poster:'assets/work/urban-air/cover-drone.webp'},...files.map(f=>({type:'image',src:`assets/work/urban-air/${f}`}))];

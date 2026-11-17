@@ -22,6 +22,8 @@
 
     'JINGWUTONG APP':'警务通 APP',
     'Mobile App':'移动应用',
+    'Character IP':'角色 IP 设计',
+    'A cyberpunk mechanical hound explored through character design, diverse perspectives and future-world scenes.':'以赛博朋克机械猎犬为主角，通过角色设定、多角度造型与未来场景展现 IP 世界。',
     'A mobile app design for police services, bringing information and workflows together in a clear interface.':'警务服务移动应用设计，通过清晰的界面整合信息与业务流程。',
     'LOW-ALTITUDE DIGITAL TWIN':'低空数字孪生平台',
     'Digital Twin':'数字孪生',

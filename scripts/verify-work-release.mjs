@@ -43,4 +43,7 @@ for (const marker of ['work-paper-ready', 'Canvas2D Mesh', 'UNPACK_FLIP_Y_WEBGL'
 }
 assert.equal(readdirSync(join(dist, 'assets/work')).filter(name => /^\d{2}\.(?:jpe?g|png|webp)$/i.test(name)).length,
   19, 'Expected 19 built Work cover photos');
+for (const name of ['cover.webp', ...Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)]) {
+  assert(existsSync(join(dist, 'assets/work/neon-hound', name)), `NEON HOUND asset missing: ${name}`);
+}
 console.log(`Work release assets: six icon routes, ${dimensions} PNG, valid ICO, Demo 21 bundle, 19 covers OK`);

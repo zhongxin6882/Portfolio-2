@@ -1,6 +1,6 @@
 
 /* Work-only desktop visual renderer, ported from the approved CENTER Demo 21.
-   The existing work.js remains the single owner of scrolling, 19 cards,
+   The existing work.js remains the single owner of scrolling, project cards,
    index metadata, details, and all mobile handling. */
 import { gsap } from 'gsap';
 const mq=matchMedia('(min-width:851px)'),reduce=matchMedia('(prefers-reduced-motion:reduce)');

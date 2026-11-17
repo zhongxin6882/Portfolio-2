@@ -23,7 +23,7 @@ async function open(viewport, noWebGL = false) {
   }
   await page.goto(new URL('index.html', origin).href, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.addStyleTag({ content: '#intro-loader,.page-transition{display:none!important}' });
-  await page.waitForFunction(() => document.querySelectorAll('.work-card').length === 19);
+  await page.waitForFunction(() => document.querySelectorAll('.work-card').length === 20);
   return page;
 }
 
@@ -65,17 +65,22 @@ try {
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '02');
       assert.equal(await page.locator('.work-index-item[aria-current="true"]').count(), 1,
         'Right-hand metadata did not follow the Work counter');
-      for (let i = 0; i < 18; i++) await page.keyboard.press('ArrowDown');
+      for (let i = 0; i < 19; i++) await page.keyboard.press('ArrowDown');
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '01', null,
         { timeout: 10000 });
       await page.keyboard.press('ArrowUp');
-      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '19', null,
+      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '20', null,
         { timeout: 10000 });
       await page.locator('.work-paper-hotspot').hover();
       await page.waitForFunction(() => document.querySelector('.work-paper-cursor')?.classList.contains('show'));
       await page.locator('.work-paper-hotspot').click();
       await page.locator('#work-detail').waitFor({ state: 'visible' });
       await page.locator('#work-detail .reference-gallery').waitFor({ state: 'visible' });
+      const images = page.locator('#work-detail .reference-gallery img');
+      assert.equal(await images.count(), 16, 'NEON HOUND should show all 16 images');
+      assert.deepEqual(await images.evaluateAll(els => els.map(el => new URL(el.src).pathname.split('/').pop())),
+        Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`),
+        'NEON HOUND images are out of order');
       assert.equal(await page.locator('#work-detail .reference-rail button').count() > 0, true, 'Project gallery navigation missing');
       await page.keyboard.press('Escape');
       assert(await page.locator('#work-detail').isHidden(), 'Project detail did not close');
@@ -98,7 +103,7 @@ try {
 
   for (const viewport of [{ width: 850, height: 720 }, { width: 390, height: 844 }]) {
     const phone = await open(viewport);
-    assert.equal(await phone.locator('.work-card').count(), 19);
+    assert.equal(await phone.locator('.work-card').count(), 20);
     assert(await phone.locator('.work-card').first().isVisible(), `${viewport.width}px card is hidden`);
     if (viewport.width <= 760) {
       assert(await phone.locator('.work-mobile-caption').first().isVisible(), 'Phone caption missing');
