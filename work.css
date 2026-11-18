@@ -530,7 +530,7 @@
 
 /* Work case view: fixed information, scrolling media and thumbnail rail. */
 #work-detail.reference-detail{inset:0;overflow-y:auto;background:#ededed;z-index:40;scroll-behavior:smooth}
-#work-detail.reference-detail .detail-body{padding:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,min(620px,calc(100vw - 300px))) minmax(0,1fr);gap:0;align-items:start}
+#work-detail.reference-detail .detail-body{padding:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,min(720px,calc(100vw - 300px))) minmax(0,1fr);gap:0;align-items:start}
 .reference-info{position:sticky;top:0;height:100svh;padding:clamp(200px,34vh,340px) 18px 40px 24px;overflow:auto;font:14px/1.4 var(--font-sans)}
 .reference-info h1{font:600 clamp(22px,2vw,36px)/1.05 var(--font-sans);letter-spacing:-.05em;margin:0 0 38px}
 .reference-info-row{display:grid;grid-template-columns:75px 1fr;gap:12px;margin-bottom:30px}.reference-info-row span{color:#888}.reference-info-row p{margin:0}
@@ -601,3 +601,11 @@
 /* Keep each artwork frame fixed while its image zooms inside. */
 #work-detail.reference-detail .reference-image-frame{overflow:hidden;width:100%}
 #work-detail.reference-detail .reference-image-frame img{display:block;width:100%;height:auto;margin:0}
+
+/* Desktop case layout preview */
+@media (min-width: 761px) {
+  #work-detail.reference-detail .reference-info { width: min(100%, 488px); }
+  #work-detail.reference-detail .reference-info-row p { min-width: 0; overflow-wrap: anywhere; }
+  #work-detail.reference-detail .reference-gallery { padding-top: max(0px, calc(31vh - 100px)); }
+  #work-detail.reference-detail .reference-rail { margin-right: 32px; }
+}

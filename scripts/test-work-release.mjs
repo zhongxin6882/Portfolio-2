@@ -94,7 +94,7 @@ try {
       await images.nth(0).evaluate(img => img.decode());
       await images.nth(1).evaluate(img => img.decode());
       const galleryBox = await page.locator('#work-detail .reference-gallery').boundingBox();
-      assert(Math.abs(galleryBox.width - 620) < 1, `Desktop gallery width is ${galleryBox.width}, expected 620px`);
+      assert(Math.abs(galleryBox.width - 720) < 1, `Desktop gallery width is ${galleryBox.width}, expected 720px`);
       assert(Math.abs(galleryBox.x + galleryBox.width / 2 - viewport.width / 2) < 1, 'Desktop gallery is not centered');
       const indicator = page.locator('#work-detail .reference-rail-indicator');
       await page.waitForFunction(() => document.querySelector('.reference-rail-indicator')?.dataset.progress !== undefined);
