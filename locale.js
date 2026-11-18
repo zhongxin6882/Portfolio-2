@@ -20,6 +20,8 @@
   const zh = {
     'Theme':'主题', 'Gray':'灰色', 'Black':'黑色', 'White':'白色',
 
+    'KUNLUN':'昆仑', 'Product Design':'产品设计',
+    'A smart-city visual intelligence platform and its product design system.':'面向智慧城市的智能视图平台与产品设计系统。',
     'JINGWUTONG APP':'警务通 APP',
     'Mobile App':'移动应用',
     'Character IP':'角色 IP 设计',
