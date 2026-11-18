@@ -46,4 +46,7 @@ assert.equal(readdirSync(join(dist, 'assets/work')).filter(name => /^\d{2}\.(?:j
 for (const name of ['cover-neon-rain.webp', ...Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)]) {
   assert(existsSync(join(dist, 'assets/work/neon-hound', name)), `NEON HOUND asset missing: ${name}`);
 }
+for (const name of ['cover.webp', 'intro.webp', ...Array.from({length:11}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)]) {
+  assert(existsSync(join(dist, 'assets/work/smart-city-vision', name)), `Smart City Vision asset missing: ${name}`);
+}
 console.log(`Work release assets: six icon routes, ${dimensions} PNG, valid ICO, Demo 21 bundle, 19 covers OK`);

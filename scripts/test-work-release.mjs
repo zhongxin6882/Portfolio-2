@@ -113,6 +113,26 @@ try {
       assert(Math.abs(frameBefore.width - frameAfter.width) < 0.1 && Math.abs(frameBefore.height - frameAfter.height) < 0.1, 'Artwork frame changed size on hover');
       await page.keyboard.press('Escape');
       assert(await page.locator('#work-detail').isHidden(), 'Project detail did not close');
+
+      await page.keyboard.press('ArrowUp');
+      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '19');
+      await page.keyboard.press('ArrowUp');
+      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '18');
+      const cityCover = await page.locator('.work-card img').nth(17).evaluate(async img => {
+        await img.decode();
+        return {src: img.currentSrc, ratio: img.naturalHeight / img.naturalWidth};
+      });
+      assert(cityCover.src.endsWith('/smart-city-vision/cover.webp'), 'Smart City Vision is missing from slot 18');
+      assert(Math.abs(cityCover.ratio - .775) < .002, 'Smart City Vision cover does not match the card ratio');
+      await page.locator('.work-paper-hotspot').click();
+      await page.locator('#work-detail').waitFor({ state: 'visible' });
+      const cityImages = page.locator('#work-detail .reference-gallery img');
+      assert.deepEqual(await cityImages.evaluateAll(els => els.map(el => new URL(el.src).pathname.split('/').pop())),
+        ['intro.webp', ...Array.from({length:11}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)],
+        'Smart City Vision images are out of order');
+      await cityImages.first().evaluate(img => img.decode());
+      await page.keyboard.press('Escape');
+      assert(await page.locator('#work-detail').isHidden(), 'Smart City Vision detail did not close');
     }
     if (viewport.width === 1280) {
       await page.mouse.wheel(0, 520);

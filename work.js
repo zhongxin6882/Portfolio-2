@@ -61,7 +61,18 @@ Object.assign(projects[6], {
 // ⚠️ 顺序重排：以下两个 splice 用的是硬编码下标，增删项目后必须重新核对。
 const [defiant]=projects.splice(9,1);projects.splice(7,0,defiant);
 // The reference closes the loop through DAFI and then DISTRICT2 before 01.
-const [district2,dafi]=projects.splice(17,2);projects.push(dafi,district2);
+const [district2,dafi]=projects.splice(17,2);
+Object.assign(dafi, {
+  name:'SMART CITY VISION', type:'Data Visualization', date:'',
+  description:'A city IoT visualization dashboard for traffic management, urban operations, public safety, smart parks and retail.',
+  role:'', awards:'',
+  image:'assets/work/smart-city-vision/cover.webp',
+  remote:'assets/work/smart-city-vision/cover.webp',
+  gallery:['intro.webp', ...Array.from({length:11},(_,i)=>`${String(i+1).padStart(2,'0')}.webp`)]
+    .map(file=>`assets/work/smart-city-vision/${file}`),
+  theme:'black'
+});
+projects.push(dafi,district2);
 // Add the IP project after the historical reordering to preserve existing image mappings.
 projects.push({
   name:'NEON HOUND', type:'Character IP', date:'2026',
@@ -221,8 +232,10 @@ function openDetail(i){
   const chosenTheme=allowedThemes.includes(storedTheme)?storedTheme:(p.theme||'gray');
   detail.dataset.theme=chosenTheme;document.body.dataset.projectTheme=chosenTheme;
   detail.classList.remove('urban-air'); detail.classList.add('reference-detail'); document.body.style.overflow='hidden';
+  detail.classList.toggle('reference-detail-wide', Boolean(p.gallery));
   let media;
-  if(p.jingwutong) media=Array.from({length:18},(_,n)=>({type:'image',src:`assets/work/jingwutong/${n+1}.png`}));
+  if(p.gallery) media=p.gallery.map(src=>({type:'image',src}));
+  else if(p.jingwutong) media=Array.from({length:18},(_,n)=>({type:'image',src:`assets/work/jingwutong/${n+1}.png`}));
   else if(p.neonHound) media=Array.from({length:16},(_,n)=>({type:'image',src:`assets/work/neon-hound/${String(n+1).padStart(2,'0')}.webp`}));
   else if(p.urbanAir){
     const files=['bc05684fca8844cb.png','d466299053079e74.png','60fc621e21a0dbc8.gif','306b09acd5c363c6.png','4971e1bb1e25ecc0.png','upload-06.webp','d4cb1fdf9e21fc01.png','upload-08.webp','upload-09.webp','upload-10.webp','upload-11.webp','95bf083627cbb8ee.png','upload-13.webp','upload-14.webp','upload-15.webp','upload-16.webp','upload-17.webp','upload-18.webp'];
