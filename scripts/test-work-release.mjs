@@ -76,7 +76,7 @@ try {
         await img.decode();
         return {src: img.currentSrc, width: img.naturalWidth, height: img.naturalHeight};
       });
-      assert(coverInfo.src.includes('/neon-hound/cover-future-city-reframed.webp'), 'NEON HOUND cover is not the updated artwork');
+      assert(coverInfo.src.includes('/neon-hound/cover-neon-rain.webp'), 'NEON HOUND cover is not the updated artwork');
       assert(Math.abs(coverInfo.height / coverInfo.width - .775) < .002,
         'NEON HOUND cover does not match the desktop card ratio');
       await page.locator('.work-paper-hotspot').hover();

@@ -66,8 +66,8 @@ const [district2,dafi]=projects.splice(17,2);projects.push(dafi,district2);
 projects.push({
   name:'NEON HOUND', type:'Character IP', date:'2026',
   description:'A cyberpunk mechanical hound explored through character design, diverse perspectives and future-world scenes.',
-  role:'', awards:'', image:'assets/work/neon-hound/cover-future-city-reframed.webp',
-  remote:'assets/work/neon-hound/cover-future-city-reframed.webp', neonHound:true, theme:'black'
+  role:'', awards:'', image:'assets/work/neon-hound/cover-neon-rain.webp',
+  remote:'assets/work/neon-hound/cover-neon-rain.webp', neonHound:true, theme:'black'
 });
 projects.forEach((p,i)=>p.number=i+1);
 // 右侧索引卡片的配色 chips，12 组，按 i % 12 循环取用。
@@ -127,7 +127,9 @@ document.addEventListener('click',event=>{
 },true);
 // ── 构建卡片堆叠：每个项目一个 <article class="work-card">，内含按钮与封面图。
 // 图片先加载本地 assets/work/，onerror 时回退远程；前 3 张 eager，其余 lazy。
-projects.forEach((project,i)=>{const article=document.createElement('article');article.className='work-card'+(project.urbanAir?' work-card-urban-air':'');const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`Preview or switch to ${project.name}`);const img=new Image();img.src=project.image;img.onerror=()=>{if(img.src!==project.remote)img.src=project.remote};img.alt=project.name+' project cover';img.loading=i<3?'eager':'lazy';button.append(img);button.addEventListener('click',()=>{if(focused>=0)return;if(looping()&&i!==wrap(Math.round(position)))quickSwitchTo(i);else if(!looping()&&i!==active)cards[i].scrollIntoView({behavior:'smooth',block:'center'});else openFocus(i)});const caption=document.createElement('div');caption.className='work-mobile-caption';caption.innerHTML=`<span class="mobile-type">${project.type}</span><h2>${project.name}</h2><p>${project.description}</p><span class="work-mobile-palette" aria-hidden="true">${palettes[i%palettes.length].map(color=>`<i style="background:${color}"></i>`).join('')}</span>`;article.append(button,caption);stack.append(article);cards.push(article)});
+projects.forEach((project,i)=>{const article=document.createElement('article');article.className='work-card'+(project.urbanAir?' work-card-urban-air':'');
+  if (project.neonHound) article.classList.add('work-card-neon-hound');
+  const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`Preview or switch to ${project.name}`);const img=new Image();img.src=project.image;img.onerror=()=>{if(img.src!==project.remote)img.src=project.remote};img.alt=project.name+' project cover';img.loading=i<3?'eager':'lazy';button.append(img);button.addEventListener('click',()=>{if(focused>=0)return;if(looping()&&i!==wrap(Math.round(position)))quickSwitchTo(i);else if(!looping()&&i!==active)cards[i].scrollIntoView({behavior:'smooth',block:'center'});else openFocus(i)});const caption=document.createElement('div');caption.className='work-mobile-caption';caption.innerHTML=`<span class="mobile-type">${project.type}</span><h2>${project.name}</h2><p>${project.description}</p><span class="work-mobile-palette" aria-hidden="true">${palettes[i%palettes.length].map(color=>`<i style="background:${color}"></i>`).join('')}</span>`;article.append(button,caption);stack.append(article);cards.push(article)});
 // ── 构建右侧索引：点击后桌面端转动堆叠到该项目，移动端滚动到对应卡片。
 projects.forEach((project,i)=>{const item=document.createElement('button');item.className='work-index-item';item.type='button';const colors=palettes[i%palettes.length];item.innerHTML=`<small>${project.type}</small><strong>${project.name}</strong><em></em><p>${project.description}</p><span class="work-palette" aria-hidden="true">${colors.map(c=>`<i style="background:${c}"></i>`).join('')}</span>`;item.setAttribute('aria-label',`Go to ${project.name}`);item.addEventListener('click',()=>{if(looping())quickSwitchTo(i);else cards[i].scrollIntoView({behavior:'smooth',block:'center'})});list.append(item);items.push(item)});
 // 切换“当前项目”：刷新左侧信息栏 + 右侧索引高亮与 aria-current，并重绑 View project 按钮。
