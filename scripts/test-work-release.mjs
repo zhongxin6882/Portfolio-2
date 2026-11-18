@@ -104,8 +104,13 @@ try {
         return p > .05 && p < .95;
       });
       assert(await indicator.isVisible(), 'Continuous thumbnail indicator is hidden');
+      const frame = images.nth(0).locator('..');
+      const frameBefore = await frame.boundingBox();
+      assert.equal(await frame.evaluate(el => getComputedStyle(el).overflow), 'hidden', 'Artwork frame must clip the zoom');
       await images.nth(0).hover({position:{x:420,y:380}});
       await page.waitForFunction(() => new DOMMatrix(getComputedStyle(document.querySelector('#reference-media-0')).transform).a > 1.01);
+      const frameAfter = await frame.boundingBox();
+      assert(Math.abs(frameBefore.width - frameAfter.width) < 0.1 && Math.abs(frameBefore.height - frameAfter.height) < 0.1, 'Artwork frame changed size on hover');
       await page.keyboard.press('Escape');
       assert(await page.locator('#work-detail').isHidden(), 'Project detail did not close');
     }

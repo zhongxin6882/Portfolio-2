@@ -584,7 +584,8 @@
 /* Uniform spacing between project media on desktop and mobile. */
 #work-detail.reference-detail .reference-gallery > img,
 #work-detail.reference-detail .reference-gallery > video,
-#work-detail.reference-detail .reference-gallery > .reference-opening{margin:0 0 40px}
+#work-detail.reference-detail .reference-gallery > .reference-opening,
+#work-detail.reference-detail .reference-gallery > .reference-image-frame{margin:0 0 40px}
 #work-detail.reference-detail .reference-opening > img,
 #work-detail.reference-detail .reference-opening > video{margin:0}
 #work-detail.reference-detail .reference-gallery > :last-child{margin-bottom:0}
@@ -596,3 +597,7 @@
   #work-detail.reference-detail .reference-gallery img{position:relative;transform:scale(1);transition:transform .55s cubic-bezier(.22,1,.36,1);transform-origin:center}
   #work-detail.reference-detail .reference-gallery img:hover{z-index:3;transform:scale(1.025)}
 }
+
+/* Keep each artwork frame fixed while its image zooms inside. */
+#work-detail.reference-detail .reference-image-frame{overflow:hidden;width:100%}
+#work-detail.reference-detail .reference-image-frame img{display:block;width:100%;height:auto;margin:0}
