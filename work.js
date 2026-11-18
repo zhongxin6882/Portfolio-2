@@ -85,7 +85,7 @@ projects.push({
   description:'A smart-city visual intelligence platform and its product design system.',
   role:'', awards:'', image:'assets/work/kunlun/cover.webp',
   remote:'assets/work/kunlun/cover.webp',
-  gallery:Array.from({length:13},(_,i)=>`assets/work/kunlun/${String(i+1).padStart(2,'0')}.webp`),
+  gallery:[2,1,...Array.from({length:20},(_,i)=>i+3)].map(i=>`assets/work/kunlun/${String(i).padStart(2,'0')}.webp`),
   theme:'black'
 });
 projects.forEach((p,i)=>p.number=i+1);
