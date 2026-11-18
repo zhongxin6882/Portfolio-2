@@ -609,3 +609,9 @@
   #work-detail.reference-detail .reference-gallery { padding-top: max(0px, calc(31vh - 100px)); }
   #work-detail.reference-detail .reference-rail { margin-right: 32px; }
 }
+
+/* Hide thumbnails when the next-project panel is reached. */
+#work-detail.reference-detail .reference-rail { transition: opacity .25s ease, visibility .25s ease; }
+#work-detail.reference-detail.reference-ready.reference-info-hidden .reference-rail { animation: none; opacity: 0; visibility: hidden; pointer-events: none; }
+#work-detail.reference-detail .detail-close { display: grid; place-items: center; padding: 0; line-height: 1; }
+@media (prefers-reduced-motion: reduce) { #work-detail.reference-detail .reference-rail { transition: none; } }
