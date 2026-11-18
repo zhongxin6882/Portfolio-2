@@ -52,4 +52,5 @@ for (const name of ['cover.webp', 'intro.webp', ...Array.from({length:11}, (_, i
 for (const name of ['cover.webp', ...Array.from({length:13}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)]) {
   assert(existsSync(join(dist, 'assets/work/kunlun', name)), `KUNLUN asset missing: ${name}`);
 }
+assert(existsSync(join(dist, 'assets/work/urban-air/cover-aerial-night.webp')), 'Drone cover missing');
 console.log(`Work release assets: six icon routes, ${dimensions} PNG, valid ICO, Demo 21 bundle, 19 covers OK`);

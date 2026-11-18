@@ -53,8 +53,8 @@ Object.assign(projects[6], {
   name:'LOW-ALTITUDE DIGITAL TWIN', type:'Digital Twin', date:'2026',
   description:'A digital twin platform that brings low-altitude airspace, flight missions and drone operations together in one visual overview.',
   role:'', awards:'',
-  image:'assets/work/urban-air/cover-drone.webp',
-  remote:'assets/work/urban-air/cover-drone.webp',
+  image:'assets/work/urban-air/cover-aerial-night.webp',
+  remote:'assets/work/urban-air/cover-aerial-night.webp',
   urbanAir:true, theme:'black'
 });
 // The reference sequence places DEFIANT directly after MAT VOYCE.
