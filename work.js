@@ -42,6 +42,15 @@ const projects=[
 // 派生实际使用的对象：image 指向本地 assets/work/NN.ext（NN=数组序号+1，补零两位），
 // remote 是 framerusercontent 兜底地址。调整项目顺序时必须同步重命名本地图片文件。
 ].map(([name,type,date,description,role,awards,image],i)=>({name,type,date,description,role,awards,image:`assets/work/${String(i+1).padStart(2,'0')}.${image.split('.').pop()}`,remote:`https://framerusercontent.com/images/${image}?width=1138`,number:i+1}));
+// 小鹿网球作品集，按原文件编号展示。
+Object.assign(projects[0], {
+  name:'XIAOLU TENNIS', type:'IP Design', date:'2026',
+  description:'小鹿网球 IP 形象设计，包含角色设定、插画、海报、表情和周边应用。',
+  role:'', awards:'', image:'assets/work/xiaolu-tennis/01.webp',
+  remote:'assets/work/xiaolu-tennis/01.webp',
+  gallery:Array.from({length:28},(_,i)=>`assets/work/xiaolu-tennis/${String(i+1).padStart(2,'0')}.webp`),
+  theme:'white'
+});
 // 警务通项目：原始图片按编号展示。
 Object.assign(projects[1], {
   name:'JINGWUTONG APP', type:'Mobile App', date:'',
