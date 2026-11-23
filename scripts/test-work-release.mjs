@@ -23,7 +23,7 @@ async function open(viewport, noWebGL = false) {
   }
   await page.goto(new URL('index.html', origin).href, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.addStyleTag({ content: '#intro-loader,.page-transition{display:none!important}' });
-  await page.waitForFunction(() => document.querySelectorAll('.work-card').length === 6);
+  await page.waitForFunction(() => document.querySelectorAll('.work-card').length === 8);
   return page;
 }
 
@@ -65,12 +65,12 @@ try {
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '02');
       assert.equal(await page.locator('.work-index-item[aria-current="true"]').count(), 1,
         'Right-hand metadata did not follow the Work counter');
-      for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowDown');
+      for (let i = 0; i < 7; i++) await page.keyboard.press('ArrowDown');
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '01', null,
         { timeout: 10000 });
       await page.keyboard.press('ArrowUp');
-      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '06');
-      await page.keyboard.press('ArrowUp');
+      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '08');
+      for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowUp');
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '05');
       const cover = page.locator('.work-card img').nth(4);
       const coverInfo = await cover.evaluate(async img => {
@@ -117,7 +117,7 @@ try {
 
       await page.keyboard.press('ArrowUp');
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '04');
-      for (const project of ['xiaolu-tennis', 'kunlun', 'smart-city-vision']) {
+      for (const project of ['xiaolu-tennis', 'kunlun', 'smart-city-vision', 'isle', 'young-reading']) {
         const cover = await page.locator(`.work-card img[src="assets/work/${project}/cover.webp"]`).evaluate(async img => {
           await img.decode();
           return [img.naturalWidth, img.naturalHeight];
@@ -152,7 +152,7 @@ try {
 
   for (const viewport of [{ width: 850, height: 720 }, { width: 390, height: 844 }]) {
     const phone = await open(viewport);
-    assert.equal(await phone.locator('.work-card').count(), 6);
+    assert.equal(await phone.locator('.work-card').count(), 8);
     assert(await phone.locator('.work-card').first().isVisible(), `${viewport.width}px card is hidden`);
     if (viewport.width <= 760) {
       assert(await phone.locator('.work-mobile-caption').first().isVisible(), 'Phone caption missing');
@@ -183,3 +183,4 @@ try {
 } finally {
   await browser.close();
 }
+

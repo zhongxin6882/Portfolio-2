@@ -97,7 +97,18 @@ projects.push({
   gallery:[2,1,...Array.from({length:20},(_,i)=>i+3)].map(i=>`assets/work/kunlun/${String(i).padStart(2,'0')}.webp`),
   theme:'black'
 });
-const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND', 'KUNLUN']);
+projects.push({
+  name:'ISLE 海屿', type:'Brand Identity', date:'',
+  description:'ISLE 海屿烘焙品牌视觉设计，涵盖品牌标识、插画、包装、海报与门店应用。',
+  role:'', awards:'', image:'assets/work/isle/cover.webp', remote:'assets/work/isle/cover.webp',
+  gallery:Array.from({length:22},(_,i)=>`assets/work/isle/${String(i+1).padStart(2,'0')}.${[20,21].includes(i+1)?'gif':'webp'}`), theme:'white'
+}, {
+  name:'YOUNG READING', type:'Product Design', date:'2024',
+  description:'年轻阅读产品设计，展示产品理念、视觉规范与移动端界面。',
+  role:'', awards:'', image:'assets/work/young-reading/cover.webp', remote:'assets/work/young-reading/cover.webp',
+  gallery:Array.from({length:15},(_,i)=>`assets/work/young-reading/${String(i+1).padStart(2,'0')}.webp`), theme:'white'
+});
+const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND', 'KUNLUN', 'ISLE 海屿', 'YOUNG READING']);
 for (let i = projects.length - 1; i >= 0; i--) {
   if (!visibleProjects.has(projects[i].name)) projects.splice(i, 1);
 }
@@ -325,3 +336,4 @@ function closeOverlays(){delete document.body.dataset.projectTheme;detailLoadTok
 // ── 开场动画收尾：5500ms 后加 .is-done（about.js 用的是 4700ms，两者并不统一）。
 // prefers-reduced-motion 时立即结束。若由站内跳转进入，page-transition.js 会直接移除该元素。
 const loader=document.getElementById('intro-loader');if(loader)setTimeout(()=>loader.classList.add('is-done'),matchMedia('(prefers-reduced-motion: reduce)').matches?0:5500);
+
