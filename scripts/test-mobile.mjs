@@ -87,7 +87,7 @@ try {
         assert(current!=='01','Work scroll counter did not update at '+width);
       }
       if(route==='playground.html'){
-        assert(await page.locator('.play-card').count()===24,'Playground cards missing');
+        assert(await page.locator('.play-card').count()===29,'Playground cards missing');
         const cols=await page.locator('.play-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
         assert.equal(cols,1,'Playground must be single-column');
         const top=await page.locator('.play-grid').boundingBox();
