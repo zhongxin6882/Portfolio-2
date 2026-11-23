@@ -97,6 +97,10 @@ projects.push({
   gallery:[2,1,...Array.from({length:20},(_,i)=>i+3)].map(i=>`assets/work/kunlun/${String(i).padStart(2,'0')}.webp`),
   theme:'black'
 });
+const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND']);
+for (let i = projects.length - 1; i >= 0; i--) {
+  if (!visibleProjects.has(projects[i].name)) projects.splice(i, 1);
+}
 projects.forEach((p,i)=>p.number=i+1);
 // 右侧索引卡片的配色 chips，12 组，按 i % 12 循环取用。
 const palettes=[['#090f25','#f5f1db','#075ad8'],['#14151e','#d9d7ed','#8a72e9'],['#c83e35','#e3ddd3','#ffac51'],['#332c25','#efe5d4','#90a2a6'],['#251e22','#e5b59b','#dc6058'],['#d453cc','#f4e2f3','#7e319d'],['#d9d5d3','#4a3b53','#ec9d48'],['#4236ce','#f1f1ee','#111'],['#e5c2b0','#24201e','#cf4660'],['#ef6b83','#10264e','#e8dbca'],['#071b5c','#d45c7c','#f0a760'],['#b9c7bf','#26201d','#bb5248']];

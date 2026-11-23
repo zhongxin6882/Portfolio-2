@@ -23,7 +23,7 @@ async function open(viewport, noWebGL = false) {
   }
   await page.goto(new URL('index.html', origin).href, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.addStyleTag({ content: '#intro-loader,.page-transition{display:none!important}' });
-  await page.waitForFunction(() => document.querySelectorAll('.work-card').length === 21);
+  await page.waitForFunction(() => document.querySelectorAll('.work-card').length === 5);
   return page;
 }
 
@@ -65,15 +65,12 @@ try {
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '02');
       assert.equal(await page.locator('.work-index-item[aria-current="true"]').count(), 1,
         'Right-hand metadata did not follow the Work counter');
-      for (let i = 0; i < 20; i++) await page.keyboard.press('ArrowDown');
+      for (let i = 0; i < 4; i++) await page.keyboard.press('ArrowDown');
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '01', null,
         { timeout: 10000 });
       await page.keyboard.press('ArrowUp');
-      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '21');
-      await page.keyboard.press('ArrowUp');
-      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '20', null,
-        { timeout: 10000 });
-      const cover = page.locator('.work-card img').nth(19);
+      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '05');
+      const cover = page.locator('.work-card img').nth(4);
       const coverInfo = await cover.evaluate(async img => {
         await img.decode();
         return {src: img.currentSrc, width: img.naturalWidth, height: img.naturalHeight};
@@ -117,10 +114,8 @@ try {
       assert(await page.locator('#work-detail').isHidden(), 'Project detail did not close');
 
       await page.keyboard.press('ArrowUp');
-      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '19');
-      await page.keyboard.press('ArrowUp');
-      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '18');
-      const cityCover = await page.locator('.work-card img').nth(17).evaluate(async img => {
+      await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '04');
+      const cityCover = await page.locator('.work-card img').nth(3).evaluate(async img => {
         await img.decode();
         return {src: img.currentSrc, ratio: img.naturalHeight / img.naturalWidth};
       });
@@ -154,7 +149,7 @@ try {
 
   for (const viewport of [{ width: 850, height: 720 }, { width: 390, height: 844 }]) {
     const phone = await open(viewport);
-    assert.equal(await phone.locator('.work-card').count(), 21);
+    assert.equal(await phone.locator('.work-card').count(), 5);
     assert(await phone.locator('.work-card').first().isVisible(), `${viewport.width}px card is hidden`);
     if (viewport.width <= 760) {
       assert(await phone.locator('.work-mobile-caption').first().isVisible(), 'Phone caption missing');
