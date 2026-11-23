@@ -118,7 +118,8 @@ try {
       await page.keyboard.press('ArrowUp');
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '04');
       for (const project of ['xiaolu-tennis', 'kunlun', 'smart-city-vision', 'isle', 'young-reading']) {
-        const cover = await page.locator(`.work-card img[src="assets/work/${project}/cover.webp"]`).evaluate(async img => {
+        const coverPath = `assets/work/${project}/${project === 'young-reading' ? 'revised/' : ''}cover.webp`;
+        const cover = await page.locator(`.work-card img[src="${coverPath}"]`).evaluate(async img => {
           await img.decode();
           return [img.naturalWidth, img.naturalHeight];
         });
