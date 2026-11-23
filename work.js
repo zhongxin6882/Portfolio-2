@@ -259,12 +259,21 @@ function openDetail(i){
   else if(p.jingwutong) media=Array.from({length:18},(_,n)=>({type:'image',src:`assets/work/jingwutong/${n+1}.png`}));
   else if(p.neonHound) media=Array.from({length:16},(_,n)=>({type:'image',src:`assets/work/neon-hound/${String(n+1).padStart(2,'0')}.webp`}));
   else if(p.urbanAir){
-    const files=['bc05684fca8844cb.png','d466299053079e74.png','60fc621e21a0dbc8.gif','306b09acd5c363c6.png','4971e1bb1e25ecc0.png','upload-06.webp','d4cb1fdf9e21fc01.png','upload-08.webp','upload-09.webp','upload-10.webp','upload-11.webp','95bf083627cbb8ee.png','upload-13.webp','upload-14.webp','upload-15.webp','upload-16.webp','upload-17.webp','upload-18.webp'];
-    media=[{type:'video',src:'assets/work/urban-air/video.mp4',poster:'assets/work/urban-air/cover-drone.webp'},...files.map(f=>({type:'image',src:`assets/work/urban-air/${f}`}))];
+    const animated = new Set([3,6,8,9,11,14,17,20,21]);
+    const base = 'assets/work/urban-air/revised/';
+    media = [
+      {type:'video',src:'assets/work/urban-air/video.mp4',poster:'assets/work/urban-air/cover-drone.webp'},
+      ...Array.from({length:21},(_,i)=>{
+        const n=i+1;
+        return animated.has(n)
+          ? {type:'video',src:`${base}${n}.mp4`,poster:`${base}${n}.webp`,loop:true}
+          : {type:'image',src:`${base}${n}.webp`};
+      })
+    ];
   } else if(i===0) media=[p.image,...['SbcAb0YDNv6PLqpq5XAlze41BM.jpg','F487AXTxDP4zFhdlhNPN7uwgOIk.jpg','ykCmCfzhgrEyaaT99BSLyOoMNM.jpg'].map(f=>`https://framerusercontent.com/images/${f}?width=1500`)].map(src=>({type:'image',src}));
   else media=[{type:'image',src:p.image}];
   const info=[p.type,p.date].filter(Boolean).join(' / ');
-  const renderMedia=(m,n)=>m.type==='video'?`<video id="reference-media-${n}" controls playsinline preload="metadata" poster="${m.poster}"><source src="${m.src}" type="video/mp4"></video>`:`<div class="reference-image-frame"><img id="reference-media-${n}" src="${m.src}" alt="${p.name} ${n+1}" loading="${n?'lazy':'eager'}"></div>`;
+  const renderMedia=(m,n)=>m.type==='video'?`<video id="reference-media-${n}" ${m.loop ? 'autoplay muted loop' : 'controls'} playsinline preload="metadata" poster="${m.poster}"><source src="${m.src}" type="video/mp4"></video>`:`<div class="reference-image-frame"><img id="reference-media-${n}" src="${m.src}" alt="${p.name} ${n+1}" loading="${n?'lazy':'eager'}"></div>`;
   detail.querySelector('.detail-body').innerHTML=`<div class="reference-loader" role="status" aria-label="Loading project"><span class="reference-loader-title">${p.name}</span></div><aside class="reference-info"><div class="reference-info-row"><span>About</span><p>${p.description}</p></div><div class="reference-info-row"><span>Type</span><p>${info}</p></div>${p.role?`<div class="reference-info-row"><span>Role</span><p>${p.role}</p></div>`:''}${p.awards?`<div class="reference-info-row"><span>Recognition</span><p>${p.awards}</p></div>`:''}<div class="reference-theme-control"><label for="project-theme">Theme</label><select id="project-theme"><option value="gray">Gray</option><option value="black">Black</option><option value="white">White</option></select></div></aside><div class="reference-gallery">${media.map((m,n)=>n===0?`<div class="reference-opening">${renderMedia(m,n)}</div>`:renderMedia(m,n)).join('')}</div><nav class="reference-rail" aria-label="Project gallery">${media.map((m,n)=>`<button type="button" data-media-index="${n}" aria-label="${p.name} ${n+1}"><img src="${m.poster||m.src}" alt="" loading="lazy"></button>`).join('')}</nav><div class="reference-title">${p.name}</div><button type="button" class="reference-next"><span>Next project</span><strong>${projects[(i+1)%projects.length].name}</strong></button>`;
   const themeSelect=detail.querySelector('#project-theme');themeSelect.value=chosenTheme;
   themeSelect.addEventListener('change',()=>{const value=themeSelect.value;if(!allowedThemes.includes(value))return;detail.dataset.theme=value;document.body.dataset.projectTheme=value;try{localStorage.setItem(themeKey,value)}catch{}});
