@@ -77,7 +77,7 @@ try {
         await img.decode();
         return {src: img.currentSrc, width: img.naturalWidth, height: img.naturalHeight};
       });
-      assert(coverInfo.src.includes('/neon-hound/cover-neon-rain.webp'), 'NEON HOUND cover is not the updated artwork');
+      assert(coverInfo.src.includes('/neon-hound/cover-white.webp'), 'NEON HOUND cover is not the updated artwork');
       assert(Math.abs(coverInfo.height / coverInfo.width - .775) < .002,
         'NEON HOUND cover does not match the desktop card ratio');
       await page.locator('.work-paper-hotspot').hover();
@@ -88,7 +88,7 @@ try {
       const images = page.locator('#work-detail .reference-gallery img');
       assert.equal(await images.count(), 16, 'NEON HOUND should show all 16 images');
       assert.deepEqual(await images.evaluateAll(els => els.map(el => new URL(el.src).pathname.split('/').pop())),
-        Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`),
+        Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.${[3, 7, 15].includes(i + 1) ? 'png' : 'webp'}`),
         'NEON HOUND images are out of order');
       assert.equal(await page.locator('#work-detail .reference-rail button').count() > 0, true, 'Project gallery navigation missing');
       await page.waitForFunction(() => document.querySelector('#work-detail')?.classList.contains('reference-ready'));

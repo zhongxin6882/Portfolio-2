@@ -86,8 +86,8 @@ projects.push(dafi,district2);
 projects.push({
   name:'NEON HOUND', type:'Character IP', date:'2026',
   description:'A cyberpunk mechanical hound explored through character design, diverse perspectives and future-world scenes.',
-  role:'', awards:'', image:'assets/work/neon-hound/cover-neon-rain.webp',
-  remote:'assets/work/neon-hound/cover-neon-rain.webp', neonHound:true, theme:'black'
+  role:'', awards:'', image:'assets/work/neon-hound/cover-white.webp',
+  remote:'assets/work/neon-hound/cover-white.webp', neonHound:true, theme:'black'
 });
 projects.push({
   name:'KUNLUN', type:'Product Design', date:'2022',
@@ -257,7 +257,7 @@ function openDetail(i){
   let media;
   if(p.gallery) media=p.gallery.map(src=>({type:'image',src}));
   else if(p.jingwutong) media=Array.from({length:18},(_,n)=>({type:'image',src:`assets/work/jingwutong/${n+1}.png`}));
-  else if(p.neonHound) media=Array.from({length:16},(_,n)=>({type:'image',src:`assets/work/neon-hound/${String(n+1).padStart(2,'0')}.webp`}));
+  else if(p.neonHound) media=Array.from({length:16},(_,n)=>({type:'image',src:`assets/work/neon-hound/${String(n+1).padStart(2,'0')}.${[3,7,15].includes(n+1)?'png':'webp'}`}));
   else if(p.urbanAir){
     const animated = new Set([3,6,8,9,11,14,17,20,21]);
     const base = 'assets/work/urban-air/revised/';

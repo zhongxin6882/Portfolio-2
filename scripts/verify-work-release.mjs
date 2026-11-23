@@ -43,7 +43,7 @@ for (const marker of ['work-paper-ready', 'Canvas2D Mesh', 'UNPACK_FLIP_Y_WEBGL'
 }
 assert.equal(readdirSync(join(dist, 'assets/work')).filter(name => /^\d{2}\.(?:jpe?g|png|webp)$/i.test(name)).length,
   19, 'Expected 19 built Work cover photos');
-for (const name of ['cover-neon-rain.webp', ...Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)]) {
+for (const name of ['cover-white.webp', ...Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.${[3, 7, 15].includes(i + 1) ? 'png' : 'webp'}`)]) {
   assert(existsSync(join(dist, 'assets/work/neon-hound', name)), `NEON HOUND asset missing: ${name}`);
 }
 for (const name of ['cover.webp', 'intro.webp', ...Array.from({length:11}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`)]) {
