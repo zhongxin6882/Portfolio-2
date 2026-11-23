@@ -105,8 +105,8 @@ projects.push({
 }, {
   name:'YOUNG READING', type:'Product Design', date:'2024',
   description:'年轻阅读产品设计，展示产品理念、视觉规范与移动端界面。',
-  role:'', awards:'', image:'assets/work/young-reading/cover.webp', remote:'assets/work/young-reading/cover.webp',
-  gallery:Array.from({length:15},(_,i)=>`assets/work/young-reading/${String(i+1).padStart(2,'0')}.webp`), theme:'white'
+  role:'', awards:'', image:'assets/work/young-reading/revised/cover.webp', remote:'assets/work/young-reading/revised/cover.webp',
+  gallery:Array.from({length:19},(_,i)=>`assets/work/young-reading/revised/${String(i+4).padStart(2,'0')}.webp`), theme:'white'
 });
 const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND', 'KUNLUN', 'ISLE 海屿', 'YOUNG READING']);
 for (let i = projects.length - 1; i >= 0; i--) {
