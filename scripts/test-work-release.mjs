@@ -117,12 +117,13 @@ try {
 
       await page.keyboard.press('ArrowUp');
       await page.waitForFunction(() => document.querySelector('#work-number')?.textContent === '04');
-      const cityCover = await page.locator('.work-card img').nth(3).evaluate(async img => {
-        await img.decode();
-        return {src: img.currentSrc, ratio: img.naturalHeight / img.naturalWidth};
-      });
-      assert(cityCover.src.endsWith('/smart-city-vision/cover.webp'), 'Smart City Vision is missing from slot 18');
-      assert(Math.abs(cityCover.ratio - .775) < .002, 'Smart City Vision cover does not match the card ratio');
+      for (const project of ['xiaolu-tennis', 'kunlun', 'smart-city-vision']) {
+        const cover = await page.locator(`.work-card img[src="assets/work/${project}/cover.webp"]`).evaluate(async img => {
+          await img.decode();
+          return [img.naturalWidth, img.naturalHeight];
+        });
+        assert.deepEqual(cover, [1420, 1000], `Unexpected cover dimensions for ${project}`);
+      }
       await page.locator('.work-paper-hotspot').click();
       await page.locator('#work-detail').waitFor({ state: 'visible' });
       const cityImages = page.locator('#work-detail .reference-gallery img');

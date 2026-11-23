@@ -46,8 +46,8 @@ const projects=[
 Object.assign(projects[0], {
   name:'XIAOLU TENNIS', type:'IP Design', date:'2026',
   description:'小鹿网球 IP 形象设计，包含角色设定、插画、海报、表情和周边应用。',
-  role:'', awards:'', image:'assets/work/xiaolu-tennis/01.webp',
-  remote:'assets/work/xiaolu-tennis/01.webp',
+  role:'', awards:'', image:'assets/work/xiaolu-tennis/cover.webp',
+  remote:'assets/work/xiaolu-tennis/cover.webp',
   gallery:Array.from({length:28},(_,i)=>`assets/work/xiaolu-tennis/${String(i+1).padStart(2,'0')}.webp`),
   theme:'white'
 });
