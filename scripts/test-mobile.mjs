@@ -75,7 +75,7 @@ try {
       await page.locator('#menuToggle').click();
       assert.equal(await page.locator('#menuToggle').getAttribute('aria-expanded'),'false');
       if(route==='index.html'){
-        assert(await page.locator('.work-card').count()===19,'Work lost cards');
+        assert(await page.locator('.work-card').count()===8,'Work lost cards');
         assert(await page.locator('.work-mobile-caption').first().isVisible(),'Work mobile caption hidden');
         // Phones now use a circular gesture-driven stack. scrollIntoView() does
         // nothing because the cards are absolute inside a fixed-height stage.
@@ -87,7 +87,7 @@ try {
         assert(current!=='01','Work scroll counter did not update at '+width);
       }
       if(route==='playground.html'){
-        assert(await page.locator('.play-card').count()===24,'Playground cards missing');
+        assert(await page.locator('.play-card').count()===29,'Playground cards missing');
         const cols=await page.locator('.play-grid').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
         assert.equal(cols,1,'Playground must be single-column');
         const top=await page.locator('.play-grid').boundingBox();
