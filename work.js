@@ -97,7 +97,7 @@ projects.push({
   gallery:[2,1,...Array.from({length:20},(_,i)=>i+3)].map(i=>`assets/work/kunlun/${String(i).padStart(2,'0')}.webp`),
   theme:'black'
 });
-const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND']);
+const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND', 'KUNLUN']);
 for (let i = projects.length - 1; i >= 0; i--) {
   if (!visibleProjects.has(projects[i].name)) projects.splice(i, 1);
 }
