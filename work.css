@@ -649,3 +649,10 @@
   max-height: none;
   aspect-ratio: auto;
 }
+
+/* Drone artwork retains its exact gallery width and remains sharp on hover. */
+#work-detail.urban-air.reference-detail .reference-gallery img,
+#work-detail.urban-air.reference-detail .reference-gallery img:hover {
+  transform: none;
+  transition: none;
+}
