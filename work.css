@@ -639,3 +639,13 @@
 @media(max-width:760px){
   #work-detail.reference-detail .reference-gallery{max-width:752px}
 }
+
+/* Keep drone images and motion media at the same gallery width. */
+#work-detail.urban-air.reference-detail .reference-gallery video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: none;
+  aspect-ratio: auto;
+}

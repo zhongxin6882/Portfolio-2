@@ -252,7 +252,7 @@ function openDetail(i){
   const allowedThemes=['gray','black','white'];
   const chosenTheme=allowedThemes.includes(storedTheme)?storedTheme:(p.theme||'gray');
   detail.dataset.theme=chosenTheme;document.body.dataset.projectTheme=chosenTheme;
-  detail.classList.remove('urban-air'); detail.classList.add('reference-detail'); document.body.style.overflow='hidden';
+  detail.classList.toggle('urban-air', Boolean(p.urbanAir)); detail.classList.add('reference-detail'); document.body.style.overflow='hidden';
   detail.classList.toggle('reference-detail-wide', Boolean(p.gallery));
   let media;
   if(p.gallery) media=p.gallery.map(src=>({type:'image',src}));
@@ -265,6 +265,8 @@ function openDetail(i){
       {type:'video',src:'assets/work/urban-air/video.mp4',poster:'assets/work/urban-air/cover-drone.webp'},
       ...Array.from({length:21},(_,i)=>{
         const n=i+1;
+        if (n === 4) return {type:'image',src:'assets/work/urban-air/306b09acd5c363c6.png'};
+        if (n === 5) return {type:'image',src:'assets/work/urban-air/4971e1bb1e25ecc0.png'};
         return animated.has(n)
           ? {type:'video',src:`${base}${n}.mp4`,poster:`${base}${n}.webp`,loop:true}
           : {type:'image',src:`${base}${n}.webp`};
