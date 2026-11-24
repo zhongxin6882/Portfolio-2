@@ -108,7 +108,13 @@ projects.push({
   role:'', awards:'', image:'assets/work/young-reading/revised/cover.webp', remote:'assets/work/young-reading/revised/cover.webp',
   gallery:Array.from({length:19},(_,i)=>`assets/work/young-reading/revised/${String(i+4).padStart(2,'0')}.webp`), theme:'white'
 });
-const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND', 'KUNLUN', 'ISLE 海屿', 'YOUNG READING']);
+projects.push({
+  name:'POP VISUAL STORIES', type:'Illustration & Brand Design', date:'',
+  description:'A pop-art visual portfolio featuring illustration, brand identities, posters and campaign applications.',
+  role:'', awards:'', image:'assets/work/pop-visual/cover.webp', remote:'assets/work/pop-visual/cover.webp',
+  gallery:Array.from({length:9},(_,i)=>`assets/work/pop-visual/${String(i+1).padStart(2,'0')}.webp`), theme:'black'
+});
+const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND', 'KUNLUN', 'ISLE 海屿', 'YOUNG READING', 'POP VISUAL STORIES']);
 for (let i = projects.length - 1; i >= 0; i--) {
   if (!visibleProjects.has(projects[i].name)) projects.splice(i, 1);
 }

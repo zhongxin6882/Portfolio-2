@@ -20,6 +20,8 @@
   const zh = {
     'Theme':'主题', 'Gray':'灰色', 'Black':'黑色', 'White':'白色',
 
+    'POP VISUAL STORIES':'波普视觉故事', 'Illustration & Brand Design':'插画与品牌设计',
+    'A pop-art visual portfolio featuring illustration, brand identities, posters and campaign applications.':'波普风格视觉作品集，涵盖插画、品牌视觉、海报与活动应用。',
     'KUNLUN':'昆仑', 'Product Design':'产品设计',
     'A smart-city visual intelligence platform and its product design system.':'面向智慧城市的智能视图平台与产品设计系统。',
     'JINGWUTONG APP':'警务通 APP',

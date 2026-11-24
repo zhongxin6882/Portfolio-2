@@ -75,7 +75,7 @@ try {
       await page.locator('#menuToggle').click();
       assert.equal(await page.locator('#menuToggle').getAttribute('aria-expanded'),'false');
       if(route==='index.html'){
-        assert(await page.locator('.work-card').count()===8,'Work lost cards');
+        assert(await page.locator('.work-card').count()===9,'Work lost cards');
         assert(await page.locator('.work-mobile-caption').first().isVisible(),'Work mobile caption hidden');
         // Phones now use a circular gesture-driven stack. scrollIntoView() does
         // nothing because the cards are absolute inside a fixed-height stage.
