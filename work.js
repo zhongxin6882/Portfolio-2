@@ -352,12 +352,13 @@ function openDetail(i){
 function closeOverlays(){document.querySelector('.project-route-transition')?.remove();try{sessionStorage.removeItem('portfolio-open-project')}catch{}delete document.body.dataset.projectTheme;detailLoadToken++;detailResizeObserver?.disconnect();detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
 
 try {
-  const savedProject=sessionStorage.getItem('portfolio-open-project');
+  const savedProject=document.documentElement.classList.contains('restoring-project') ? sessionStorage.getItem('portfolio-open-project') : null;
   const savedIndex=projects.findIndex(project=>project.name===savedProject);
   if(savedIndex>=0) openDetail(savedIndex);
   else if(savedProject) sessionStorage.removeItem('portfolio-open-project');
 } catch {}
 document.documentElement.classList.remove('restoring-project');
+addEventListener('pageshow',event=>{if(event.persisted)closeOverlays()});
 
 // ── 开场动画收尾：5500ms 后加 .is-done（about.js 用的是 4700ms，两者并不统一）。
 // prefers-reduced-motion 时立即结束。若由站内跳转进入，page-transition.js 会直接移除该元素。
