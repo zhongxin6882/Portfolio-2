@@ -48,7 +48,9 @@ Object.assign(projects[0], {
   description:'小鹿网球 IP 形象设计，包含角色设定、插画、海报、表情和周边应用。',
   role:'', awards:'', image:'assets/work/xiaolu-tennis/cover.webp',
   remote:'assets/work/xiaolu-tennis/cover.webp',
-  gallery:Array.from({length:28},(_,i)=>`assets/work/xiaolu-tennis/${String(i+1).padStart(2,'0')}.webp`),
+  gallery:Array.from({length:28},(_,i)=>i+1)
+    .filter(number=>number!==7)
+    .map(number=>`assets/work/xiaolu-tennis/${String(number).padStart(2,'0')}.webp`),
   theme:'white'
 });
 // 警务通项目：原始图片按编号展示。
