@@ -50,7 +50,7 @@ Object.assign(projects[0], {
   remote:'assets/work/xiaolu-tennis/cover.webp',
   gallery:Array.from({length:28},(_,i)=>i+1)
     .filter(number=>number!==7)
-    .map(number=>number===24 ? 'assets/work/xiaolu-tennis/24-replacement.png' : `assets/work/xiaolu-tennis/${String(number).padStart(2,'0')}.webp`),
+    .map(number=>number===24 ? 'assets/work/xiaolu-tennis/24-replacement-v2.webp' : `assets/work/xiaolu-tennis/${String(number).padStart(2,'0')}.webp`),
   theme:'white'
 });
 // 警务通项目：原始图片按编号展示。
