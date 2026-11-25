@@ -88,7 +88,7 @@ try {
       const images = page.locator('#work-detail .reference-gallery img');
       assert.equal(await images.count(), 16, 'NEON HOUND should show all 16 images');
       assert.deepEqual(await images.evaluateAll(els => els.map(el => new URL(el.src).pathname.split('/').pop())),
-        Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.${[3, 7, 15].includes(i + 1) ? 'png' : 'webp'}`),
+        Array.from({length:16}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`),
         'NEON HOUND images are out of order');
       assert.equal(await page.locator('#work-detail .reference-rail button').count() > 0, true, 'Project gallery navigation missing');
       await page.waitForFunction(() => document.querySelector('#work-detail')?.classList.contains('reference-ready'));
