@@ -266,6 +266,15 @@ function openDetail(i){
   detailResizeObserver?.disconnect();
   detail.querySelectorAll('video').forEach(video=>video.pause());
   const p=projects[i]; focused=i; focus.hidden=true; detail.hidden=false;
+  document.querySelector('.project-route-transition')?.remove();
+  const projectTransition=document.createElement('div');
+  projectTransition.className='page-transition project-route-transition';
+  projectTransition.setAttribute('role','status');
+  const transitionTitle=document.createElement('span');
+  transitionTitle.className='page-transition__title';
+  transitionTitle.textContent=p.name;
+  projectTransition.append(transitionTitle);
+  document.body.append(projectTransition);
   try{sessionStorage.setItem('portfolio-open-project',p.name)}catch{}
   const themeKey=`portfolio-theme:${p.name}`;
   let storedTheme;try{storedTheme=localStorage.getItem(themeKey)}catch{}
@@ -337,10 +346,10 @@ function openDetail(i){
   if('ResizeObserver' in window){detailResizeObserver=new ResizeObserver(()=>{if(token===detailLoadToken&&!detail.hidden)updateProgress()});detailResizeObserver.observe(detail.querySelector('.reference-gallery'));detailResizeObserver.observe(rail);}
   const first=mediaNodes[0], reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ready=first.tagName==='IMG'?(first.complete?Promise.resolve():new Promise(resolve=>{first.addEventListener('load',resolve,{once:true});first.addEventListener('error',resolve,{once:true});})):Promise.resolve();
-  Promise.all([Promise.race([ready,new Promise(resolve=>setTimeout(resolve,1800))]),new Promise(resolve=>setTimeout(resolve,reduced?0:1100))]).then(()=>{if(token===detailLoadToken&&!detail.hidden){detail.classList.add('reference-ready');updateProgress();}});
+  Promise.all([Promise.race([ready,new Promise(resolve=>setTimeout(resolve,1800))]),new Promise(resolve=>setTimeout(resolve,reduced?0:1100))]).then(()=>{if(token===detailLoadToken&&!detail.hidden){detail.classList.add('reference-ready');updateProgress();projectTransition.classList.add('is-leaving');setTimeout(()=>projectTransition.remove(),850);}});
 
 }
-function closeOverlays(){try{sessionStorage.removeItem('portfolio-open-project')}catch{}delete document.body.dataset.projectTheme;detailLoadToken++;detailResizeObserver?.disconnect();detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
+function closeOverlays(){document.querySelector('.project-route-transition')?.remove();try{sessionStorage.removeItem('portfolio-open-project')}catch{}delete document.body.dataset.projectTheme;detailLoadToken++;detailResizeObserver?.disconnect();detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
 
 try {
   const savedProject=sessionStorage.getItem('portfolio-open-project');

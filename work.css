@@ -662,3 +662,8 @@
 #work-detail.reference-detail:not(.reference-ready) .detail-close{visibility:hidden}
 html.restoring-project #intro-loader{display:none!important}
 html.restoring-project body::before{content:'';position:fixed;inset:0;background:#000;z-index:9999}
+
+/* Project entries share the About route transition. */
+#work-detail.reference-detail .reference-loader{display:none}
+.project-route-transition{z-index:20000}
+@media(prefers-reduced-motion:reduce){.project-route-transition{transition:none}}
