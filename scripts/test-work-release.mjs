@@ -139,7 +139,7 @@ try {
       await page.locator('.work-paper-hotspot').click();
       const popImages = page.locator('#work-detail .reference-gallery img');
       assert.deepEqual(await popImages.evaluateAll(els => els.map(el => new URL(el.src).pathname.split('/').pop())),
-        Array.from({length:9}, (_, i) => `${String(i + 1).padStart(2, '0')}.webp`), 'Pop visual images are out of order');
+        Array.from({length:9}, (_, i) => `${String(i + 1).padStart(2, '0')}${[0, 2, 4, 6].includes(i) ? '-fixed' : ''}.webp`), 'Pop visual images are out of order');
       await popImages.evaluateAll(els => Promise.all(els.map(img => img.decode())));
       await page.keyboard.press('Escape');
     }
