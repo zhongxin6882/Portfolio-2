@@ -26,8 +26,19 @@ if (flip && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     pictureStream.addEventListener('scroll', updateStream, { passive: true });
     if (pictureStream.scrollTop > 0) updateStream();
   }
+  const projectDetail = document.getElementById('work-detail');
+  if (projectDetail) {
+    projectDetail.addEventListener('scroll', () => {
+      if (projectDetail.hidden) return;
+      const available = projectDetail.scrollHeight - projectDetail.clientHeight;
+      const distance = Math.max(1, Math.min(420, available));
+      rotate(-projectDetail.scrollTop * 90 / distance);
+    }, { passive: true });
+  }
   window.addEventListener('work:position', event => {
-    if (window.innerWidth > 850) rotate(-event.detail.position * 90);
+    if (window.innerWidth > 850 && (!projectDetail || projectDetail.hidden)) {
+      rotate(-event.detail.position * 90);
+    }
   });
   update();
 }
