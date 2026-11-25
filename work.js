@@ -354,7 +354,7 @@ function closeOverlays(){document.querySelector('.project-route-transition')?.re
 try {
   const savedProject=document.documentElement.classList.contains('restoring-project') ? sessionStorage.getItem('portfolio-open-project') : null;
   const savedIndex=projects.findIndex(project=>project.name===savedProject);
-  if(savedIndex>=0) openDetail(savedIndex);
+  if(savedIndex>=0){document.getElementById('intro-loader')?.remove();openDetail(savedIndex)}
   else if(savedProject) sessionStorage.removeItem('portfolio-open-project');
 } catch {}
 document.documentElement.classList.remove('restoring-project');
