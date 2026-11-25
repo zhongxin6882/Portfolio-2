@@ -266,6 +266,7 @@ function openDetail(i){
   detailResizeObserver?.disconnect();
   detail.querySelectorAll('video').forEach(video=>video.pause());
   const p=projects[i]; focused=i; focus.hidden=true; detail.hidden=false;
+  try{sessionStorage.setItem('portfolio-open-project',p.name)}catch{}
   const themeKey=`portfolio-theme:${p.name}`;
   let storedTheme;try{storedTheme=localStorage.getItem(themeKey)}catch{}
   const allowedThemes=['gray','black','white'];
@@ -339,7 +340,15 @@ function openDetail(i){
   Promise.all([Promise.race([ready,new Promise(resolve=>setTimeout(resolve,1800))]),new Promise(resolve=>setTimeout(resolve,reduced?0:1100))]).then(()=>{if(token===detailLoadToken&&!detail.hidden){detail.classList.add('reference-ready');updateProgress();}});
 
 }
-function closeOverlays(){delete document.body.dataset.projectTheme;detailLoadToken++;detailResizeObserver?.disconnect();detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
+function closeOverlays(){try{sessionStorage.removeItem('portfolio-open-project')}catch{}delete document.body.dataset.projectTheme;detailLoadToken++;detailResizeObserver?.disconnect();detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
+
+try {
+  const savedProject=sessionStorage.getItem('portfolio-open-project');
+  const savedIndex=projects.findIndex(project=>project.name===savedProject);
+  if(savedIndex>=0) openDetail(savedIndex);
+  else if(savedProject) sessionStorage.removeItem('portfolio-open-project');
+} catch {}
+document.documentElement.classList.remove('restoring-project');
 
 // ── 开场动画收尾：5500ms 后加 .is-done（about.js 用的是 4700ms，两者并不统一）。
 // prefers-reduced-motion 时立即结束。若由站内跳转进入，page-transition.js 会直接移除该元素。

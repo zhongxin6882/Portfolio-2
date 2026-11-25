@@ -656,3 +656,9 @@
   transform: none;
   transition: none;
 }
+
+/* Keep the project curtain above site chrome while it is loading. */
+#work-detail.reference-detail:not(.reference-ready){z-index:10000}
+#work-detail.reference-detail:not(.reference-ready) .detail-close{visibility:hidden}
+html.restoring-project #intro-loader{display:none!important}
+html.restoring-project body::before{content:'';position:fixed;inset:0;background:#000;z-index:9999}
