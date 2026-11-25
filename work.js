@@ -114,7 +114,7 @@ projects.push({
   name:'POP VISUAL STORIES', type:'Illustration & Brand Design', date:'',
   description:'A pop-art visual portfolio featuring illustration, brand identities, posters and campaign applications.',
   role:'', awards:'', image:'assets/work/pop-visual/cover.webp', remote:'assets/work/pop-visual/cover.webp',
-  gallery:Array.from({length:9},(_,i)=>`assets/work/pop-visual/${String(i+1).padStart(2,'0')}.webp`), theme:'black'
+  gallery:Array.from({length:9},(_,i)=>`assets/work/pop-visual/${String(i+1).padStart(2,'0')}${[0,2,4,6].includes(i)?'-fixed':''}.webp`), theme:'black'
 });
 const visibleProjects = new Set(['XIAOLU TENNIS', 'JINGWUTONG APP', 'LOW-ALTITUDE DIGITAL TWIN', 'SMART CITY VISION', 'NEON HOUND', 'KUNLUN', 'ISLE 海屿', 'YOUNG READING', 'POP VISUAL STORIES']);
 for (let i = projects.length - 1; i >= 0; i--) {
