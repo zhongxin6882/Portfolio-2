@@ -309,6 +309,16 @@ function openDetail(i){
   const themeSelect=detail.querySelector('#project-theme');themeSelect.value=chosenTheme;
   themeSelect.addEventListener('change',()=>{const value=themeSelect.value;if(!allowedThemes.includes(value))return;detail.dataset.theme=value;document.body.dataset.projectTheme=value;try{localStorage.setItem(themeKey,value)}catch{}});
   detail.querySelector('.reference-next').addEventListener('click',()=>{openDetail((i+1)%projects.length);detail.scrollTo({top:0,behavior:'instant'});});
+  const images=[...detail.querySelectorAll('.reference-gallery img')];
+  images.forEach((image,index)=>{
+    image.tabIndex=0;
+    image.setAttribute('role','button');
+    image.setAttribute('aria-label',image.alt+' — 查看大图');
+    image.addEventListener('click',()=>openImageViewer(images,index));
+    image.addEventListener('keydown',event=>{
+      if(event.key==='Enter'||event.key===' '){event.preventDefault();openImageViewer(images,index);}
+    });
+  });
   const railButtons=[...detail.querySelectorAll('.reference-rail button')];
   const mediaNodes=media.map((_,n)=>detail.querySelector(`#reference-media-${n}`));
   const rail=detail.querySelector('.reference-rail');
@@ -349,6 +359,55 @@ function openDetail(i){
   Promise.all([Promise.race([ready,new Promise(resolve=>setTimeout(resolve,1800))]),new Promise(resolve=>setTimeout(resolve,reduced?0:1100))]).then(()=>{if(token===detailLoadToken&&!detail.hidden){detail.classList.add('reference-ready');updateProgress();projectTransition.classList.add('is-leaving');setTimeout(()=>projectTransition.remove(),850);}});
 
 }
+const imageViewer=document.createElement('dialog');
+imageViewer.className='work-image-viewer';
+imageViewer.setAttribute('aria-label','作品图片查看器');
+imageViewer.innerHTML=`<div class="work-viewer-top"><span>WORK / PROJECT</span><button type="button" data-close aria-label="关闭">CLOSE ×</button></div><div class="work-viewer-stage"><img alt=""></div><button type="button" class="work-viewer-prev" aria-label="上一张">← PREVIOUS</button><button type="button" class="work-viewer-next" aria-label="下一张">NEXT →</button><div class="work-viewer-bottom"><span class="work-viewer-title"></span><div class="work-viewer-tools"><button type="button" data-out aria-label="缩小">−</button><button type="button" data-reset aria-label="重置缩放">100%</button><button type="button" data-in aria-label="放大">+</button><span class="work-viewer-count" aria-live="polite"></span></div></div>`;
+document.body.append(imageViewer);
+let viewerImages=[], viewerIndex=0, viewerScale=1, viewerTrigger=null;
+const viewerImage=imageViewer.querySelector('.work-viewer-stage img');
+const viewerStage=imageViewer.querySelector('.work-viewer-stage');
+function setViewerScale(scale){
+  if(viewerScale===1) viewerImage.dataset.fitWidth=viewerImage.getBoundingClientRect().width;
+  viewerScale=Math.max(1,Math.min(4,scale));
+  viewerImage.style.transform='';
+  viewerImage.style.maxWidth=viewerScale===1?'100%':'none';
+  viewerImage.style.maxHeight=viewerScale===1?'100%':'none';
+  viewerImage.style.width=viewerScale===1?'':`${viewerImage.dataset.fitWidth*viewerScale}px`;
+  viewerStage.classList.toggle('is-zoomed',viewerScale>1);
+  viewerImage.style.cursor=viewerScale>1?'zoom-out':'zoom-in';
+  imageViewer.querySelector('[data-reset]').textContent=`${Math.round(viewerScale*100)}%`;
+}
+function renderImageViewer(){
+  const image=viewerImages[viewerIndex];
+  viewerImage.src=image.currentSrc||image.src;
+  viewerImage.onload=()=>{viewerImage.dataset.fitWidth=viewerImage.getBoundingClientRect().width};
+  viewerImage.alt=image.alt;
+  imageViewer.querySelector('.work-viewer-title').textContent=projects[focused]?.name||'';
+  imageViewer.querySelector('.work-viewer-count').textContent=`${String(viewerIndex+1).padStart(2,'0')} / ${String(viewerImages.length).padStart(2,'0')}`;
+  imageViewer.querySelector('.work-viewer-prev').disabled=viewerImages.length<2;
+  imageViewer.querySelector('.work-viewer-next').disabled=viewerImages.length<2;
+  viewerStage.scrollTo(0,0);setViewerScale(1);
+}
+function openImageViewer(images,index){
+  viewerImages=images;viewerIndex=index;viewerTrigger=images[index];
+  renderImageViewer();imageViewer.showModal();
+}
+function changeViewerImage(step){viewerIndex=(viewerIndex+step+viewerImages.length)%viewerImages.length;renderImageViewer()}
+imageViewer.querySelector('[data-close]').addEventListener('click',()=>imageViewer.close());
+imageViewer.querySelector('.work-viewer-prev').addEventListener('click',()=>changeViewerImage(-1));
+imageViewer.querySelector('.work-viewer-next').addEventListener('click',()=>changeViewerImage(1));
+imageViewer.querySelector('[data-in]').addEventListener('click',()=>setViewerScale(viewerScale+.5));
+imageViewer.querySelector('[data-out]').addEventListener('click',()=>setViewerScale(viewerScale-.5));
+imageViewer.querySelector('[data-reset]').addEventListener('click',()=>setViewerScale(1));
+viewerImage.addEventListener('click',()=>setViewerScale(viewerScale===1?2:1));
+imageViewer.addEventListener('click',event=>{if(event.target===imageViewer)imageViewer.close()});
+imageViewer.addEventListener('close',()=>{setViewerScale(1);viewerTrigger?.focus({preventScroll:true})});
+imageViewer.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){event.preventDefault();event.stopPropagation();imageViewer.close()}
+  else if(event.key==='ArrowLeft'){event.preventDefault();event.stopPropagation();changeViewerImage(-1)}
+  else if(event.key==='ArrowRight'){event.preventDefault();event.stopPropagation();changeViewerImage(1)}
+});
 function closeOverlays(){document.querySelector('.project-route-transition')?.remove();try{sessionStorage.removeItem('portfolio-open-project')}catch{}delete document.body.dataset.projectTheme;detailLoadToken++;detailResizeObserver?.disconnect();detail.querySelectorAll('video').forEach(video=>video.pause());focus.hidden=true;detail.hidden=true;document.body.style.overflow='';focused=-1}focus.querySelector('.focus-close').onclick=closeOverlays;detail.querySelector('.detail-close').onclick=closeOverlays;addEventListener('keydown',e=>{if(e.key==='Escape')closeOverlays()});
 
 try {

@@ -1,5 +1,4 @@
-/* ==========================================================================
- * work.css — 首页作品画廊专用样式（仅 index.html 加载）
+/* =================================================================== * work.css — 首页作品画廊专用样式（仅 index.html 加载）
  *
  * 本文件是**已格式化**的（一属性一行），可以正常编辑，与 style.css 的压缩风格不同。
  * 全局令牌（--font-* 等）定义在 style.css 的 :root，本文件直接引用，两者加载顺序为
@@ -657,6 +656,26 @@
   transition: none;
 }
 
+/* Work detail image viewer */
+.reference-gallery img[role="button"]{cursor:zoom-in}
+.reference-gallery img[role="button"]:focus-visible{outline:3px solid #7294d3;outline-offset:3px}
+.work-image-viewer{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;color:#fff;overflow:hidden}
+.work-image-viewer::backdrop{background:rgba(0,0,0,.9)}
+.work-viewer-top,.work-viewer-bottom{position:absolute;left:24px;right:24px;z-index:2;display:flex;justify-content:space-between;align-items:center;font:12px Arial,sans-serif}
+.work-viewer-top{top:20px}.work-viewer-bottom{bottom:22px}
+.work-image-viewer button{border:0;background:transparent;color:#fff;cursor:pointer;font:12px Arial,sans-serif;padding:10px}
+.work-image-viewer button:focus-visible{outline:2px solid #fff}
+.work-image-viewer button:disabled{opacity:.35;cursor:default}
+.work-viewer-stage{position:absolute;inset:60px 100px 70px;display:flex;align-items:center;justify-content:center;overflow:auto}
+.work-viewer-stage img{display:block;max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;transition:transform .2s;cursor:zoom-in}
+.work-viewer-prev,.work-viewer-next{position:absolute;top:50%;transform:translateY(-50%)}
+.work-viewer-prev{left:8px}.work-viewer-next{right:8px}
+.work-viewer-tools{display:flex;align-items:center;gap:6px}
+.work-viewer-count{font:11px monospace;margin-left:14px;white-space:nowrap}
+@media(max-width:760px){.work-viewer-top,.work-viewer-bottom{left:14px;right:14px}.work-viewer-stage{inset:60px 12px 105px}.work-viewer-prev,.work-viewer-next{top:auto;bottom:55px;transform:none}.work-viewer-bottom{bottom:10px}.work-viewer-title{max-width:36%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){.work-viewer-stage img{transition:none}}
+.work-viewer-stage.is-zoomed{display:block}
+.work-viewer-stage.is-zoomed img{margin:auto;object-fit:contain}
 /* Keep the project curtain above site chrome while it is loading. */
 #work-detail.reference-detail:not(.reference-ready){z-index:10000}
 #work-detail.reference-detail:not(.reference-ready) .detail-close{visibility:hidden}
